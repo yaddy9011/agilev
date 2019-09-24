@@ -1,40 +1,26 @@
 import { Component, OnInit } from '@angular/core';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-sortexample',
   templateUrl: './sortexample.component.html',
   styleUrls: ['./sortexample.component.css']
 })
-export class SortexampleComponent implements OnInit {
+export class SortexampleComponent  {
 
-  eventUpdateCounter = 0;
+  movies = [
+    'Episode I - The Phantom Menace',
+    'Episode II - Attack of the Clones',
+    'Episode III - Revenge of the Sith',
+    'Episode IV - A New Hope',
+    'Episode V - The Empire Strikes Back',
+    'Episode VI - Return of the Jedi',
+    'Episode VII - The Force Awakens',
+    'Episode VIII - The Last Jedi'
+  ];
 
-  list = [
-    { Caption: 'Order', SortOrder: null },
-    { Caption: 'Me', SortOrder: null },
-   ]
-
-   list2=[ { Caption: 'Right', SortOrder: null },
-    { Caption: 'The', SortOrder: null },
-    { Caption: 'Into', SortOrder: null },
-    { Caption: 'Put', SortOrder: null }]
-
-
-  
-  constructor() { }
-
-  ngOnInit() {
+  drop(event: CdkDragDrop<number[]>) {
+  moveItemInArray(this.movies, event.previousIndex, event.currentIndex);
   }
-
-  public end(){
-    console.log(this.list.map((m, i, l) => {m.SortOrder = i; return m;}))
-  }
-
-public eventOptions = {
-  onUpdate: () => this.eventUpdateCounter ++,
-  draggable: '.draggable',
-  group: 'group'
-};
-  
 
 }

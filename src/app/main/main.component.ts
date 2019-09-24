@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {animate, state, style, transition, trigger} from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { TasksService } from '../services/tasks.service';
 import { Task } from '../clases/Task';
+import { obj } from '../clases/obj';
 import { UserI } from '../clases/user';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-main',
@@ -10,61 +12,99 @@ import { UserI } from '../clases/user';
   styleUrls: ['./main.component.css'],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
 })
 
-
-
 export class MainComponent implements OnInit {
 
   userName = '';
   tasks: Task[];
+  newarrs: obj[];
+  objs: obj[];
   title: string;
   idst: string;
   nameusr: string;
 
+
   constructor(private taskService: TasksService) {
 
+    this.idst = localStorage.getItem("ACCESS_IDS");
+    this.nameusr = localStorage.getItem("ACCESS_name");
+    var ok = localStorage.getItem("ACCESS_IDS");
+    console.log(ok);
 
-    this.taskService.getTasks()
-    .subscribe(tasks => {
+    this.taskService.getobj(ok)
+      .subscribe(obj => {
+        this.newarrs = obj;
+        this.newarrs.sort((a, b) => a.pos - b.pos);
+        this.objs = this.newarrs;
+        console.log(obj);
 
-      console.log(tasks);
-      this.idst= localStorage.getItem("ACCESS_IDS");
-      this.nameusr= localStorage.getItem("ACCESS_name");
-      this.tasks = tasks;
+        //var array = [];
+        // for (var i=0; i < this.newarrs.length; i++) {
+        //   console.log(i);
+        //   console.log(this.newarrs[i].pos);
+        //   if (i==this.newarrs[i].pos) {
+        //     array[i] = this.newarrs[i];
+        //   }
+        // }
 
-    
-      for (let n of tasks){
-        
-        console.log(n._id);
-      }
-    
-    
-    });
+        //this.tasks = array;
+        //console.log(array);
 
-   }
+      });
+
+  }
 
   ngOnInit() {
 
   }
 
-  registeredUser(){
- 
-       //console.log(this.userName);
-       var   num2= ((document.getElementById("num1") as HTMLInputElement).value);
-       console.log(num2);
+  // registeredUser() {
+  //   //console.log(this.userName);
+  //   var num2 = ((document.getElementById("num1") as HTMLInputElement).value);
+  //   console.log(num2);
+  //   for (let n of this.tasks) {
+  //     console.log(n.title);
+  //   }
+  // }
 
-       for (let n of this.tasks){
-        console.log(n.title);
-      }
-    
-    
-   }
+  drop(event: CdkDragDrop<number[]>) {
+
+    moveItemInArray(this.tasks, event.previousIndex, event.currentIndex);
+    console.log(this.tasks);
+
+    for (var i = 0; i < this.tasks.length; i++) {
+      this.updateStatus(this.tasks[i], i);
+    }
+
+
+    // let a: Number = event.previousIndex;
+    // let b: Number = event.currentIndex;
+    //console.log(this.tasks[event.currentIndex]);
+    // console.log(this.tasks[event.previousIndex]);
+    // this.updateStatus(this.tasks[event.currentIndex], event.currentIndex);
+    // this.updateStatus(this.tasks[event.previousIndex], event.previousIndex);
+
+  }
+
+  updateStatus(task: Task, pnew: number) {
+
+    var newTask = {
+      _id: task._id,
+      title: task.title,
+      isDone: !task.isDone,
+      pos: pnew
+    };
+    this.taskService.updateTask(newTask)
+      .subscribe(res => {
+        task.isDone = !task.isDone;
+      })
+  }
 
 }
 

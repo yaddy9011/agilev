@@ -1,9 +1,9 @@
 <app-menu></app-menu>
 <br>
-<app-sortexample></app-sortexample>
-<input type='text' [(ngModel)]='userName' id='num1' class='user_id_text'>
+
+<!-- <input type='text' [(ngModel)]='userName' id='num1' class='user_id_text'>
 <input type='submit' value='Login' (click)='registeredUser($event)'>
-<br>
+<br> -->
 
 
 <div align="center">
@@ -19,22 +19,14 @@
       <mat-card-content>
 
         <br>
-            <table  id="tbl" class="table table-hover">
-                <thead class="table-secondary">
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">First</th>
-                  </tr>
-                </thead>
 
-                <tbody id="sortable1" class="connectedSortable">
-                  <tr *ngFor="let task of tasks">
-                    <th scope="row">1</th>
-                    <td name="titless">{{ task.title }}</td>
-                  </tr>
-                </tbody>
+         
+<div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+  <div class="example-box" *ngFor="let task of tasks" cdkDrag>{{task.title}}</div>
+</div>
 
-              </table>
+
+
         
       </mat-card-content>
 

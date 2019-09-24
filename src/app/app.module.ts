@@ -26,6 +26,8 @@ import { TasksService } from './services/tasks.service';
 import { MatTableModule } from '@angular/material';
 import { SortexampleComponent } from './sortexample/sortexample.component' 
 import { SortablejsModule } from 'angular-sortablejs'
+import { DragDropModule } from '@angular/cdk/drag-drop';
+
 
 
 
@@ -58,6 +60,7 @@ import { SortablejsModule } from 'angular-sortablejs'
     MatCardModule,
     MatTableModule,
     HttpClientModule,
+    DragDropModule,
     SortablejsModule.forRoot({})
   ],
   providers: [AuthService,TasksService],
