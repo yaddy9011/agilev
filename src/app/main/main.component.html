@@ -22,12 +22,9 @@
 
          
 <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
-  <div class="example-box" *ngFor="let task of tasks" cdkDrag>{{task.title}}</div>
+  <div class="example-box" *ngFor="let obj of objs" cdkDrag>{{ obj.objetivo }}</div>
 </div>
 
-
-
-        
       </mat-card-content>
 
       <mat-card-actions>

@@ -35,8 +35,7 @@ export class MainComponent implements OnInit {
     this.idst = localStorage.getItem("ACCESS_IDS");
     this.nameusr = localStorage.getItem("ACCESS_name");
     var ok = localStorage.getItem("ACCESS_IDS");
-    console.log(ok);
-
+    
     this.taskService.getobj(ok)
       .subscribe(obj => {
         this.newarrs = obj;
@@ -75,11 +74,13 @@ export class MainComponent implements OnInit {
 
   drop(event: CdkDragDrop<number[]>) {
 
-    moveItemInArray(this.tasks, event.previousIndex, event.currentIndex);
-    console.log(this.tasks);
+    moveItemInArray(this.objs, event.previousIndex, event.currentIndex);
+    console.log(this.objs);
 
-    for (var i = 0; i < this.tasks.length; i++) {
-      this.updateStatus(this.tasks[i], i);
+    for (var i = 0; i < this.objs.length; i++) {
+
+      
+      this.updateStatus(this.objs[i], i);
     }
 
 
@@ -92,17 +93,17 @@ export class MainComponent implements OnInit {
 
   }
 
-  updateStatus(task: Task, pnew: number) {
+  updateStatus(obj: obj, pnew: number) {
 
     var newTask = {
-      _id: task._id,
-      title: task.title,
-      isDone: !task.isDone,
+      _id: obj._id,
+      objetivo: obj.objetivo,
+      id_usr: obj.id_usr,
       pos: pnew
     };
     this.taskService.updateTask(newTask)
       .subscribe(res => {
-        task.isDone = !task.isDone;
+        //task.isDone = !task.isDone;
       })
   }
 
