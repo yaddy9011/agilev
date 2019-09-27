@@ -1,24 +1,45 @@
 <mat-toolbar [style.backgroundColor]="'cyan'">
   <span class="fill-remaining-space">
+
     <button mat-icon-button [matMenuTriggerFor]="menu">
       <mat-icon>menu</mat-icon>
     </button>
+
     <mat-menu #menu="matMenu" [overlapTrigger]="false">
-      <button mat-menu-item>
-        <mat-icon>home</mat-icon>
-        <a routerLink="/home">home</a>
+
+      <button mat-menu-item routerLink="/home">
+        <mat-icon>home</mat-icon><span>Home</span>
       </button>
-      <button mat-menu-item>
-        <a routerLink="/registro">
-          <mat-icon>people_outline</mat-icon><span>registrate</span>
-        </a>
+
+      <button *ngIf="!isShoweval" mat-menu-item routerLink="/eval">
+        <mat-icon>poll</mat-icon><span>Evaluate</span>
       </button>
-      <button mat-menu-item>
-        <a routerLink="/home">
-          <mat-icon>exit_to_app</mat-icon><span>Logout</span>
-        </a>
+
+      <button *ngIf="!isShowprac" mat-menu-item routerLink="/main">
+        <mat-icon>add</mat-icon><span>practicas</span>
       </button>
+
+      <button routerLink="/login" *ngIf="!isShowLog" mat-menu-item>
+        <mat-icon>exit_to_app</mat-icon><span>Entrar</span>
+      </button>
+
+      <button routerLink="/registro" *ngIf="!isShowReg" mat-menu-item>
+        <mat-icon>person_add</mat-icon><span>Registrate</span>
+      </button>
+
+      <button routerLink="/home" mat-menu-item>
+        <mat-icon>location_city</mat-icon><span>Contacto</span>
+      </button>
+
+      <button routerLink="/home" mat-menu-item>
+        <mat-icon>mood</mat-icon><span>a cerca de ...</span>
+      </button>
+
+      <button *ngIf="!isShowLogo" mat-menu-item (click)='salir($event)'>
+        <mat-icon>exit_to_app</mat-icon><span>Logout</span>
+      </button>
+
     </mat-menu>
   </span>
-  <span class="fill-remaining-space">Evaluación del enforque ágil</span>
+  <span id="idz" class="fill-remaining-space">Evaluación del enforque ágil</span>
 </mat-toolbar>

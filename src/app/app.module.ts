@@ -19,7 +19,7 @@ import { MatCardModule } from '@angular/material';
 import { RegisterComponent } from './register/register.component';
 import { FooterComponent } from './footer/footer.component';
 import { EncabezadoComponent } from './encabezado/encabezado.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from './services/auth.service';
 import { TasksService } from './services/tasks.service';
@@ -27,6 +27,7 @@ import { MatTableModule } from '@angular/material';
 import { SortexampleComponent } from './sortexample/sortexample.component' 
 import { SortablejsModule } from 'angular-sortablejs'
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import {MatInputModule} from '@angular/material/input';
 
 
 
@@ -51,6 +52,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     BrowserAnimationsModule,
     LayoutModule,
     FormsModule,
+    ReactiveFormsModule,
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
@@ -61,6 +63,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MatTableModule,
     HttpClientModule,
     DragDropModule,
+    MatInputModule,
     SortablejsModule.forRoot({})
   ],
   providers: [AuthService,TasksService],

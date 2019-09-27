@@ -1,24 +1,74 @@
 <app-menu></app-menu>
-<div class="container">
-    <div class="login">
-      <div class="login-triangle"></div>
-  
-      <h2 class="login-header">Create an account</h2>
-  
-      <form #frmRegister="ngForm" class="login-container" (ngSubmit)="onRegister(frmRegister)">
-        <p>
-          <input type="text" name="name" placeholder="name" ngModel required>
-        </p>
-        <p>
-          <input type="email" name="email" placeholder="Email" ngModel required>
-        </p>
-        <p>
-          <input type="password" name="password" placeholder="Password" ngModel required>
-        </p>
-        <p>
-          <input type="submit" value="Register">
-        </p>
-      </form>
-    </div>
+<!-- <app-encabezado></app-encabezado> -->
+<!-- <div class="container">
+  <div class="login">
+    <div class="login-triangle"></div>
+
+    <h2 class="login-header">Create an account</h2>
+
+    <form #frmRegister="ngForm" class="login-container" (ngSubmit)="onRegister(frmRegister)">
+      <p>
+        <input type="text" name="name" placeholder="name" ngModel required>
+      </p>
+      <p>
+        <input type="email" name="email" placeholder="Email" ngModel required>
+      </p>
+      <p>
+        <input type="password" name="password" placeholder="Password" ngModel required>
+      </p>
+      <p>
+        <input type="submit" value="Register">
+      </p>
+    </form>
+  </div>
+</div> -->
+<div align="center">
+
+  <br>
+  <mat-card class="example-card">
+
+    <form #frmRegister="ngForm" class="example-form" (ngSubmit)="onRegister(frmRegister)">
+      <mat-card-header [style.backgroundColor]="'cyan'">
+        <div mat-card-avatar class="example-header-image"></div>
+        <mat-card-title>Formulario de registro</mat-card-title>
+        <mat-card-subtitle>Llena los datos que solicita el formulario</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Escribe tu nombre ..." type="text" name="name" ngModel required>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+
+          <!-- <input matInput placeholder="Correo Electronico" name="email" type="email" [formControl]="emailFormControl"
+            [errorStateMatcher]="matcher" ngModel required> -->
+
+          <input matInput placeholder="Email" type="email" name="email" ngModel required>
+
+          <!--           
+          <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+            Please enter a valid email address
+          </mat-error>
+          <mat-error *ngIf="emailFormControl.hasError('required')">
+            Email is <strong>required</strong>
+          </mat-error> -->
+
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Contraseña ..." type="password" name="password" ngModel required>
+        </mat-form-field>
+
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button [style.backgroundColor]="'cyan'" type="submit" value="Register" mat-button> Registrar</button>
+      </mat-card-actions>
+    </form>
+  </mat-card>
+
 </div>
+<br>
+
 <app-footer></app-footer>
