@@ -8,19 +8,19 @@
     <mat-menu #menu="matMenu" [overlapTrigger]="false">
 
       <button mat-menu-item routerLink="/home">
-        <mat-icon>home</mat-icon><span>Home</span>
+        <mat-icon>home</mat-icon><span>Inicio</span>
       </button>
 
       <button *ngIf="!isShoweval" mat-menu-item routerLink="/eval">
-        <mat-icon>poll</mat-icon><span>Evaluate</span>
+        <mat-icon>poll</mat-icon><span>Evalúa tus prácticas ágiles</span>
       </button>
 
       <button *ngIf="!isShowprac" mat-menu-item routerLink="/main">
-        <mat-icon>add</mat-icon><span>practicas</span>
+        <mat-icon>add</mat-icon><span>Objetivos</span>
       </button>
 
       <button routerLink="/login" *ngIf="!isShowLog" mat-menu-item>
-        <mat-icon>exit_to_app</mat-icon><span>Entrar</span>
+        <mat-icon>launch</mat-icon><span>Entrar</span>
       </button>
 
       <button routerLink="/registro" *ngIf="!isShowReg" mat-menu-item>
@@ -32,11 +32,11 @@
       </button>
 
       <button routerLink="/home" mat-menu-item>
-        <mat-icon>mood</mat-icon><span>a cerca de ...</span>
+        <mat-icon>mood</mat-icon><span>A cerca de ...</span>
       </button>
 
       <button *ngIf="!isShowLogo" mat-menu-item (click)='salir($event)'>
-        <mat-icon>exit_to_app</mat-icon><span>Logout</span>
+        <mat-icon>exit_to_app</mat-icon><span>Cerrar Sesión</span>
       </button>
 
     </mat-menu>

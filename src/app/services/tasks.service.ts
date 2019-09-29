@@ -10,8 +10,8 @@ import { obj } from '../clases/obj';
 
 export class TasksService {
 
-  domain: string = 'http://localhost:3000';
-  // domain: string = 'www.mydomainapi.com/';
+  //domain: string = 'http://localhost:3000';
+  domain: string = 'https://agile-backend.herokuapp.com/';
 
   constructor(private http: HttpClient) {
   }
