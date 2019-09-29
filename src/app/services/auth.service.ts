@@ -11,7 +11,11 @@ import { Observable, BehaviorSubject } from 'rxjs';
 
 export class AuthService {
 
-  AUTH_SERVER: string = 'http://localhost:3000';
+  
+  AUTH_SERVER: string = 'https://agile-backend.herokuapp.com';
+ // AUTH_SERVER: string = 'http://localhost:3000';
+
+
   authSubject = new BehaviorSubject(false);
   private token: string;
   constructor(private httpClient: HttpClient) { }
