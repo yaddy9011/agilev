@@ -28,6 +28,7 @@ import { SortexampleComponent } from './sortexample/sortexample.component'
 import { SortablejsModule } from 'angular-sortablejs'
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import {MatInputModule} from '@angular/material/input';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 
 
@@ -64,6 +65,7 @@ import {MatInputModule} from '@angular/material/input';
     HttpClientModule,
     DragDropModule,
     MatInputModule,
+    MatExpansionModule,
     SortablejsModule.forRoot({})
   ],
   providers: [AuthService,TasksService],
