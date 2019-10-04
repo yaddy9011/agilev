@@ -29,6 +29,7 @@ import { SortablejsModule } from 'angular-sortablejs'
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import {MatInputModule} from '@angular/material/input';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatSelectModule} from '@angular/material/select';
 
 
 
@@ -66,6 +67,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
     DragDropModule,
     MatInputModule,
     MatExpansionModule,
+    MatSelectModule,
     SortablejsModule.forRoot({})
   ],
   providers: [AuthService,TasksService],

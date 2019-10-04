@@ -27,13 +27,14 @@
   <br>
   <mat-card class="example-card">
 
+    <mat-card-header [style.backgroundColor]="'cyan'">
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>Formulario de registro</mat-card-title>
+      <mat-card-subtitle>Llena los datos que solicita el formulario</mat-card-subtitle>
+    </mat-card-header>
+    <br>
     <form #frmRegister="ngForm" class="example-form" (ngSubmit)="onRegister(frmRegister)">
-      <mat-card-header [style.backgroundColor]="'cyan'">
-        <div mat-card-avatar class="example-header-image"></div>
-        <mat-card-title>Formulario de registro</mat-card-title>
-        <mat-card-subtitle>Llena los datos que solicita el formulario</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
+      <mat-card-content align="left">
 
         <mat-form-field class="example-full-width">
           <input matInput placeholder="Escribe tu nombre ..." type="text" name="name" ngModel required>
@@ -59,6 +60,44 @@
         <mat-form-field class="example-full-width">
           <input matInput placeholder="Contraseña ..." type="password" name="password" ngModel required>
         </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Pais</mat-label>
+          <mat-select>
+            <mat-option *ngFor="let Pais of Paises" [value]="Pais._id" >
+              {{ Pais.PAIS}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <br>
+        <mat-form-field>
+          <mat-label>Ámbito de trabajo</mat-label>
+          <mat-select>
+            <mat-option *ngFor="let am of Ambitos" [value]="am._id">
+              {{ am.ambito }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+          <mat-label>Sector</mat-label>
+          <mat-select>
+            <mat-option *ngFor="let Sector of Sectores" [value]="Sector._id">
+              {{ Sector.Nombre }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+          <mat-label>Número de integrantes del equipo</mat-label>
+          <mat-select>
+            <mat-option *ngFor="let numero_integrante of numero_integrantes" [value]="numero_integrante._id">
+              {{ numero_integrante.descripcion }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
 
       </mat-card-content>
 
