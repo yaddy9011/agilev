@@ -29,6 +29,8 @@ export class MainComponent implements OnInit {
   title: string;
   idst: string;
   nameusr: string;
+  arr: string[];
+
 
 
   constructor(private taskService: TasksService) {
@@ -36,13 +38,39 @@ export class MainComponent implements OnInit {
     this.idst = localStorage.getItem("ACCESS_IDS");
     this.nameusr = localStorage.getItem("ACCESS_name");
     var ok = localStorage.getItem("ACCESS_IDS");
-    
+
     this.taskService.getobj(ok)
       .subscribe(obj => {
         this.newarrs = obj;
         this.newarrs.sort((a, b) => a.pos - b.pos);
-        this.objs = this.newarrs;
-        console.log(obj);
+        // this.objs = this.newarrs;
+
+        for (var i = 0; i < obj.length; i++) {
+
+
+          var descripcion = obj[i].id_obj;
+          var y = Object.values(descripcion)[1];
+          //this.arr[i] = y;
+
+          // this.arrayNew[i]=Object.values(descripcion)[1], obj[i].pos;
+
+
+
+          // let arraData = {
+          //   _id: obj[i]._id,
+          //   objetivo: obj[i].objetivo,
+          //   id_usr: obj[i].id_usr,
+          //   id_obj: Object.values(hotel)[1],
+          //   pos: obj[i].pos
+          // };
+
+
+
+          console.log(Object.values(descripcion)[1]);
+
+        }
+
+        //console.log(this.arr);
 
         //var array = [];
         // for (var i=0; i < this.newarrs.length; i++) {
@@ -79,8 +107,6 @@ export class MainComponent implements OnInit {
     console.log(this.objs);
 
     for (var i = 0; i < this.objs.length; i++) {
-
-      
       this.updateStatus(this.objs[i], i);
     }
 
@@ -111,3 +137,29 @@ export class MainComponent implements OnInit {
 }
 
 
+
+
+
+// this.taskService.getobj(ok)
+// .subscribe(obj => {
+//   this.newarrs = obj;
+//   this.newarrs.sort((a, b) => a.pos - b.pos);
+//   this.objs = this.newarrs;
+
+//   for (var i = 0; i < obj.length; i++) {
+//     var hotel = obj[i].id_obj;
+
+//     var arraData = {
+//       _id: obj[i]._id,
+//       objetivo: obj[i].objetivo,
+//       id_usr: obj[i].id_usr,
+//       id_obj:Object.values(hotel)[1],
+//       pos: obj[i].pos
+//     };
+
+//     console.log(Object.values(hotel)[1]);
+
+//   }
+
+
+// });

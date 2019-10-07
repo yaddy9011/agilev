@@ -1,4 +1,4 @@
 export interface Ambito {
   id: string,
-  ambito: string
+  amb: string
 }

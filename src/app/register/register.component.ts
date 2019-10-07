@@ -60,9 +60,8 @@ export class RegisterComponent implements OnInit {
       });
 
       this.taskService.getAmbito()
-      .subscribe(ambi => {
-        this.Ambitos = ambi;
-        console.log(ambi);
+      .subscribe(am => {
+        this.Ambitos = am; 
       });
 
       this.taskService.getNumIntegrantes()
