@@ -32,8 +32,6 @@ export class MainComponent implements OnInit {
   arr: string[];
   list: obj[];
 
-
-
   constructor(private taskService: TasksService) {
 
     this.idst = localStorage.getItem("ACCESS_IDS");
@@ -52,7 +50,8 @@ export class MainComponent implements OnInit {
             objetivo: Object.values(obj[i].id_obj)[1],
             id_usr: obj[i].id_usr,
             id_obj: Object.values(obj[i].id_obj)[0],
-            pos: obj[i].pos
+            pos: obj[i].pos,
+            num: Object.values(obj[i].id_obj)[2],
           };
           ids.push(arraData);
         }
@@ -85,6 +84,12 @@ export class MainComponent implements OnInit {
 
   }
 
+  dropPracticas(event: CdkDragDrop<number[]>) {
+
+    moveItemInArray(this.objs, event.previousIndex, event.currentIndex);
+
+  }
+
   updateStatus(obj: obj, pnew: number) {
 
     var newTask = {
@@ -102,9 +107,6 @@ export class MainComponent implements OnInit {
   }
 
 }
-
-
-
 
 
 // this.taskService.getobj(ok)

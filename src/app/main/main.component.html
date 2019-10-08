@@ -1,8 +1,10 @@
 <app-menu></app-menu>
 <br>
 <div align="center">
+
   <mat-accordion>
-    <mat-expansion-panel style="width:80%;">
+
+    <mat-expansion-panel style="width:80%;" [expanded]="true">
       <mat-expansion-panel-header [style.backgroundColor]="'cyan'">
         <mat-panel-title>
           <h6 class="text-uppercase font-weight-bold">OBJETIVOS</h6>
@@ -13,11 +15,14 @@
       </mat-expansion-panel-header>
 
       <br>
+
       <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
         <div align="left" class="example-box" *ngFor="let obj of objs" cdkDrag>
-          {{ obj.objetivo }}
+          <span style="width:10%;" class="text-uppercase font-weight-bold" align="left"> {{ obj.num }} </span>
+          <span align="left" style="width:85%;"> {{ obj.objetivo }} </span>
         </div>
       </div>
+
       <br>
 
       <!-- <mat-form-field>
@@ -41,7 +46,9 @@
       </mat-expansion-panel-header>
       <p>I'm visible because I am open</p>
     </mat-expansion-panel>
+
   </mat-accordion>
+
 </div>
 <br>
 <br>

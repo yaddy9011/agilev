@@ -4,4 +4,5 @@ export class obj {
     id_usr: string;
     id_obj: string;
     pos: number;
+    num: String;
 }
