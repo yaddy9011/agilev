@@ -14,7 +14,9 @@
 
       <br>
       <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
-        <div align="left" class="example-box" *ngFor="let obj of objs" cdkDrag>{{ obj.objetivo }}</div>
+        <div align="left" class="example-box" *ngFor="let obj of objs" cdkDrag>
+          {{ obj.objetivo }}
+        </div>
       </div>
       <br>
 
@@ -31,7 +33,7 @@
     <mat-expansion-panel style="width:80%;" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
       <mat-expansion-panel-header [style.backgroundColor]="'cyan'">
         <mat-panel-title>
-            <h6 class="text-uppercase font-weight-bold">PRÁCTICAS ÁGILES</h6> 
+          <h6 class="text-uppercase font-weight-bold">PRÁCTICAS ÁGILES</h6>
         </mat-panel-title>
         <mat-panel-description>
           Currently I am {{panelOpenState ? 'open' : 'closed'}}

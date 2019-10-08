@@ -30,6 +30,7 @@ export class MainComponent implements OnInit {
   idst: string;
   nameusr: string;
   arr: string[];
+  list: obj[];
 
 
 
@@ -43,46 +44,20 @@ export class MainComponent implements OnInit {
       .subscribe(obj => {
         this.newarrs = obj;
         this.newarrs.sort((a, b) => a.pos - b.pos);
-        // this.objs = this.newarrs;
-
-        for (var i = 0; i < obj.length; i++) {
-
-
-          var descripcion = obj[i].id_obj;
-          var y = Object.values(descripcion)[1];
-          //this.arr[i] = y;
-
-          // this.arrayNew[i]=Object.values(descripcion)[1], obj[i].pos;
-
-
-
-          // let arraData = {
-          //   _id: obj[i]._id,
-          //   objetivo: obj[i].objetivo,
-          //   id_usr: obj[i].id_usr,
-          //   id_obj: Object.values(hotel)[1],
-          //   pos: obj[i].pos
-          // };
-
-
-
-          console.log(Object.values(descripcion)[1]);
-
+        //this.objs = this.newarrs;
+        var ids = [];
+        for (var i = 0; i < this.newarrs.length; i++) {
+          const arraData = {
+            _id: obj[i]._id,
+            objetivo: Object.values(obj[i].id_obj)[1],
+            id_usr: obj[i].id_usr,
+            id_obj: Object.values(obj[i].id_obj)[0],
+            pos: obj[i].pos
+          };
+          ids.push(arraData);
         }
-
-        //console.log(this.arr);
-
-        //var array = [];
-        // for (var i=0; i < this.newarrs.length; i++) {
-        //   console.log(i);
-        //   console.log(this.newarrs[i].pos);
-        //   if (i==this.newarrs[i].pos) {
-        //     array[i] = this.newarrs[i];
-        //   }
-        // }
-
-        //this.tasks = array;
-        //console.log(array);
+        this.objs = ids;
+        console.log(ids);
 
       });
 
@@ -92,15 +67,6 @@ export class MainComponent implements OnInit {
 
   }
 
-  // registeredUser() {
-  //   //console.log(this.userName);
-  //   var num2 = ((document.getElementById("num1") as HTMLInputElement).value);
-  //   console.log(num2);
-  //   for (let n of this.tasks) {
-  //     console.log(n.title);
-  //   }
-  // }
-
   drop(event: CdkDragDrop<number[]>) {
 
     moveItemInArray(this.objs, event.previousIndex, event.currentIndex);
@@ -109,7 +75,6 @@ export class MainComponent implements OnInit {
     for (var i = 0; i < this.objs.length; i++) {
       this.updateStatus(this.objs[i], i);
     }
-
 
     // let a: Number = event.previousIndex;
     // let b: Number = event.currentIndex;
@@ -126,8 +91,10 @@ export class MainComponent implements OnInit {
       _id: obj._id,
       objetivo: obj.objetivo,
       id_usr: obj.id_usr,
+      id_obj: obj.id_obj,
       pos: pnew
     };
+
     this.taskService.updateTask(newTask)
       .subscribe(res => {
         //task.isDone = !task.isDone;
