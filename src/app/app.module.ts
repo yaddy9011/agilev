@@ -10,7 +10,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { LoginComponent } from './login/login.component';
-import { MatMenuModule} from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
 import { MenuComponent } from './menu/menu.component';
 import { HomeComponent } from './home/home.component';
 import { MainComponent } from './main/main.component';
@@ -18,20 +18,17 @@ import { EvaluacionComponent } from './evaluacion/evaluacion.component';
 import { MatCardModule } from '@angular/material';
 import { RegisterComponent } from './register/register.component';
 import { FooterComponent } from './footer/footer.component';
-import { EncabezadoComponent } from './encabezado/encabezado.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from './services/auth.service';
 import { TasksService } from './services/tasks.service';
 import { MatTableModule } from '@angular/material';
-import { SortexampleComponent } from './sortexample/sortexample.component' 
 import { SortablejsModule } from 'angular-sortablejs'
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import {MatInputModule} from '@angular/material/input';
-import {MatExpansionModule} from '@angular/material/expansion';
-import {MatSelectModule} from '@angular/material/select';
-
-
+import { MatInputModule } from '@angular/material/input';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSelectModule } from '@angular/material/select';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -43,10 +40,7 @@ import {MatSelectModule} from '@angular/material/select';
     MainComponent,
     EvaluacionComponent,
     RegisterComponent,
-    FooterComponent,
-    EncabezadoComponent,
-    SortexampleComponent
-    
+    FooterComponent
   ],
   imports: [
     BrowserModule,
@@ -68,9 +62,10 @@ import {MatSelectModule} from '@angular/material/select';
     MatInputModule,
     MatExpansionModule,
     MatSelectModule,
+    MatSnackBarModule,
     SortablejsModule.forRoot({})
   ],
-  providers: [AuthService,TasksService],
+  providers: [AuthService, TasksService],
   bootstrap: [AppComponent]
 })
 

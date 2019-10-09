@@ -8,6 +8,7 @@ import { Ambito } from '../clases/Ambito';
 import { numero_integrante } from '../clases/num-integrante';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 export interface Food {
   value: string;
@@ -27,8 +28,10 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
+
 export class RegisterComponent implements OnInit {
 
+  durationInSeconds = 5;
   //cambios hoy 04/10/2019
   Paises: Pais[];
   Sectores: Sector[];
@@ -41,30 +44,24 @@ export class RegisterComponent implements OnInit {
   ]);
   matcher = new MyErrorStateMatcher();
 
-  foods: Food[] = [
-    { value: 'steak-0', viewValue: 'Steak' },
-    { value: 'pizza-1', viewValue: 'Pizza' },
-    { value: 'tacos-2', viewValue: 'Tacos' }
-  ];
-
-  constructor(private authService: AuthService, private taskService: TasksService, private router: Router) {
+  constructor(private authService: AuthService, private taskService: TasksService, private router: Router, private _snackBar: MatSnackBar) {
 
     this.taskService.getPaises()
       .subscribe(pa => {
         this.Paises = pa;
       });
 
-      this.taskService.getSector()
+    this.taskService.getSector()
       .subscribe(sec => {
         this.Sectores = sec;
       });
 
-      this.taskService.getAmbito()
+    this.taskService.getAmbito()
       .subscribe(am => {
-        this.Ambitos = am; 
+        this.Ambitos = am;
       });
 
-      this.taskService.getNumIntegrantes()
+    this.taskService.getNumIntegrantes()
       .subscribe(num_in => {
         this.numero_integrantes = num_in;
       });
@@ -76,7 +73,23 @@ export class RegisterComponent implements OnInit {
   onRegister(form): void {
     this.authService.register(form.value).subscribe(res => {
       this.router.navigateByUrl('/login');
-    });
+    },
+      error => {
+
+        this._snackBar.openFromComponent(DialogregisterComponent,{
+          duration: this.durationInSeconds * 1000,
+        });
+
+        console.log("esto es un error de");
+        //console.log(error);
+      }
+    );
   }
 
 }
+
+@Component({
+  selector: 'Dialogregister',
+  templateUrl: 'dialogRegister.html'
+})
+export class DialogregisterComponent { }

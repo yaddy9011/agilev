@@ -1,9 +1,7 @@
 <app-menu></app-menu>
 <br>
 <div align="center">
-
   <mat-accordion>
-
     <mat-expansion-panel style="width:80%;" [expanded]="true">
       <mat-expansion-panel-header [style.backgroundColor]="'cyan'">
         <mat-panel-title>
@@ -13,48 +11,58 @@
           Ordena los objetivos segun la prioridad que consideres adecuada
         </mat-panel-description>
       </mat-expansion-panel-header>
-
       <br>
-
       <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
         <div align="left" class="example-box" *ngFor="let obj of objs" cdkDrag>
           <span style="width:10%;" class="text-uppercase font-weight-bold" align="left"> {{ obj.num }} </span>
           <span align="left" style="width:85%;"> {{ obj.objetivo }} </span>
         </div>
       </div>
-
       <br>
-
-      <!-- <mat-form-field>
-      <input matInput placeholder="First name">
-    </mat-form-field> -->
-
-      <!-- <mat-form-field>
-      <input matInput placeholder="Age">
-    </mat-form-field> -->
-
     </mat-expansion-panel>
-
     <mat-expansion-panel style="width:80%;" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
       <mat-expansion-panel-header [style.backgroundColor]="'cyan'">
         <mat-panel-title>
           <h6 class="text-uppercase font-weight-bold">PRÁCTICAS ÁGILES</h6>
         </mat-panel-title>
         <mat-panel-description>
-          Currently I am {{panelOpenState ? 'open' : 'closed'}}
+          Ordena las prácticas segun la prioridad que consideres adecuada, y asigna nivel de aplicación
+          <!-- Currently I am {{panelOpenState ? 'open' : 'closed'}} -->
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <p>I'm visible because I am open</p>
+      <br>
+      <div cdkDropList class="example-list" (cdkDropListDropped)="dropPracticas($event)">
+        <div align="left" class="example-box" *ngFor="let prac of Practicas; let i = index" cdkDrag>
+          <span style="width:10%;" class="text-uppercase font-weight-bold" align="left"> {{ prac.num }} </span>
+          <span align="left" style="width:60%;"> {{ prac.textprac }} </span>
+          <span align="right" style="width:30%;">
+            <mat-form-field>
+              <mat-label>Nivel de aplicación</mat-label>
+              <select [(ngModel)]="idArr[i]" (change)="onChange($event.target.value)" matNativeControl required>
+                <option value="0">No Definido</option>
+                <option value="1">Muy Bajo</option>
+                <option value="3">Bajo</option>
+                <option value="4">Medio</option>
+                <option value="5">Alto</option>
+                <option value="6">Muy alto</option>
+              </select>
+            </mat-form-field>
+          </span>
+        </div>
+      </div>
     </mat-expansion-panel>
-
   </mat-accordion>
-
 </div>
 <br>
 <br>
 <br>
-
+<br>
 <app-footer></app-footer>
+
+
+
+
+
 
 <!-- <input type='text' [(ngModel)]='userName' id='num1' class='user_id_text'>
 <input type='submit' value='Login' (click)='registeredUser($event)'>

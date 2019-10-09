@@ -3,6 +3,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { TasksService } from '../services/tasks.service';
 import { Task } from '../clases/Task';
 import { obj } from '../clases/obj';
+import { Practica } from '../clases/practica';
 import { UserI } from '../clases/user';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
@@ -21,6 +22,11 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 export class MainComponent implements OnInit {
 
+  idArr = []
+
+
+
+  nrSelect = 3
   panelOpenState = false;
   userName = '';
   tasks: Task[];
@@ -31,6 +37,10 @@ export class MainComponent implements OnInit {
   nameusr: string;
   arr: string[];
   list: obj[];
+
+  Practicas: Practica[];
+  ArrayPracticas: Practica[];
+  listPractica: Practica[];
 
   constructor(private taskService: TasksService) {
 
@@ -56,10 +66,30 @@ export class MainComponent implements OnInit {
           ids.push(arraData);
         }
         this.objs = ids;
-        console.log(ids);
-
+        //  console.log(ids);
       });
 
+    this.taskService.getPracticas(ok)
+      .subscribe(prac => {
+        this.ArrayPracticas = prac;
+        this.ArrayPracticas.sort((a, b) => a.pos - b.pos);
+        var arrdatanew = [];
+        for (var i = 0; i < this.ArrayPracticas.length; i++) {
+          const arraData = {
+            _id: prac[i]._id,
+            textprac: Object.values(prac[i].id_prac)[2],
+            id_usr: prac[i].id_usr,
+            id_obj: Object.values(prac[i].id_prac)[0],
+            pos: prac[i].pos,
+            num: Object.values(prac[i].id_prac)[1],
+            nivelapli: prac[i].nivelapli
+          };
+          this.idArr[i] = arraData.nivelapli;
+          arrdatanew.push(arraData);
+        }
+        this.Practicas = arrdatanew;
+        // console.log(arrdatanew);
+      });
   }
 
   ngOnInit() {
@@ -69,8 +99,7 @@ export class MainComponent implements OnInit {
   drop(event: CdkDragDrop<number[]>) {
 
     moveItemInArray(this.objs, event.previousIndex, event.currentIndex);
-    console.log(this.objs);
-
+    // console.log(this.objs);
     for (var i = 0; i < this.objs.length; i++) {
       this.updateStatus(this.objs[i], i);
     }
@@ -81,12 +110,6 @@ export class MainComponent implements OnInit {
     // console.log(this.tasks[event.previousIndex]);
     // this.updateStatus(this.tasks[event.currentIndex], event.currentIndex);
     // this.updateStatus(this.tasks[event.previousIndex], event.previousIndex);
-
-  }
-
-  dropPracticas(event: CdkDragDrop<number[]>) {
-
-    moveItemInArray(this.objs, event.previousIndex, event.currentIndex);
 
   }
 
@@ -106,8 +129,49 @@ export class MainComponent implements OnInit {
       })
   }
 
-}
+  dropPracticas(event: CdkDragDrop<number[]>) {
 
+    moveItemInArray(this.Practicas, event.previousIndex, event.currentIndex);
+
+    for (var i = 0; i < this.Practicas.length; i++) {
+
+      this.idArr[i] = this.Practicas[i].nivelapli;
+
+      this.updateStatuspracticas(this.Practicas[i], i);
+    }
+
+  }
+
+
+  updateStatuspracticas(pra: Practica, pnew: number) {
+
+    var newActualizacion = {
+      _id: pra._id,
+      id_usr: pra.id_usr,
+      id_obj: pra.id_prac,
+      pos: pnew,
+      nivelapli: pra.nivelapli
+    };
+
+    this.taskService.updatePractica(newActualizacion)
+      .subscribe(res => {
+      })
+  }
+
+  onChange(deviceValue) {
+
+    //console.log(this.idArr);
+
+    for (var i = 0; i < this.Practicas.length; i++) {
+      this.Practicas[i].nivelapli = this.idArr[i];
+      this.updateStatuspracticas(this.Practicas[i], i);
+    }
+
+    //this.idArr[2]=deviceValue;
+    //console.log(deviceValue);
+  }
+
+}
 
 // this.taskService.getobj(ok)
 // .subscribe(obj => {

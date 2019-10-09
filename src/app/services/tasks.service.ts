@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators';
 import { Task } from '../clases/Task';
 import { Pais } from '../clases/pais';
 import { obj } from '../clases/obj';
+import { Practica } from '../clases/practica';
 import { Sector } from '../clases/Sector';
 import { Ambito } from '../clases/Ambito';
 import { numero_integrante } from '../clases/num-integrante';
@@ -66,6 +67,16 @@ export class TasksService {
 
   updateTask(newTask) {
     return this.http.put<Task>(`${this.domain}/api/tasks/${newTask._id}`, newTask)
+      .pipe(map(res => res));
+  }
+
+  getPracticas(id) {
+    return this.http.get<Practica[]>(`${this.domain}/api/practicas/${id}`)
+      .pipe(map(res => res));
+  }
+
+  updatePractica(newPractica) {
+    return this.http.put<Practica>(`${this.domain}/api/practicas/${newPractica._id}`, newPractica)
       .pipe(map(res => res));
   }
 
