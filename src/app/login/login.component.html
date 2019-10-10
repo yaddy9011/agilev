@@ -2,19 +2,20 @@
 
 <div class="main">
 
-    <p class="sign" align="center">Sign in</p>
+  <p class="sign" align="center">Entra al sistema</p>
+
+  <form #frmLogin="ngForm" class="form1" (ngSubmit)="onLogin(frmLogin)">
+
+    <input class="un" align="center" type="email" name="email" placeholder="Email" ngModel required>
+
+    <input class="pass" name="password" type="password" align="center" placeholder="Password" ngModel required>
+
+    <input class="submit" type="submit" value="Acceder">
+
+    <p class="forgot" align="center"><a href="#">olvidaste tu contraseña?</a></p>
+
+  </form>
   
-    <form #frmLogin="ngForm" class="form1" (ngSubmit)="onLogin(frmLogin)">
-  
-      <input class="un" align="center" type="email" name="email" placeholder="Email" ngModel required>
-      
-      <input class="pass" name="password" type="password" align="center" placeholder="Password" ngModel required>
-  
-      <input class="submit" type="submit" value="Send">
-  
-      <p class="forgot" align="center"><a href="#">Forgot Password?</a></p>
-  
-    </form>
 </div>
 
 <app-footer></app-footer>

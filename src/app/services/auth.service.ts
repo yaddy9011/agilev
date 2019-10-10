@@ -61,7 +61,7 @@ export class AuthService {
 
     localStorage.setItem("ACCESS_IDS", ids);
     localStorage.setItem("ACCESS_name", nam);
-    console.log(ids);
+   // console.log(ids);
 
   }
 

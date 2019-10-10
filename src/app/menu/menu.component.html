@@ -1,10 +1,8 @@
-<mat-toolbar [style.backgroundColor]="'cyan'">
+<mat-toolbar id="menu-tool">
   <span class="fill-remaining-space">
-
     <button mat-icon-button [matMenuTriggerFor]="menu">
       <mat-icon>menu</mat-icon>
     </button>
-
     <mat-menu #menu="matMenu" [overlapTrigger]="false">
 
       <button mat-menu-item routerLink="/home">
@@ -16,7 +14,7 @@
       </button>
 
       <button *ngIf="!isShowprac" mat-menu-item routerLink="/main">
-        <mat-icon>add</mat-icon><span>Objetivos</span>
+        <mat-icon>add</mat-icon><span>Objetivos y prácticas</span>
       </button>
 
       <button routerLink="/login" *ngIf="!isShowLog" mat-menu-item>
@@ -41,5 +39,5 @@
 
     </mat-menu>
   </span>
-  <span id="idz" class="fill-remaining-space">Evaluación del enforque ágil</span>
+  <span class="fill-remaining-space">Evaluación del enforque ágil</span>
 </mat-toolbar>

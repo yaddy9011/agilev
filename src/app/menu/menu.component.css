@@ -1,0 +1,7 @@
+#menu-tool{
+  background-color: var(--first-color);
+  color:var(--first-letra);
+  position: fixed;
+      z-index: 1;
+  }
+  

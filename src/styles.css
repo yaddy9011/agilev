@@ -1,14 +1,32 @@
 /* You can add global styles to this file, and also import other style files */
-@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+/* @import '~@angular/material/prebuilt-themes/indigo-pink.css'; */
+@import '../node_modules/@angular/material/prebuilt-themes/indigo-pink.css';
 @import '~bootstrap/dist/css/bootstrap.min.css';
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
 .example-card {
     max-width: 800px;
   }
-
-  body{
+  
+body{
     display: flex;
     flex-direction: column;
     height: 100%;
 }
+
+#mat-header{
+  background-color: var(--first-color);
+}
+
+#mat-button{
+  background-color: var(--first-color);
+}
+
+:root {
+  --first-color: #03A9F4;
+  --second-color:#0277BD;
+  --first-letra: #000000;
+  --second-letra: #fff;
+} 

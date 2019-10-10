@@ -249,9 +249,7 @@
   right: 0;
 }
 } */
-
  @media only screen and (max-width:1199px) {
-
 .container { width: 96%; }
 }
 
@@ -260,4 +258,9 @@
   top: 0;
   right: 0;
   left: 0;
+}
+
+#mat-header{
+  background-color: var(--first-color);
+  color:var(--first-letra);
 }

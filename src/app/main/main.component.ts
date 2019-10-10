@@ -23,10 +23,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 export class MainComponent implements OnInit {
 
   idArr = []
-
-
-
-  nrSelect = 3
+  //nrSelect = 3
   panelOpenState = false;
   userName = '';
   tasks: Task[];

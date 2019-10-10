@@ -93,7 +93,9 @@ export class RegisterComponent implements OnInit {
   templateUrl: 'dialogRegister.html',
   styles: [`
     .example-pizza-party {
-      color: hotpink;
+      color: #ffff;
+      max-width:100%;
+      background-color: #C62828;
     }
   `],
 })
