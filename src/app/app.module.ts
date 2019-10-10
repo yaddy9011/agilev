@@ -16,7 +16,7 @@ import { HomeComponent } from './home/home.component';
 import { MainComponent } from './main/main.component';
 import { EvaluacionComponent } from './evaluacion/evaluacion.component';
 import { MatCardModule } from '@angular/material';
-import { RegisterComponent } from './register/register.component';
+import { RegisterComponent, PizzaPartyComponent } from './register/register.component';
 import { FooterComponent } from './footer/footer.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -28,8 +28,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSelectModule } from '@angular/material/select';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -40,8 +39,10 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     MainComponent,
     EvaluacionComponent,
     RegisterComponent,
+    PizzaPartyComponent,
     FooterComponent
   ],
+  entryComponents: [PizzaPartyComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

@@ -76,20 +76,25 @@ export class RegisterComponent implements OnInit {
     },
       error => {
 
-        this._snackBar.openFromComponent(DialogregisterComponent,{
+        this._snackBar.openFromComponent(PizzaPartyComponent,{
           duration: this.durationInSeconds * 1000,
         });
 
-        console.log("esto es un error de");
-        //console.log(error);
+      // alert("revisa los datos del formulario, es posible que el correo ya exista");
       }
     );
   }
 
 }
 
+
 @Component({
-  selector: 'Dialogregister',
-  templateUrl: 'dialogRegister.html'
+  selector: 'snack-bar-component-example-snack',
+  templateUrl: 'dialogRegister.html',
+  styles: [`
+    .example-pizza-party {
+      color: hotpink;
+    }
+  `],
 })
-export class DialogregisterComponent { }
+export class PizzaPartyComponent {}

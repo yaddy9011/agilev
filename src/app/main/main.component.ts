@@ -52,6 +52,7 @@ export class MainComponent implements OnInit {
       .subscribe(obj => {
         this.newarrs = obj;
         this.newarrs.sort((a, b) => a.pos - b.pos);
+        //console.log(this.newarrs);
         //this.objs = this.newarrs;
         var ids = [];
         for (var i = 0; i < this.newarrs.length; i++) {
@@ -66,7 +67,7 @@ export class MainComponent implements OnInit {
           ids.push(arraData);
         }
         this.objs = ids;
-        //  console.log(ids);
+       
       });
 
     this.taskService.getPracticas(ok)
