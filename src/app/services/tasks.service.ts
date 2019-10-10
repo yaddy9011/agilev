@@ -15,8 +15,8 @@ import { numero_integrante } from '../clases/num-integrante';
 
 export class TasksService {
 
-  domain: string = 'http://localhost:3000';
-  //domain: string = 'https://agile-backend.herokuapp.com';
+  //domain: string = 'http://localhost:3000';
+  domain: string = 'https://agile-backend.herokuapp.com';
 
   constructor(private http: HttpClient) {
   }
