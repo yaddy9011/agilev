@@ -21,6 +21,7 @@ import { FooterComponent } from './footer/footer.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from './services/auth.service';
+import { AppGlobals } from './app.global';
 import { TasksService } from './services/tasks.service';
 import { MatTableModule } from '@angular/material';
 import { SortablejsModule } from 'angular-sortablejs'
@@ -29,6 +30,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { GestionObjetivosComponent } from './gestion-objetivos/gestion-objetivos.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     EvaluacionComponent,
     RegisterComponent,
     PizzaPartyComponent,
-    FooterComponent
+    FooterComponent,
+    GestionObjetivosComponent
   ],
   entryComponents: [PizzaPartyComponent],
   imports: [
@@ -66,8 +69,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatSnackBarModule,
     SortablejsModule.forRoot({})
   ],
-  providers: [AuthService, TasksService],
+  providers: [AuthService, TasksService, AppGlobals],
   bootstrap: [AppComponent]
 })
 
-export class AppModule { }
+export class AppModule {}

@@ -5,32 +5,36 @@ import { HomeComponent } from './home/home.component';
 import { EvaluacionComponent } from './evaluacion/evaluacion.component';
 import { RegisterComponent } from './register/register.component';
 import { MainComponent } from './main/main.component';
-
+import { GestionObjetivosComponent } from './gestion-objetivos/gestion-objetivos.component';
 
 const routes: Routes = [
   {
-    path:'login',
-    component:LoginComponent
+    path: 'login',
+    component: LoginComponent
   }
   ,
   {
-    path:'home',
-    component:HomeComponent
+    path: 'home',
+    component: HomeComponent
   }
   ,
   {
-    path:'eval',
-    component:EvaluacionComponent
+    path: 'eval',
+    component: EvaluacionComponent
   },
   {
-    path:'registro',
-    component:RegisterComponent
+    path: 'registro',
+    component: RegisterComponent
   }
   ,
   {
-    path:'main',
-    component:MainComponent
-  }   
+    path: 'main',
+    component: MainComponent
+  }
+  , {
+    path: 'Gobjetivos',
+    component: GestionObjetivosComponent
+  }
 ];
 
 @NgModule({

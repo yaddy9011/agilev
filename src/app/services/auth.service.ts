@@ -5,18 +5,19 @@ import { UserI } from '../clases/user';
 import { JwtResponseI } from '../clases/jwt-response';
 import { tap } from 'rxjs/operators';
 import { Observable, BehaviorSubject } from 'rxjs';
-
+import { AppGlobals } from '../app.global';
 
 @Injectable()
-
 export class AuthService {
 
-  AUTH_SERVER: string = 'https://agile-backend.herokuapp.com';
-  // AUTH_SERVER: string = 'http://localhost:3000';
-
+  AUTH_SERVER: string
   authSubject = new BehaviorSubject(false);
   private token: string;
-  constructor(private httpClient: HttpClient) { }
+
+
+  constructor(private httpClient: HttpClient, public _global: AppGlobals) {
+    this.AUTH_SERVER = this._global.domain
+  }
 
   register(user: UserI): Observable<JwtResponseI> {
     return this.httpClient.post<JwtResponseI>(`${this.AUTH_SERVER}/register`,
@@ -37,7 +38,7 @@ export class AuthService {
           if (res) {
             // guardar token
             this.saveToken(res.dataUser.accessToken, res.dataUser.expiresIn);
-            this.saveID(res.dataUser.id,res.dataUser.name);
+            this.saveID(res.dataUser.id, res.dataUser.name);
           }
         })
       );
@@ -61,7 +62,7 @@ export class AuthService {
 
     localStorage.setItem("ACCESS_IDS", ids);
     localStorage.setItem("ACCESS_name", nam);
-   // console.log(ids);
+    // console.log(ids);
 
   }
 

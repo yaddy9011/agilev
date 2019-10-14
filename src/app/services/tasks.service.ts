@@ -8,6 +8,7 @@ import { Practica } from '../clases/practica';
 import { Sector } from '../clases/Sector';
 import { Ambito } from '../clases/Ambito';
 import { numero_integrante } from '../clases/num-integrante';
+import { AppGlobals } from '../app.global';
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +16,12 @@ import { numero_integrante } from '../clases/num-integrante';
 
 export class TasksService {
 
-  //domain: string = 'http://localhost:3000';
-  domain: string = 'https://agile-backend.herokuapp.com';
+  domain: string
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, public _global: AppGlobals) {
+
+    this.domain = this._global.domain
+
   }
 
   getTasks() {
