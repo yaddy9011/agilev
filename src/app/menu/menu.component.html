@@ -17,7 +17,7 @@
         <mat-icon>add</mat-icon><span>Objetivos y prácticas</span>
       </button>
 
-      <button  mat-menu-item routerLink="/Gobjetivos">
+      <button *ngIf="!isShowGo"  mat-menu-item routerLink="/Gobjetivos">
         <mat-icon>edit</mat-icon><span>Gestión de Objetivos</span>
       </button>
 

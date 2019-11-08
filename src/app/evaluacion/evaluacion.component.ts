@@ -12,4 +12,10 @@ export class EvaluacionComponent implements OnInit {
   ngOnInit() {
   }
 
+  GenerarEvaluacion() {
+
+    alert('entre a mi metodo');
+
+  }
+
 }

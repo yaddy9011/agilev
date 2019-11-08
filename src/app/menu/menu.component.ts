@@ -14,6 +14,8 @@ export class MenuComponent implements OnInit {
   isShowLog = false;
   isShowLogo = false;
   isShowprac = false;
+  isShowGo= true;
+
 
   constructor(private AuthService: AuthService, private router: Router) { }
 

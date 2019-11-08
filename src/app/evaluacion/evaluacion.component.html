@@ -1,6 +1,28 @@
 <app-menu></app-menu>
-<br>
-<br>
-<br>
-<p>evaluacion works!</p>
+
+<div id="app" align="center">
+    <br>
+    <br>
+    <br>
+    <mat-card class="example-card">
+        <mat-card-header id="mat-header">
+            <div mat-card-avatar class="example-header-image"></div>
+            <mat-card-title>
+                Evaluación por objetivos works!
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <p>
+                Preciona el botón para generar un nueva evaluación.
+            </p>
+        </mat-card-content>
+        <mat-card-actions>
+            <button  (click)="GenerarEvaluacion($event, item)" mat-fab aria-label="Example icon-button with a heart icon">
+                <mat-icon> list_alt</mat-icon>
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</div>
+
+
 <app-footer></app-footer>

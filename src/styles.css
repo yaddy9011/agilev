@@ -4,18 +4,19 @@
 @import '~bootstrap/dist/css/bootstrap.min.css';
 
 html, body { height: 100%; }
+
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+body{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
 
 .example-card {
     max-width: 800px;
   }
   
-body{
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
 #mat-header{
   background-color: var(--first-color);
 }
