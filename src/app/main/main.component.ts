@@ -34,7 +34,6 @@ export class MainComponent implements OnInit {
   nameusr: string;
   arr: string[];
   list: obj[];
-
   Practicas: Practica[];
   ArrayPracticas: Practica[];
   listPractica: Practica[];
@@ -86,8 +85,9 @@ export class MainComponent implements OnInit {
           arrdatanew.push(arraData);
         }
         this.Practicas = arrdatanew;
-        // console.log(arrdatanew);
+    
       });
+
   }
 
   ngOnInit() {
@@ -171,26 +171,3 @@ export class MainComponent implements OnInit {
 
 }
 
-// this.taskService.getobj(ok)
-// .subscribe(obj => {
-//   this.newarrs = obj;
-//   this.newarrs.sort((a, b) => a.pos - b.pos);
-//   this.objs = this.newarrs;
-
-//   for (var i = 0; i < obj.length; i++) {
-//     var hotel = obj[i].id_obj;
-
-//     var arraData = {
-//       _id: obj[i]._id,
-//       objetivo: obj[i].objetivo,
-//       id_usr: obj[i].id_usr,
-//       id_obj:Object.values(hotel)[1],
-//       pos: obj[i].pos
-//     };
-
-//     console.log(Object.values(hotel)[1]);
-
-//   }
-
-
-// });

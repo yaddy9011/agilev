@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserI } from '../clases/user';
@@ -6,14 +5,12 @@ import { JwtResponseI } from '../clases/jwt-response';
 import { tap } from 'rxjs/operators';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { AppGlobals } from '../app.global';
-
 @Injectable()
 export class AuthService {
 
   AUTH_SERVER: string
   authSubject = new BehaviorSubject(false);
   private token: string;
-
 
   constructor(private httpClient: HttpClient, public _global: AppGlobals) {
     this.AUTH_SERVER = this._global.domain
@@ -36,10 +33,17 @@ export class AuthService {
       user).pipe(tap(
         (res: JwtResponseI) => {
           if (res) {
-            // guardar token
             this.saveToken(res.dataUser.accessToken, res.dataUser.expiresIn);
             this.saveID(res.dataUser.id, res.dataUser.name);
           }
+        })
+      );
+  }
+
+  GuardarEvaluacion(id_usr): Observable<JwtResponseI> {
+    console.log(id_usr);
+    return this.httpClient.post<JwtResponseI>(`${this.AUTH_SERVER}/setEvaluationbyobj/${id_usr}`,id_usr).pipe(tap(
+        (res: JwtResponseI) => {
         })
       );
   }
@@ -59,11 +63,8 @@ export class AuthService {
   }
 
   private saveID(ids: string, nam: string): void {
-
     localStorage.setItem("ACCESS_IDS", ids);
     localStorage.setItem("ACCESS_name", nam);
-    // console.log(ids);
-
   }
 
   private getToken(): string {

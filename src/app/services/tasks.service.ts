@@ -8,7 +8,9 @@ import { Practica } from '../clases/practica';
 import { Sector } from '../clases/Sector';
 import { Ambito } from '../clases/Ambito';
 import { numero_integrante } from '../clases/num-integrante';
+import { Eval } from '../clases/evaluacionbyobj';
 import { AppGlobals } from '../app.global';
+
 
 @Injectable({
   providedIn: 'root'
@@ -57,6 +59,13 @@ export class TasksService {
     return this.http.get<obj[]>(`${this.domain}/api/tasks/${id}`)
       .pipe(map(res => res));
   }
+
+
+  getEvalByObj(id) {
+    return this.http.get<Eval[]>(`${this.domain}/api/evaluaciones/${id}`)
+      .pipe(map(res => res));
+  }
+
 
   addTask(newTask: Task) {
     return this.http.post<Task>(`${this.domain}/api/tasks`, newTask)
