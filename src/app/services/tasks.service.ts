@@ -20,11 +20,8 @@ import { AppGlobals } from '../app.global';
 export class TasksService {
 
   domain: string
-
   constructor(private http: HttpClient, public _global: AppGlobals) {
-
     this.domain = this._global.domain
-
   }
 
   getTasks() {
@@ -87,6 +84,13 @@ export class TasksService {
       .pipe(map(res => res));
   }
 
+  
+  getPracticasbyEval(id) {
+    return this.http.get<Practica[]>(`${this.domain}/api/practicasbyeval/${id}`)
+      .pipe(map(res => res));
+  }
+
+  
   updatePractica(newPractica) {
     return this.http.put<Practica>(`${this.domain}/api/practicas/${newPractica._id}`, newPractica)
       .pipe(map(res => res));

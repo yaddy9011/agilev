@@ -3,7 +3,9 @@ export class Practica {
     textprac: string;
     id_usr: string;
     id_prac: string;
+    id_eval: string;
     pos: number;
+    n_prac: number;
     num: String;
     nivelapli: number;
 }

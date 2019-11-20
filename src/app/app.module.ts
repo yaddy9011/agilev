@@ -31,6 +31,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { GestionObjetivosComponent } from './gestion-objetivos/gestion-objetivos.component';
+import {MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { GestionObjetivosComponent } from './gestion-objetivos/gestion-objetivos
     MatInputModule,
     MatExpansionModule,
     MatSelectModule,
+    MatDialogModule,
     MatSnackBarModule,
     SortablejsModule.forRoot({})
   ],
