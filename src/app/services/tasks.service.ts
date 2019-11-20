@@ -9,6 +9,7 @@ import { Sector } from '../clases/Sector';
 import { Ambito } from '../clases/Ambito';
 import { numero_integrante } from '../clases/num-integrante';
 import { Eval } from '../clases/evaluacionbyobj';
+import { Rop } from '../clases/rop';
 import { AppGlobals } from '../app.global';
 
 
@@ -36,36 +37,35 @@ export class TasksService {
       .pipe(map(res => res));
   }
 
-
   getSector() {
     return this.http.get<Sector[]>(`${this.domain}/api/sectores`)
       .pipe(map(res => res));
   }
-
 
   getAmbito() {
     return this.http.get<Ambito[]>(`${this.domain}/api/ambitos`)
       .pipe(map(res => res));
   }
 
-
   getNumIntegrantes() {
     return this.http.get<numero_integrante[]>(`${this.domain}/api/numerointegrantes`)
       .pipe(map(res => res));
   }
-
 
   getobj(id) {
     return this.http.get<obj[]>(`${this.domain}/api/tasks/${id}`)
       .pipe(map(res => res));
   }
 
-
   getEvalByObj(id) {
     return this.http.get<Eval[]>(`${this.domain}/api/evaluaciones/${id}`)
       .pipe(map(res => res));
   }
 
+  getrop(id) {
+    return this.http.get<Rop[]>(`${this.domain}/api/evaluaciones/${id}`)
+      .pipe(map(res => res));
+  }
 
   addTask(newTask: Task) {
     return this.http.post<Task>(`${this.domain}/api/tasks`, newTask)
@@ -91,5 +91,6 @@ export class TasksService {
     return this.http.put<Practica>(`${this.domain}/api/practicas/${newPractica._id}`, newPractica)
       .pipe(map(res => res));
   }
+
 
 }
