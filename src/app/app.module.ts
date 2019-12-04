@@ -14,7 +14,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MenuComponent } from './menu/menu.component';
 import { HomeComponent } from './home/home.component';
 import { MainComponent } from './main/main.component';
-import { EvaluacionComponent } from './evaluacion/evaluacion.component';
+import { EvaluacionComponent, DialogOverviewExampleDialog} from './evaluacion/evaluacion.component';
 import { MatCardModule } from '@angular/material';
 import { RegisterComponent, PizzaPartyComponent } from './register/register.component';
 import { FooterComponent } from './footer/footer.component';
@@ -43,10 +43,11 @@ import {MatDialogModule, MatDialogRef} from '@angular/material/dialog';
     EvaluacionComponent,
     RegisterComponent,
     PizzaPartyComponent,
+    DialogOverviewExampleDialog,
     FooterComponent,
     GestionObjetivosComponent
   ],
-  entryComponents: [PizzaPartyComponent],
+  entryComponents: [PizzaPartyComponent, DialogOverviewExampleDialog],
   imports: [
     BrowserModule,
     AppRoutingModule,

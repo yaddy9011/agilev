@@ -7,10 +7,8 @@ import { Eval } from '../clases/evaluacionbyobj';
 import { obj } from '../clases/obj';
 
 export interface DialogData {
-  animal: string;
-  name: string;
+  idEval: String;
 }
-
 
 @Component({
   selector: 'app-evaluacion',
@@ -27,8 +25,6 @@ export interface DialogData {
 
 export class EvaluacionComponent implements OnInit {
 
-  animal: string;
-  name: string;
   newarrs: Eval[];
   Arrayobj: obj[];
   dataSource;
@@ -38,8 +34,6 @@ export class EvaluacionComponent implements OnInit {
   constructor(private authService: AuthService, private taskService: TasksService, public dialog: MatDialog) {
     this.idst = localStorage.getItem("ACCESS_IDS");
     this.GetEvalByObj();
-    console.log(this.newarrs);
-    this.GetObjetivosbyUsr();
   }
 
   ngOnInit() { }
@@ -51,10 +45,49 @@ export class EvaluacionComponent implements OnInit {
   GetEvalByObj() {
     this.taskService.getEvalByObj(this.idst)
       .subscribe(evals => {
-        console.log(evals);
         this.newarrs = evals;
         this.dataSource = this.newarrs;
       });
+  }
+
+  remove(id) {
+
+    console.log(this.newarrs[id]._id)
+
+    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+      width: '300px',
+      data: { idEval: this.newarrs[id]._id }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      // console.log('The dialog was closed');
+      // this.animal = result;
+    });
+
+  }
+
+}
+
+
+@Component({
+  selector: 'dialog-overview-example-dialog',
+  templateUrl: 'dialog-overview-example-dialog.html',
+})
+
+export class DialogOverviewExampleDialog {
+
+  idst: string;
+  _idEval: String;
+  Arrayobj: obj[];
+
+  constructor(public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData, private taskService: TasksService) {
+    this.idst = localStorage.getItem("ACCESS_IDS");
+    this._idEval = data.idEval
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 
   GetRop() {
@@ -70,40 +103,14 @@ export class EvaluacionComponent implements OnInit {
       .subscribe(ob => {
         console.log(ob);
         this.Arrayobj = ob;
-      });
-  }
-
-
-  remove(id) {
-    console.log(id);
-
-    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
-      width: '250px', 
-      data: { name: id, animal: this.animal }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.animal = result;
-    });
+
+
+
+
 
   }
 
-}
-
-
-@Component({
-  selector: 'dialog-overview-example-dialog',
-  templateUrl: 'dialog-overview-example-dialog.html',
-})
-
-export class DialogOverviewExampleDialog {
-
-  constructor(public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
-
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
 
 }

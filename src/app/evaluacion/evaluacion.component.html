@@ -77,16 +77,14 @@
     </mat-card>
 
 
-
-
     <table class="table table-bordered table-responsive-md table-striped text-center">
         <tr>
             <th class="text-center">Evaluacion</th>
             <th class="text-center">Ver evaluacion</th>
         </tr>
-        <tr *ngFor="let Arrayobjs of Arrayobj; let id = index">
+        <tr *ngFor="let newarrss of newarrs; let id = index">
             <td>
-                <span>{{Arrayobjs.objetivo}}</span>
+                <span>{{newarrss.fecha_creacion}}</span>
             </td>
             <td>
                 <span class="table-remove">
@@ -96,18 +94,9 @@
             </td>
         </tr>
     </table>
-
-
-
-
-
-
-
 </div>
 
 <br>
 <br>
 <br>
-
-
 <app-footer></app-footer>
