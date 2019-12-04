@@ -59,10 +59,12 @@ export class TasksService {
       .pipe(map(res => res));
   }
 
-  getrop(id) {
-    return this.http.get<Rop[]>(`${this.domain}/api/evaluaciones/${id}`)
+  getrop(idObj) {
+    return this.http.get<Rop[]>(`${this.domain}/api/rop/${idObj}`)
       .pipe(map(res => res));
   }
+
+  
 
   addTask(newTask: Task) {
     return this.http.post<Task>(`${this.domain}/api/tasks`, newTask)
@@ -85,8 +87,8 @@ export class TasksService {
   }
 
   
-  getPracticasbyEval(id) {
-    return this.http.get<Practica[]>(`${this.domain}/api/practicasbyeval/${id}`)
+  getPracticasbyEval(ideval) {
+    return this.http.get<Practica[]>(`${this.domain}/api/practicasbyeval/${ideval}`)
       .pipe(map(res => res));
   }
 

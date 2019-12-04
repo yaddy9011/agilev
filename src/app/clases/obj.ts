@@ -5,4 +5,5 @@ export class obj {
     id_obj: string;
     pos: number;
     num: String;
+    n_obj:number;
 }

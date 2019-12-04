@@ -1,18 +1,21 @@
-<h1 mat-dialog-title>Hi {{data.idEval}}</h1>
+<h1 mat-dialog-title>Evaluación por Objetivos</h1>
 <div mat-dialog-content>
 
-  <table>
+  <table class="table table-bordered table-responsive-md table-striped">
     <tr>
-      <th class="text-center">Evaluacion</th>
-      <th class="text-center">Ver evaluacion</th>
+      <th class="text-center">ID</th>
+      <th class="text-center">Objetivo</th>
+    </tr>
+    <tr *ngFor="let objss of objs; let id = index">
+      <td width="20%">
+        <span>{{objss.num}}</span>
+      </td>
+      <td>
+        <span>{{objss.objetivo}}</span>
+      </td>
     </tr>
   </table>
 
-  <p>What's your favorite animal?</p>
-  <mat-form-field>
-    <input matInput [(ngModel)]="data.animal">
-
-  </mat-form-field>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Cerrar</button>
