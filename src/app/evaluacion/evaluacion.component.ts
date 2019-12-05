@@ -76,6 +76,9 @@ export class DialogOverviewExampleDialog {
   Arrayobj: obj[];
   objs: obj[];
   Rop: Rop[];
+  NewArrObj = [];
+  total_obj: number;
+  total_prac: number;
 
   constructor(public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData, private taskService: TasksService) {
@@ -83,10 +86,10 @@ export class DialogOverviewExampleDialog {
     this.idst = localStorage.getItem("ACCESS_IDS");
     this._idEval = data.idEval;
     this.getObjetivosByUSR();
-    console.log(this.objs);
     this.getPracticasbyEval();
-   
-    //this.getEvaluacionPorcentajes();
+    console.log(this.total_obj);
+    // this.getEvaluacionPorcentajes();
+
   }
 
   onNoClick(): void {
@@ -94,17 +97,18 @@ export class DialogOverviewExampleDialog {
   }
 
   GetRop(IdObj) {
+    var rops = [];
     this.taskService.getrop(IdObj)
       .subscribe(rop => {
-        this.Rop = rop;
+        rops = rop;
       });
+    this.Rop = rops;
   }
 
   getPracticasbyEval() {
-  var prac_v = []
+    var prac_v = []
     this.taskService.getPracticasbyEval(this._idEval)
       .subscribe(pa => {
-  
         for (var i = 0; i < pa.length; i++) {
           const arraData = {
             _id: pa[i]._id,
@@ -117,21 +121,18 @@ export class DialogOverviewExampleDialog {
           };
           prac_v.push(arraData);
         }
-     
       });
-       this.ArrayPrac = prac_v;
-        console.log(this.ArrayPrac);
-
+    this.ArrayPrac = prac_v;
   }
-
 
   getObjetivosByUSR() {
     var ids = [];
+    var tob;
+
     this.taskService.getobj(this.idst)
       .subscribe(obj => {
         this.Arrayobj = obj;
         this.Arrayobj.sort((a, b) => a.pos - b.pos);
-       
         for (var i = 0; i < this.Arrayobj.length; i++) {
           const arraData = {
             _id: obj[i]._id,
@@ -144,24 +145,25 @@ export class DialogOverviewExampleDialog {
           };
           ids.push(arraData);
         }
-      
-      });
 
         this.objs = ids;
-        console.log(this.objs);
+        tob = this.objs.length;
+        console.log("aqui entre  " + this.objs.length);
+
+      });
+
+       this.total_obj = ids.length;
   }
 
 
   getEvaluacionPorcentajes() {
 
-  
+    console.log("aqui entree" + this.objs.length);
 
     for (var i = 0; i < this.objs.length; i++) {
-
+      console.log("aqui entree022");
       var n_obj = this.objs[i].n_obj;
-
-       this.BuscarRelacionOP(n_obj);
-
+      this.BuscarRelacionOP(n_obj);
     }
 
   }
@@ -169,14 +171,16 @@ export class DialogOverviewExampleDialog {
   BuscarRelacionOP(n_obj) {
 
     this.GetRop(n_obj);
+    console.log(this.Rop);
+
 
     for (var i = 0; i < this.Rop.length; i++) {
       var ob = this.Rop[i].n_obj;
       var nc = this.Rop[i].nivel_contribucion;
       var pa = this.Rop[i].n_prac;
 
-    const prar = this.ArrayPrac.find( ncy => ncy.n_prac === pa);
-    console.log(prar.nivelapli);
+      const prar = this.ArrayPrac.find(ncy => ncy.n_prac === pa);
+      console.log(prar);
 
 
     }
@@ -185,10 +189,6 @@ export class DialogOverviewExampleDialog {
 
 
   }
-
-
-
-
 
 
 }
