@@ -76,11 +76,8 @@ export class DialogOverviewExampleDialog {
   Arrayobj: obj[];
   objs: obj[];
   Rop: Rop[];
-  ArrayRelacion: Rop[];
+  public ArrayRelacion: Rop[];
   DatosObj = [];
-
-
-
 
   constructor(public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData, private taskService: TasksService) {
@@ -88,6 +85,9 @@ export class DialogOverviewExampleDialog {
     this.idst = localStorage.getItem("ACCESS_IDS");
     this._idEval = data.idEval;
     this.getObjetivosByUSR();
+
+
+
   }
 
   onNoClick(): void {
@@ -131,89 +131,67 @@ export class DialogOverviewExampleDialog {
             num: Object.values(obj[i].id_obj)[2],
             n_obj: Object.values(obj[i].id_obj)[3]
           };
-          ids.push(arraData);
+ 
         }
         this.objs = ids;
         this.getPracticasbyEval();
         this.getEvaluacionPorcentajes();
       });
-
   }
 
-
+  // creo que se puede solucionar mandando arrays por metodos checar
   getEvaluacionPorcentajes() {
-
+    let newration = [];
     for (var i = 0; i < this.objs.length; i++) {
-
       var rsum = 0;
       var n_obj = this.objs[i].n_obj;
       var var_obj = this.objs[i].objetivo;
       var xnum = this.objs[i].num;
-
-      // console.log(n_obj);
-      // console.log(var_obj);
-      // console.log(xnum);
-
-      this.taskService.getrop(n_obj)
-        .subscribe(rop => {
-          this.Rop = rop;
-          this.BuscarRelacionOP();
-          //console.log(this.ArrayRelacion.length + "tam" + i);
-          rsum = Number(this.SumarTotales());
-
-          console.log("sumii" + rsum);
-          //console.log(rsum);
-          // console.log(this.ArrayRelacion);
-
-          const datosnew = {
-            objetivo: var_obj,
-            num: xnum,
-            total_Eva: rsum
-          };
-
-          this.DatosObj.push(datosnew);
-
-        });
-
-
-
-
+      this.Rop = this.GetRop(n_obj);
+      newration = this.GetRop(n_obj);
+      //  console.log(this.Rop.length);
+      // console.log(newration[0]);
+      this.BuscarRelacionOP();
+      rsum = Number(this.SumarTotales());
+      const datosnew = {
+        objetivo: var_obj,
+        num: xnum,
+        total_Eva: rsum
+      };
+      this.DatosObj.push(datosnew);
     }
 
-    console.log(this.DatosObj);
+    //console.log(this.DatosObj);
+
+
 
   }
 
   BuscarRelacionOP() {
     var t = [];
+
     for (var i = 0; i < this.Rop.length; i++) {
+
+      //console.log(this.Rop[i]);
+
       var ob = this.Rop[i].n_obj;
       var nc = this.Rop[i].nivel_contribucion;
       var pa = this.Rop[i].n_prac;
       var na = this.BuscarNA(pa);
-
-      // if (typeof na === "undefined") {
-      //   na = 0;
-      // }
-
       const datosnew = {
         n_obj: ob,
         n_prac: pa,
         nivel_contribucion: nc,
         na: na
       };
-
       t.push(datosnew);
-
       // console.log(ob);
       // console.log(pa);
       // console.log(nc);
       // console.log(na);
       // console.log("---");
     }
-
     this.ArrayRelacion = t;
-
   }
 
   BuscarNA(prac: Number) {
@@ -230,7 +208,6 @@ export class DialogOverviewExampleDialog {
   SumarTotales() {
 
     let SumaObjetivos: number = 0;
-    //console.log(this.ArrayRelacion.length);
     for (var j = 0; j < this.ArrayRelacion.length; j++) {
       var nc = Number(this.ArrayRelacion[j].nivel_contribucion);
       var na = Number(this.ArrayRelacion[j].na);
@@ -242,5 +219,20 @@ export class DialogOverviewExampleDialog {
     }
     return SumaObjetivos;
   }
+
+
+  GetRop(n_obj: number) {
+    let fallCourses = [];
+    this.taskService.getrop(n_obj)
+      .subscribe(v => {
+        for (let elemento of v) {
+          fallCourses.push(elemento);
+        }
+        console.log(fallCourses);
+        console.log(fallCourses.length);
+      });
+    return fallCourses;
+  }
+
 
 }
