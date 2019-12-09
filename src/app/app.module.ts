@@ -32,7 +32,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { GestionObjetivosComponent } from './gestion-objetivos/gestion-objetivos.component';
 import {MatDialogModule, MatDialogRef} from '@angular/material/dialog';
-
+import {MatTabsModule} from '@angular/material/tabs';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 @NgModule({
   declarations: [
     AppComponent,
@@ -49,6 +50,7 @@ import {MatDialogModule, MatDialogRef} from '@angular/material/dialog';
   ],
   entryComponents: [PizzaPartyComponent, DialogOverviewExampleDialog],
   imports: [
+    NgbModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -70,6 +72,7 @@ import {MatDialogModule, MatDialogRef} from '@angular/material/dialog';
     MatSelectModule,
     MatDialogModule,
     MatSnackBarModule,
+    MatTabsModule,
     SortablejsModule.forRoot({})
   ],
   providers: [AuthService, TasksService, AppGlobals],

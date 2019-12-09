@@ -59,8 +59,8 @@ export class TasksService {
       .pipe(map(res => res));
   }
 
-  getrop(idObj) {
-    return this.http.get<Rop[]>(`${this.domain}/api/rop/${idObj}`)
+  getrop() {
+    return this.http.get<Rop[]>(`${this.domain}/api/rop`)
       .pipe(map(res => res));
   }
 
