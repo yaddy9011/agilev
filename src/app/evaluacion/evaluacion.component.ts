@@ -73,6 +73,7 @@ export class DialogOverviewExampleDialog {
   Rop: Rop[];
   public ArrayRelacion: Rop[];
   DatosObj = [];
+  arrROP = [];
 
   constructor(public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData, private taskService: TasksService) {
@@ -138,21 +139,27 @@ export class DialogOverviewExampleDialog {
           y.push(elemento);
         }
         this.Rop = y;
+
         for (var i = 0; i < this.objs.length; i++) {
           var rsum = 0;
           var n_obj = this.objs[i].n_obj;
           var var_obj = this.objs[i].objetivo;
           var xnum = this.objs[i].num;
           this.BuscarRelacionOP(n_obj);
+          for (let elemento of this.ArrayRelacion) {
+            this.arrROP.push(elemento);
+          }
           rsum = Number(this.SumarTotales());
           const datosnew = {
+            n_obj: n_obj,
             objetivo: var_obj,
             num: xnum,
             total_Eva: rsum
           };
           this.DatosObj.push(datosnew);
         }
-        // console.log(this.DatosObj);
+        console.log(this.arrROP);
+        console.log(this.DatosObj);
       });
   }
 
@@ -171,11 +178,11 @@ export class DialogOverviewExampleDialog {
           na: na
         };
         t.push(datosnew);
-        // console.log(ob);
-        // console.log(pa);
-        // console.log(nc);
-        // console.log(na);
-        // console.log("---");
+        console.log(ob);
+        console.log(pa);
+        console.log(nc);
+        console.log(na);
+        console.log("---");
       }
     }
     this.ArrayRelacion = t;
@@ -195,14 +202,14 @@ export class DialogOverviewExampleDialog {
   SumarTotales() {
     let SumaObjetivos: number = 0;
     for (var j = 0; j < this.ArrayRelacion.length; j++) {
-      console.log("objetivo " + this.ArrayRelacion[j].n_obj);
-      console.log("practica " + this.ArrayRelacion[j].n_prac);
+      //  console.log("objetivo " + this.ArrayRelacion[j].n_obj);
+      // console.log("practica " + this.ArrayRelacion[j].n_prac);
       var nc = Number(this.ArrayRelacion[j].nivel_contribucion);
       var na = Number(this.ArrayRelacion[j].na);
-      console.log("nivel contribucion " + nc);
-      console.log("nivel aplicacion " + na);
+      // console.log("nivel contribucion " + nc);
+      // console.log("nivel aplicacion " + na);
       var Mul = nc * na;
-      console.log("multiplicacion " + Mul);
+      // console.log("multiplicacion " + Mul);
       SumaObjetivos = SumaObjetivos + Mul;
     }
     return SumaObjetivos;

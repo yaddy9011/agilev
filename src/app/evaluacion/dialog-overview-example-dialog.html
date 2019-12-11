@@ -1,7 +1,6 @@
 <h1 mat-dialog-title>Evaluación por Objetivos</h1>
 <div mat-dialog-content>
-
-  <table class="table table-bordered table-responsive-md table-striped">
+  <!-- <table class="table table-bordered table-responsive-md table-striped">
     <tr>
       <th class="text-center">ID</th>
       <th class="text-center">Objetivo</th>
@@ -14,17 +13,40 @@
         <span>{{DatosObjs.total_Eva}}</span>
       </td>
     </tr>
-  </table>
+  </table> -->
   <br>
-
-
-  ​ <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">Simple collapsible</button>
-  <div id="demo" class="collapse">
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-  </div>
-
+  <!-- <div class="row">
+    <div class="col-sm-6">Contenido1
+      <dx-data-grid #grid id="gridContainer" [dataSource]="DatosObj" keyExpr="n_obj" [hoverStateEnabled]="true"
+        [showBorders]="true" [selectedRowKeys]="[]">
+        <dxo-selection mode="single"></dxo-selection>
+        <dxi-column dataField="n_obj" visible="false" [width]="100"></dxi-column>
+        <dxi-column dataField="num" caption="N° Objetivo" [width]="100"></dxi-column>
+        <dxi-column dataField="total_Eva" caption="Total de Evaluación" [width]="100"></dxi-column>
+      </dx-data-grid>
+    </div>
+    <div class="col-sm-6">Contenido2
+      <div id="employeeInfo" *ngIf="grid.selectedRowKeys.length">
+        <p class="employeeNotes">{{grid.instance.getSelectedRowsData()[0].n_obj}}</p>
+        <table>
+          <tr>
+            <td>Prácticas Relacionadas</td>
+          </tr>
+          <tr *ngFor="let arrROPs of arrROP">
+            <td *ngIf="arrROPs.n_obj==grid.instance.getSelectedRowsData()[0].n_obj">{{arrROPs.n_prac}}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div> -->
+  <dx-data-grid id="gridContainer" [dataSource]="arrROP" [allowColumnReordering]="true" [showBorders]="true">
+    <dxi-column dataField="n_prac"></dxi-column>
+    <dxi-column dataField="n_obj" [groupIndex]="0"></dxi-column>
+    <dxo-search-panel [visible]="true"></dxo-search-panel>
+    <dxo-paging [pageSize]="10"></dxo-paging>
+    <dxo-group-panel [visible]="true"></dxo-group-panel>
+    <dxo-grouping #expand [autoExpandAll]="false"></dxo-grouping>
+  </dx-data-grid>
   <br>
   <br>
   <br>

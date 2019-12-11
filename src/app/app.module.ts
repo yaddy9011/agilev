@@ -34,6 +34,8 @@ import { GestionObjetivosComponent } from './gestion-objetivos/gestion-objetivos
 import {MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {MatTabsModule} from '@angular/material/tabs';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {DevExtremeModule} from 'devextreme-angular';
+import {MatDividerModule} from '@angular/material/divider';
 @NgModule({
   declarations: [
     AppComponent,
@@ -65,6 +67,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     MatMenuModule,
     MatCardModule,
     MatTableModule,
+    MatDividerModule,
     HttpClientModule,
     DragDropModule,
     MatInputModule,
@@ -73,6 +76,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     MatDialogModule,
     MatSnackBarModule,
     MatTabsModule,
+    DevExtremeModule,
     SortablejsModule.forRoot({})
   ],
   providers: [AuthService, TasksService, AppGlobals],
