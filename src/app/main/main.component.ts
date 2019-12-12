@@ -43,7 +43,6 @@ export class MainComponent implements OnInit {
     this.idst = localStorage.getItem("ACCESS_IDS");
     this.nameusr = localStorage.getItem("ACCESS_name");
     var ok = localStorage.getItem("ACCESS_IDS");
-
     this.taskService.getobj(ok)
       .subscribe(obj => {
         this.newarrs = obj;

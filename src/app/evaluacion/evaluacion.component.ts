@@ -103,7 +103,6 @@ export class DialogOverviewExampleDialog {
           prac_v.push(arraData);
         }
       });
-
     this.ArrayPrac = prac_v;
   }
 
@@ -139,17 +138,26 @@ export class DialogOverviewExampleDialog {
           y.push(elemento);
         }
         this.Rop = y;
-
         for (var i = 0; i < this.objs.length; i++) {
           var rsum = 0;
           var n_obj = this.objs[i].n_obj;
           var var_obj = this.objs[i].objetivo;
           var xnum = this.objs[i].num;
           this.BuscarRelacionOP(n_obj);
-          for (let elemento of this.ArrayRelacion) {
-            this.arrROP.push(elemento);
-          }
           rsum = Number(this.SumarTotales());
+          var CEval = n_obj + " " + var_obj + " : " + rsum;
+          for (let elemento of this.ArrayRelacion) {
+
+            const CadenaFinal = {
+              grup_ob: n_obj,
+              n_prac: elemento.n_prac,
+              n_c: elemento.nivel_contribucion,
+              n_a: elemento.na
+            };
+
+            this.arrROP.push(CadenaFinal);
+          }
+
           const datosnew = {
             n_obj: n_obj,
             objetivo: var_obj,

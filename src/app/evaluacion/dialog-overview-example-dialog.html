@@ -40,8 +40,10 @@
     </div>
   </div> -->
   <dx-data-grid id="gridContainer" [dataSource]="arrROP" [allowColumnReordering]="true" [showBorders]="true">
-    <dxi-column dataField="n_prac"></dxi-column>
-    <dxi-column dataField="n_obj" [groupIndex]="0"></dxi-column>
+    <dxi-column dataField="n_prac" caption="N° Práctica"></dxi-column>
+    <dxi-column dataField="n_c" caption="Nivel de contribución"></dxi-column>
+    <dxi-column dataField="n_a" caption="Nivel de aplicación"></dxi-column>
+    <dxi-column dataField="grup_ob" caption="N° Objetivo" [groupIndex]="0"></dxi-column>
     <dxo-search-panel [visible]="true"></dxo-search-panel>
     <dxo-paging [pageSize]="10"></dxo-paging>
     <dxo-group-panel [visible]="true"></dxo-group-panel>
@@ -49,6 +51,14 @@
   </dx-data-grid>
   <br>
   <br>
+
+  <div class="list-container">
+    <dx-list height="100%" [dataSource]="arrROP" [grouped]="true" [collapsibleGroups]="true">
+      <div *dxTemplate="let item of 'group'">
+        <div>Assigned: {{item.n_prac}}</div>
+      </div>
+    </dx-list>
+  </div>
   <br>
 </div>
 <div mat-dialog-actions>
