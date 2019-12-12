@@ -49,17 +49,26 @@
     <dxo-group-panel [visible]="true"></dxo-group-panel>
     <dxo-grouping #expand [autoExpandAll]="false"></dxo-grouping>
   </dx-data-grid>
+
+  <br>
   <br>
   <br>
 
-  <div class="list-container">
-    <dx-list height="100%" [dataSource]="arrROP" [grouped]="true" [collapsibleGroups]="true">
-      <div *dxTemplate="let item of 'group'">
-        <div>Assigned: {{item.n_prac}}</div>
-      </div>
-    </dx-list>
-  </div>
-  <br>
+  <dx-data-grid id="gridContainer" [dataSource]="DatosObj" [masterDetail]="{ enabled: true, template: 'detail' }"
+    keyExpr="n_obj" [showBorders]="true">
+
+    <dxi-column dataField="n_obj" [width]="70" caption="Title"></dxi-column>
+    <dxi-column dataField="num"></dxi-column>
+    <dxi-column dataField="total_Eva"></dxi-column>
+    <div *dxTemplate="let employee of 'detail'">
+      <div class="master-detail-caption">{{employee.data.num}}</div>
+      <dx-data-grid [dataSource]="arrROP" [showBorders]="true" [columnAutoWidth]="true">
+        <dxi-column dataField="n_prac"></dxi-column>
+      </dx-data-grid>
+    </div>
+  </dx-data-grid>
+
+
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Cerrar</button>
