@@ -39,36 +39,33 @@
       </div>
     </div>
   </div> -->
-  <dx-data-grid id="gridContainer" [dataSource]="arrROP" [allowColumnReordering]="true" [showBorders]="true">
-    <dxi-column dataField="n_prac" caption="N° Práctica"></dxi-column>
-    <dxi-column dataField="n_c" caption="Nivel de contribución"></dxi-column>
-    <dxi-column dataField="n_a" caption="Nivel de aplicación"></dxi-column>
-    <dxi-column dataField="grup_ob" caption="N° Objetivo" [groupIndex]="0"></dxi-column>
-    <dxo-search-panel [visible]="true"></dxo-search-panel>
-    <dxo-paging [pageSize]="10"></dxo-paging>
-    <dxo-group-panel [visible]="true"></dxo-group-panel>
-    <dxo-grouping #expand [autoExpandAll]="false"></dxo-grouping>
-  </dx-data-grid>
-
   <br>
   <br>
   <br>
-
-  <dx-data-grid id="gridContainer" [dataSource]="DatosObj" [masterDetail]="{ enabled: true, template: 'detail' }"
+  <dx-data-grid #grid id="gridContainer" [dataSource]="DatosObj" [masterDetail]="{ enabled: true, template: 'detail' }"
     keyExpr="n_obj" [showBorders]="true">
-
     <dxi-column dataField="n_obj" [width]="70" caption="Title"></dxi-column>
     <dxi-column dataField="num"></dxi-column>
+    <dxi-column dataField="objetivo"></dxi-column>
     <dxi-column dataField="total_Eva"></dxi-column>
     <div *dxTemplate="let employee of 'detail'">
       <div class="master-detail-caption">{{employee.data.num}}</div>
-      <dx-data-grid [dataSource]="arrROP" [showBorders]="true" [columnAutoWidth]="true">
-        <dxi-column dataField="n_prac"></dxi-column>
-      </dx-data-grid>
+      <table class="table table-bordered table-responsive-md table-striped">
+        <tr>
+          <td>Prácticas Relacionadas</td>
+        </tr>
+        <tr *ngFor="let arrROPs of arrROP" >
+          <td *ngIf="arrROPs.n_obj==employee.key">{{arrROPs.n_prac}}</td>
+          <td *ngIf="arrROPs.n_obj==employee.key">{{arrROPs.texp}}</td>
+          <td *ngIf="arrROPs.n_obj==employee.key" >{{arrROPs.nc}}</td>
+          <td *ngIf="arrROPs.n_obj==employee.key" >{{arrROPs.na}}</td>
+        </tr>
+      </table>
+      <!-- <dx-data-grid [dataSource]="arrROP" [showBorders]="true" [columnAutoWidth]="true">
+        <dxi-column *ngIf="arrROP.n_obj==grid.instance.getSelectedRowsData()[0].n_obj" dataField="n_prac"></dxi-column>
+      </dx-data-grid> -->
     </div>
   </dx-data-grid>
-
-
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Cerrar</button>

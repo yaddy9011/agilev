@@ -71,7 +71,7 @@ export class DialogOverviewExampleDialog {
   Arrayobj: obj[];
   objs: obj[];
   Rop: Rop[];
-  public ArrayRelacion: Rop[];
+  public ArrayRelacion = [];
   DatosObj = [];
   arrROP = [];
 
@@ -94,7 +94,7 @@ export class DialogOverviewExampleDialog {
           const arraData = {
             _id: pa[i]._id,
             n_prac: Number(Object.values(pa[i].id_prac)[4]),
-            textprac: Object.values(pa[i].id_prac)[0],
+            textprac: Object.values(pa[i].id_prac)[2],
             nivelapli: pa[i].nivelapli,
             id_usr: pa[i].id_usr,
             id_eval: pa[i].id_eval,
@@ -104,10 +104,11 @@ export class DialogOverviewExampleDialog {
         }
       });
     this.ArrayPrac = prac_v;
+    console.log(this.ArrayPrac);
   }
 
   getObjetivosByUSR() {
-    var ids = [];
+    var array_new_obj = [];
     this.taskService.getobj(this.idst)
       .subscribe(obj => {
         this.Arrayobj = obj;
@@ -122,14 +123,15 @@ export class DialogOverviewExampleDialog {
             num: Object.values(obj[i].id_obj)[2],
             n_obj: Object.values(obj[i].id_obj)[3]
           };
-          ids.push(arraData);
+          array_new_obj.push(arraData);
         }
-        this.objs = ids;
+        this.objs = array_new_obj;
+        console.log(this.objs);
         this.getPracticasbyEval();
         this.getEvaluacionPorcentajes();
       });
   }
-  // creo que se puede solucionar mandando arrays por metodos checar
+
   getEvaluacionPorcentajes() {
     this.taskService.getrop()
       .subscribe(v => {
@@ -141,23 +143,21 @@ export class DialogOverviewExampleDialog {
         for (var i = 0; i < this.objs.length; i++) {
           var rsum = 0;
           var n_obj = this.objs[i].n_obj;
+          console.log(n_obj);
           var var_obj = this.objs[i].objetivo;
           var xnum = this.objs[i].num;
           this.BuscarRelacionOP(n_obj);
           rsum = Number(this.SumarTotales());
-          var CEval = n_obj + " " + var_obj + " : " + rsum;
           for (let elemento of this.ArrayRelacion) {
-
             const CadenaFinal = {
-              grup_ob: n_obj,
+              n_obj: n_obj,
               n_prac: elemento.n_prac,
               n_c: elemento.nivel_contribucion,
-              n_a: elemento.na
+              n_a: elemento.na,
+              texp: elemento.textprac
             };
-
             this.arrROP.push(CadenaFinal);
           }
-
           const datosnew = {
             n_obj: n_obj,
             objetivo: var_obj,
@@ -178,30 +178,35 @@ export class DialogOverviewExampleDialog {
       if (ob == n_obj) {
         var nc = this.Rop[i].nivel_contribucion;
         var pa = this.Rop[i].n_prac;
-        var na = this.BuscarNA(pa);
+        let arrdp = this.BuscarNA(pa);
+        console.log(arrdp);
         const datosnew = {
           n_obj: ob,
           n_prac: pa,
           nivel_contribucion: nc,
-          na: na
+          na: arrdp.nivelapli,
+          textprac: arrdp.textprac
         };
         t.push(datosnew);
-        console.log(ob);
-        console.log(pa);
-        console.log(nc);
-        console.log(na);
-        console.log("---");
+        // console.log(ob);
+        // console.log(pa);
+        // console.log(nc);
+        // console.log(arrdp.nivelapli);
+        // console.log("---");
       }
     }
     this.ArrayRelacion = t;
   }
 
   BuscarNA(prac: Number) {
-
-    var res: Number;
+    var res;
     for (var i = 0; i < this.ArrayPrac.length; i++) {
       if (prac == Number(this.ArrayPrac[i].n_prac)) {
-        res = Number(this.ArrayPrac[i].nivelapli);
+        let DatosPrac = {
+          nivelapli: Number(this.ArrayPrac[i].nivelapli),
+          textprac: this.ArrayPrac[i].textprac,
+        }
+        res = DatosPrac;
       }
     }
     return res;
