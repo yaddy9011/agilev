@@ -7,6 +7,7 @@ import { Eval } from '../clases/evaluacionbyobj';
 import { obj } from '../clases/obj';
 import { Practica } from '../clases/practica';
 import { Rop } from '../clases/rop';
+import { Router } from '@angular/router';
 
 export interface DialogData {
   idEval: String;
@@ -39,6 +40,7 @@ export class EvaluacionComponent implements OnInit {
 
   GenerarEvaluacion() {
     this.authService.GuardarEvaluacion(this.idst).subscribe(res => { console.log(res); });
+    location.reload();
   }
 
   GetEvalByUSR() {
@@ -47,13 +49,21 @@ export class EvaluacionComponent implements OnInit {
         this.newarrs = evals;
       });
   }
-  remove(id) {
+
+  VerEval(id) {
     const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
-      width: '600px',
+      width: '900px',
       data: { idEval: this.newarrs[id]._id }
     });
     dialogRef.afterClosed().subscribe(result => {
     });
+  }
+
+  EliminarEval(id) {
+    this.taskService.DeleteEval(id)
+      .subscribe(evals => {
+      });
+    location.reload();
   }
 }
 
@@ -67,13 +77,14 @@ export class DialogOverviewExampleDialog {
 
   idst: string;
   _idEval: String;
-  ArrayPrac: Practica[];
+  public ArrayPrac = [];
   Arrayobj: obj[];
   objs: obj[];
   Rop: Rop[];
   public ArrayRelacion = [];
   DatosObj = [];
   arrROP = [];
+  AgilidadTotal = 0;
 
   constructor(public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData, private taskService: TasksService) {
@@ -84,6 +95,7 @@ export class DialogOverviewExampleDialog {
 
   onNoClick(): void {
     this.dialogRef.close();
+    location.reload();
   }
 
   getPracticasbyEval() {
@@ -100,14 +112,14 @@ export class DialogOverviewExampleDialog {
             id_eval: pa[i].id_eval,
             id_prac: pa[i].id_prac
           };
-          prac_v.push(arraData);
+          prac_v[i]=arraData;
         }
       });
     this.ArrayPrac = prac_v;
-    console.log(this.ArrayPrac);
   }
 
   getObjetivosByUSR() {
+    this.getPracticasbyEval();
     var array_new_obj = [];
     this.taskService.getobj(this.idst)
       .subscribe(obj => {
@@ -126,8 +138,6 @@ export class DialogOverviewExampleDialog {
           array_new_obj.push(arraData);
         }
         this.objs = array_new_obj;
-        console.log(this.objs);
-        this.getPracticasbyEval();
         this.getEvaluacionPorcentajes();
       });
   }
@@ -136,18 +146,19 @@ export class DialogOverviewExampleDialog {
     this.taskService.getrop()
       .subscribe(v => {
         var y = [];
+        var ArrayMaxSum: number[] = [];
+
         for (let elemento of v) {
           y.push(elemento);
         }
         this.Rop = y;
+        let TotalAgilidadObjetivos: number = 0;
         for (var i = 0; i < this.objs.length; i++) {
-          var rsum = 0;
           var n_obj = this.objs[i].n_obj;
-          console.log(n_obj);
           var var_obj = this.objs[i].objetivo;
           var xnum = this.objs[i].num;
           this.BuscarRelacionOP(n_obj);
-          rsum = Number(this.SumarTotales());
+          var rsum = this.SumarTotales();
           for (let elemento of this.ArrayRelacion) {
             const CadenaFinal = {
               n_obj: n_obj,
@@ -162,12 +173,18 @@ export class DialogOverviewExampleDialog {
             n_obj: n_obj,
             objetivo: var_obj,
             num: xnum,
-            total_Eva: rsum
+            total_Eva: rsum + " %"
           };
+
+          ArrayMaxSum.push(rsum);
+          TotalAgilidadObjetivos = TotalAgilidadObjetivos + rsum;
           this.DatosObj.push(datosnew);
         }
-        console.log(this.arrROP);
-        console.log(this.DatosObj);
+
+        var Newmax = Math.max.apply(null, ArrayMaxSum);
+        this.AgilidadTotal = Math.round(((TotalAgilidadObjetivos / this.DatosObj.length) / Newmax) * 100);
+        // console.log(this.arrROP);
+        //console.log(this.DatosObj);
       });
   }
 
@@ -179,7 +196,6 @@ export class DialogOverviewExampleDialog {
         var nc = this.Rop[i].nivel_contribucion;
         var pa = this.Rop[i].n_prac;
         let arrdp = this.BuscarNA(pa);
-        console.log(arrdp);
         const datosnew = {
           n_obj: ob,
           n_prac: pa,
@@ -200,11 +216,12 @@ export class DialogOverviewExampleDialog {
 
   BuscarNA(prac: Number) {
     var res;
+    
     for (var i = 0; i < this.ArrayPrac.length; i++) {
       if (prac == Number(this.ArrayPrac[i].n_prac)) {
         let DatosPrac = {
           nivelapli: Number(this.ArrayPrac[i].nivelapli),
-          textprac: this.ArrayPrac[i].textprac,
+          textprac: this.ArrayPrac[i].textprac
         }
         res = DatosPrac;
       }
@@ -213,18 +230,20 @@ export class DialogOverviewExampleDialog {
   }
 
   SumarTotales() {
+    var arraySums: number[] = [];
     let SumaObjetivos: number = 0;
+    let ResulTotal: number = 0;
     for (var j = 0; j < this.ArrayRelacion.length; j++) {
-      //  console.log("objetivo " + this.ArrayRelacion[j].n_obj);
-      // console.log("practica " + this.ArrayRelacion[j].n_prac);
       var nc = Number(this.ArrayRelacion[j].nivel_contribucion);
       var na = Number(this.ArrayRelacion[j].na);
-      // console.log("nivel contribucion " + nc);
-      // console.log("nivel aplicacion " + na);
       var Mul = nc * na;
-      // console.log("multiplicacion " + Mul);
+      arraySums.push(Mul);
       SumaObjetivos = SumaObjetivos + Mul;
     }
-    return SumaObjetivos;
+    var max = Math.max.apply(null, arraySums);
+    var porcentaje = (Number((SumaObjetivos / this.ArrayRelacion.length) / max)) * 100;
+    ResulTotal = Math.round(porcentaje);
+    return ResulTotal;
   }
+
 }

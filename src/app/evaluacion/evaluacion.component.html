@@ -1,5 +1,4 @@
 <app-menu></app-menu>
-
 <div id="app" align="center">
     <br>
     <br>
@@ -12,35 +11,39 @@
             </mat-card-title>
         </mat-card-header>
         <mat-card-content>
-
-            <table class="table table-bordered table-responsive-md table-striped text-center">
-                <tr>
-                    <th class="text-center">Fecha de Evaluación</th>
-                    <th class="text-center">Ver Evaluacion</th>
-                </tr>
-                <tr *ngFor="let newarrss of newarrs; let id = index">
-                    <td>
-                        <span>{{newarrss.fecha_creacion}}</span>
-                    </td>
-                    <td>
-                        <span class="table-remove">
-                            <button mat-mini-fab (click)="remove(id)">
+            <div align="center">
+                <table class="table table-bordered table-responsive-md table-striped text-center">
+                    <tr>
+                        <th class="text-center">Fecha de Evaluación</th>
+                        <th class="text-center">Ver Evaluación</th>
+                        <th class="text-center">Eliminar</th>
+                    </tr>
+                    <tr *ngFor="let newarrss of newarrs; let id = index">
+                        <td>
+                            <span>{{newarrss.fecha_creacion | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+                        </td>
+                        <td>
+                            <button mat-mini-fab (click)="VerEval(id)">
                                 <mat-icon>visibility</mat-icon>
                             </button>
-                        </span>
-                    </td>
-                </tr>
-            </table>
-            <br>
-            <p>
-                Preciona el botón para generar un nueva evaluación.
-            </p>
+                        </td>
+                        <td>
+                            <button mat-mini-fab (click)="EliminarEval(newarrss._id)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+                <br>
+                <p>
+                    Preciona el botón para generar un nueva evaluación.
+                </p>
+            </div>
         </mat-card-content>
-
         <mat-card-actions>
             <button (click)="GenerarEvaluacion($event, item)" mat-fab
                 aria-label="Example icon-button with a heart icon">
-                <mat-icon> list_alt</mat-icon>
+                <mat-icon>list_alt</mat-icon>
             </button>
         </mat-card-actions>
     </mat-card>

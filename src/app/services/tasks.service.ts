@@ -64,8 +64,6 @@ export class TasksService {
       .pipe(map(res => res));
   }
 
-  
-
   addTask(newTask: Task) {
     return this.http.post<Task>(`${this.domain}/api/tasks`, newTask)
       .pipe(map(res => res));
@@ -98,5 +96,11 @@ export class TasksService {
       .pipe(map(res => res));
   }
 
+  DeleteEval(ideval){
+    return this.http.delete<Eval>(`${this.domain}/api/DeleteEvals/${ideval}`)
+      .pipe(map(res => res));
+  }
+
+  
 
 }

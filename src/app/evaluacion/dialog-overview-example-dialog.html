@@ -1,71 +1,32 @@
 <h1 mat-dialog-title>Evaluación por Objetivos</h1>
 <div mat-dialog-content>
-  <!-- <table class="table table-bordered table-responsive-md table-striped">
-    <tr>
-      <th class="text-center">ID</th>
-      <th class="text-center">Objetivo</th>
-    </tr>
-    <tr *ngFor="let DatosObjs of DatosObj; let id = index">
-      <td width="20%">
-        <span>{{DatosObjs.num}}</span>
-      </td>
-      <td>
-        <span>{{DatosObjs.total_Eva}}</span>
-      </td>
-    </tr>
-  </table> -->
+  <div>Agilidad por objetivos = {{AgilidadTotal}} %</div>
   <br>
-  <!-- <div class="row">
-    <div class="col-sm-6">Contenido1
-      <dx-data-grid #grid id="gridContainer" [dataSource]="DatosObj" keyExpr="n_obj" [hoverStateEnabled]="true"
-        [showBorders]="true" [selectedRowKeys]="[]">
-        <dxo-selection mode="single"></dxo-selection>
-        <dxi-column dataField="n_obj" visible="false" [width]="100"></dxi-column>
-        <dxi-column dataField="num" caption="N° Objetivo" [width]="100"></dxi-column>
-        <dxi-column dataField="total_Eva" caption="Total de Evaluación" [width]="100"></dxi-column>
-      </dx-data-grid>
-    </div>
-    <div class="col-sm-6">Contenido2
-      <div id="employeeInfo" *ngIf="grid.selectedRowKeys.length">
-        <p class="employeeNotes">{{grid.instance.getSelectedRowsData()[0].n_obj}}</p>
-        <table>
-          <tr>
-            <td>Prácticas Relacionadas</td>
-          </tr>
-          <tr *ngFor="let arrROPs of arrROP">
-            <td *ngIf="arrROPs.n_obj==grid.instance.getSelectedRowsData()[0].n_obj">{{arrROPs.n_prac}}</td>
-          </tr>
-        </table>
-      </div>
-    </div>
-  </div> -->
-  <br>
-  <br>
-  <br>
-  <dx-data-grid #grid id="gridContainer" [dataSource]="DatosObj" [masterDetail]="{ enabled: true, template: 'detail' }"
-    keyExpr="n_obj" [showBorders]="true">
-    <dxi-column dataField="n_obj" [width]="70" caption="Title"></dxi-column>
-    <dxi-column dataField="num"></dxi-column>
-    <dxi-column dataField="objetivo"></dxi-column>
-    <dxi-column dataField="total_Eva"></dxi-column>
-    <div *dxTemplate="let employee of 'detail'">
-      <div class="master-detail-caption">{{employee.data.num}}</div>
-      <table class="table table-bordered table-responsive-md table-striped">
+  <dx-data-grid #grid id="gridContainer" [width]="650" [dataSource]="DatosObj"
+    [masterDetail]="{ enabled: true, template: 'detail' }" keyExpr="n_obj" [showBorders]="true">
+    <dxi-column dataField="n_obj" [width]="100" caption="n° Objetivo"></dxi-column>
+    <dxi-column dataField="objetivo" [width]="350" caption="Objetivo"></dxi-column>
+    <dxi-column dataField="total_Eva" [width]="120" caption="Total de la Evaluación"></dxi-column>
+    <div id="div1" *dxTemplate="let datos of 'detail'">
+      <div class="master-detail-caption">{{datos.data.objetivo}}</div>
+      <br>
+      <table class="table table-condensed table-bordered table-hover">
         <tr>
-          <td>Prácticas Relacionadas</td>
+          <td>N° Práctica</td>
+          <td>Descripción</td>
+          <td>Nivel de contribución</td>
+          <td>Nivel de aplicación</td>
         </tr>
-        <tr *ngFor="let arrROPs of arrROP" >
-          <td *ngIf="arrROPs.n_obj==employee.key">{{arrROPs.n_prac}}</td>
-          <td *ngIf="arrROPs.n_obj==employee.key">{{arrROPs.texp}}</td>
-          <td *ngIf="arrROPs.n_obj==employee.key" >{{arrROPs.nc}}</td>
-          <td *ngIf="arrROPs.n_obj==employee.key" >{{arrROPs.na}}</td>
+        <tr *ngFor="let arrROPs of arrROP">
+          <td width="5%" *ngIf="arrROPs.n_obj==datos.key">{{arrROPs.n_prac}}</td>
+          <td width="20%" *ngIf="arrROPs.n_obj==datos.key">{{arrROPs.texp}}</td>
+          <td *ngIf="arrROPs.n_obj==datos.key">{{arrROPs.n_c}}</td>
+          <td *ngIf="arrROPs.n_obj==datos.key">{{arrROPs.n_a}}</td>
         </tr>
       </table>
-      <!-- <dx-data-grid [dataSource]="arrROP" [showBorders]="true" [columnAutoWidth]="true">
-        <dxi-column *ngIf="arrROP.n_obj==grid.instance.getSelectedRowsData()[0].n_obj" dataField="n_prac"></dxi-column>
-      </dx-data-grid> -->
     </div>
   </dx-data-grid>
+  <br>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Cerrar</button>

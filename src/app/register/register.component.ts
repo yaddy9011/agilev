@@ -75,7 +75,6 @@ export class RegisterComponent implements OnInit {
       this.router.navigateByUrl('/login');
     },
       error => {
-
         this._snackBar.openFromComponent(PizzaPartyComponent,{
           duration: this.durationInSeconds * 1000,
         });
