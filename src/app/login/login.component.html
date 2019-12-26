@@ -18,4 +18,15 @@
   
 </div>
 
+<dx-popup [width]="300" [height]="250" [showTitle]="true" title="Aviso" [dragEnabled]="false"
+  [closeOnOutsideClick]="false" [(visible)]="popupVisible">
+  <div class='text-center'>
+    <br>
+    <p> {{mensaje}}</p>
+    <br>
+    <dx-button icon="check" type="success" text="Done" (onClick)="doneClick()">
+    </dx-button>
+  </div>
+</dx-popup>
+
 <app-footer></app-footer>

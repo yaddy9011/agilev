@@ -6,18 +6,17 @@ import { EvaluacionComponent } from './evaluacion/evaluacion.component';
 import { RegisterComponent } from './register/register.component';
 import { MainComponent } from './main/main.component';
 import { GestionObjetivosComponent } from './gestion-objetivos/gestion-objetivos.component';
+import { GestionPracticasComponent } from './gestion-practicas/gestion-practicas.component';
 
 const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
-  }
-  ,
+  },
   {
     path: 'home',
     component: HomeComponent
-  }
-  ,
+  },
   {
     path: 'eval',
     component: EvaluacionComponent
@@ -25,15 +24,18 @@ const routes: Routes = [
   {
     path: 'registro',
     component: RegisterComponent
-  }
-  ,
+  },
   {
     path: 'main',
     component: MainComponent
-  }
-  , {
+  },
+  {
     path: 'Gobjetivos',
     component: GestionObjetivosComponent
+  },
+  {
+    path: 'Gpracticas',
+    component: GestionPracticasComponent
   }
 ];
 

@@ -8,7 +8,7 @@ import { Ambito } from '../clases/Ambito';
 import { numero_integrante } from '../clases/num-integrante';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export interface Food {
   value: string;
@@ -31,18 +31,19 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 
 export class RegisterComponent implements OnInit {
 
-  durationInSeconds = 5;
-  //cambios hoy 04/10/2019
   Paises: Pais[];
   Sectores: Sector[];
   Ambitos: Ambito[];
   numero_integrantes: numero_integrante[];
+  popupVisible = false;
+  mensaje = "";
 
   emailFormControl = new FormControl('', [
     Validators.required,
     Validators.email,
   ]);
   matcher = new MyErrorStateMatcher();
+
 
   constructor(private authService: AuthService, private taskService: TasksService, private router: Router, private _snackBar: MatSnackBar) {
 
@@ -71,31 +72,20 @@ export class RegisterComponent implements OnInit {
   }
 
   onRegister(form): void {
+
     this.authService.register(form.value).subscribe(res => {
       this.router.navigateByUrl('/login');
     },
       error => {
-        this._snackBar.openFromComponent(PizzaPartyComponent,{
-          duration: this.durationInSeconds * 1000,
-        });
-
-      // alert("revisa los datos del formulario, es posible que el correo ya exista");
+        this.popupVisible = true;
+        this.mensaje = error.error;
       }
     );
   }
 
+  doneClick() {
+    this.popupVisible = false;
+  }
+
 }
 
-
-@Component({
-  selector: 'snack-bar-component-example-snack',
-  templateUrl: 'dialogRegister.html',
-  styles: [`
-    .example-pizza-party {
-      color: #ffff;
-      max-width:100%;
-      background-color: #C62828;
-    }
-  `],
-})
-export class PizzaPartyComponent {}

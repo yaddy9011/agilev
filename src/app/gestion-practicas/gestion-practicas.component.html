@@ -5,7 +5,7 @@
     <br>
     <br>
     <mat-accordion>
-        <dx-data-grid #grid [width]="800" id="gridContainer" [dataSource]="Objs" keyExpr="_id"
+        <dx-data-grid #grid [width]="900" id="gridContainer" [dataSource]="Practicas" keyExpr="_id"
             [allowColumnReordering]="true" [showBorders]="true" (onRowInserting)="InsertRow($event)"
             (onEditorPreparing)="onEditorPreparing($event)" (onRowUpdating)="UpdateRow($event)"
             (onRowRemoving)="DeleteRow($event)">
@@ -14,8 +14,9 @@
                 <dxo-texts confirmDeleteMessage="¿Estas seguro de eliminar el registro?"></dxo-texts>
             </dxo-editing>
             <dxi-column dataField="_n" caption="N°" [width]="50"></dxi-column>
-            <dxi-column dataField="descrip" caption="Descripción"></dxi-column>
-            <dxi-column dataField="clave"  [width]="60" caption="Clave"></dxi-column>
+            <dxi-column dataField="descripcion" caption="Descripción"></dxi-column>
+            <dxi-column dataField="metodo_agil" [width]="150" caption="Metodos ágiles"></dxi-column>
+            <dxi-column dataField="Clave"  [width]="60" caption="Clave"></dxi-column>
         </dx-data-grid>
         <br>
         <br>

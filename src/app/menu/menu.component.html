@@ -17,8 +17,12 @@
         <mat-icon>add</mat-icon><span>Objetivos y prácticas</span>
       </button>
 
-      <button *ngIf="!isShowGo"  mat-menu-item routerLink="/Gobjetivos">
+      <button *ngIf="!isShowGo" mat-menu-item routerLink="/Gobjetivos">
         <mat-icon>edit</mat-icon><span>Gestión de Objetivos</span>
+      </button>
+
+      <button *ngIf="!isShowGp" mat-menu-item routerLink="/Gpracticas">
+        <mat-icon>edit</mat-icon><span>Gestión de Prácticas</span>
       </button>
 
       <button routerLink="/login" *ngIf="!isShowLog" mat-menu-item>

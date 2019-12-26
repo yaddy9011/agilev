@@ -11,7 +11,7 @@ import { Gobjetivo } from '../clases/gobjetivos';
 export class CrudGoService {
   domain: string
   constructor(private http: HttpClient, public _global: AppGlobals) {
-    this.domain = this._global.domain
+    this.domain = this._global.domain;
   }
 
   getObjetivos() {
@@ -20,18 +20,17 @@ export class CrudGoService {
   }
 
   insertObj(inserObj) {
-    return this.http.post<Gobjetivo>(`${this.domain}/gobjetivos`, inserObj)
+    return this.http.post<Gobjetivo>(`${this.domain}/api/InsertGobjetivos`, inserObj)
       .pipe(map(res => res));
   }
 
-
   deleteObjetivos(id) {
-    return this.http.delete<Gobjetivo>(`${this.domain}/api/gobjetivos/${id}`)
+    return this.http.delete<Gobjetivo>(`${this.domain}/api/DeleteGobjetivos/${id}`)
       .pipe(map(res => res));
   }
 
   updateObjetivos(ActObj) {
-    return this.http.put<Gobjetivo>(`${this.domain}/api/gobjetivos/${ActObj._id}`, ActObj)
+    return this.http.put<Gobjetivo>(`${this.domain}/api/UpdateGobjetivos/${ActObj._id}`, ActObj)
       .pipe(map(res => res));
   }
 

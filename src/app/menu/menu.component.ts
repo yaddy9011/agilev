@@ -14,7 +14,8 @@ export class MenuComponent implements OnInit {
   isShowLog = false;
   isShowLogo = false;
   isShowprac = false;
-  isShowGo= true;
+  isShowGo = false;
+  isShowGp = false;
 
 
   constructor(private AuthService: AuthService, private router: Router) { }
@@ -32,11 +33,8 @@ export class MenuComponent implements OnInit {
   }
 
   salir() {
-
     this.AuthService.logout();
-
     this.navegacion(1);
-
   }
 
 
@@ -50,16 +48,12 @@ export class MenuComponent implements OnInit {
       case "/home": {
 
         if (x == null) {
-
           this.isShowLogo = !this.isShowLogo;
           this.isShoweval = !this.isShoweval;
-          this.isShowprac= !this.isShowprac;
-
+          this.isShowprac = !this.isShowprac;
         } else {
-
           this.isShowReg = !this.isShowReg;
           this.isShowLog = !this.isShowLog;
-
         }
 
         if (y == 1) {
@@ -68,14 +62,13 @@ export class MenuComponent implements OnInit {
 
         break;
       }
+
       case "/main": {
 
         this.isShowReg = !this.isShowReg;
         this.isShowLog = !this.isShowLog;
 
-
         if (y == 1) {
-
           this.router.navigateByUrl('/home');
         }
 
@@ -84,49 +77,65 @@ export class MenuComponent implements OnInit {
       }
 
       case "/login": {
-
         this.isShowLog = !this.isShowLog;
         this.isShowLogo = !this.isShowLogo;
         this.isShoweval = !this.isShoweval;
-        this.isShowprac= !this.isShowprac;
-
+        this.isShowprac = !this.isShowprac;
         break;
       }
 
       case "/eval": {
-
         if (x == null) {
-
           this.isShowLogo = !this.isShowLogo;
           this.isShoweval = !this.isShoweval;
-          this.isShowprac= !this.isShowprac;
-
+          this.isShowprac = !this.isShowprac;
         } else {
-
           this.isShowReg = !this.isShowReg;
           this.isShowLog = !this.isShowLog;
-
         }
 
         if (y == 1) {
-
           this.router.navigateByUrl('/home');
         }
-
         break;
       }
       case "/registro": {
-
         this.isShowReg = !this.isShowReg;
         this.isShowLogo = !this.isShowLogo;
         this.isShoweval = !this.isShoweval;
-        this.isShowprac= !this.isShowprac;
-
+        this.isShowprac = !this.isShowprac;
         break;
       }
 
+      case "/Gobjetivos": {
+
+        if (x == null) {
+          this.isShowLogo = !this.isShowLogo;
+          this.isShoweval = !this.isShoweval;
+          this.isShowprac = !this.isShowprac;
+        } else {
+          this.isShowReg = !this.isShowReg;
+          this.isShowLog = !this.isShowLog;
+        }
+        if (y == 1) {
+          this.router.navigateByUrl('/home');
+        }
+        break;
+      }
+      case "/Gpracticas": {
+        if (x == null) {
+          this.isShoweval = !this.isShoweval;
+          this.isShowprac = !this.isShowprac;
+          this.isShowLogo = !this.isShowLogo;
+        } else {
+          this.isShowReg = !this.isShowReg;
+          this.isShowLog = !this.isShowLog;
+        }
+        if (y == 1) {
+          this.router.navigateByUrl('/home');
+        }
+        break;
+      }
     }
-
   }
-
 }

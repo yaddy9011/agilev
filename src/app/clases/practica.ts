@@ -6,6 +6,6 @@ export class Practica {
     id_eval: string;
     pos: number;
     n_prac: number;
-    num: String;
+    Clave: String;
     nivelapli: number;
 }

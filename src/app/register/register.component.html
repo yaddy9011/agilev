@@ -1,27 +1,4 @@
 <app-menu></app-menu>
-<!-- <app-encabezado></app-encabezado> -->
-<!-- <div class="container">
-  <div class="login">
-    <div class="login-triangle"></div>
-
-    <h2 class="login-header">Create an account</h2>
-
-    <form #frmRegister="ngForm" class="login-container" (ngSubmit)="onRegister(frmRegister)">
-      <p>
-        <input type="text" name="name" placeholder="name" ngModel required>
-      </p>
-      <p>
-        <input type="email" name="email" placeholder="Email" ngModel required>
-      </p>
-      <p>
-        <input type="password" name="password" placeholder="Password" ngModel required>
-      </p>
-      <p>
-        <input type="submit" value="Register">
-      </p>
-    </form>
-  </div>
-</div> -->
 <div align="center">
   <br>
   <br>
@@ -35,32 +12,19 @@
     <br>
     <form #frmRegister="ngForm" class="example-form" (ngSubmit)="onRegister(frmRegister)">
       <mat-card-content align="left">
-
         <mat-form-field class="example-full-width">
           <input matInput placeholder="Escribe tu nombre ..." type="text" name="name" ngModel required>
         </mat-form-field>
-
         <mat-form-field class="example-full-width">
 
-          <!-- <input matInput placeholder="Correo Electronico" name="email" type="email" [formControl]="emailFormControl"
-            [errorStateMatcher]="matcher" ngModel required> -->
 
-          <input matInput placeholder="Email" type="email" name="email" ngModel required>
-
-          <!--           
-          <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
-            Please enter a valid email address
-          </mat-error>
-          <mat-error *ngIf="emailFormControl.hasError('required')">
-            Email is <strong>required</strong>
-          </mat-error> -->
+          <input matInput placeholder="Email" ngModel email type="email" [(ngModel)]="correo" name="email" ngModel
+            required>
 
         </mat-form-field>
-
         <mat-form-field class="example-full-width">
           <input matInput placeholder="Contraseña ..." type="password" name="password" ngModel required>
         </mat-form-field>
-
         <mat-form-field>
           <mat-label>Pais</mat-label>
           <mat-select name="selectpais" ngModel required>
@@ -69,7 +33,6 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-
         <br>
         <mat-form-field>
           <mat-label>Ámbito de trabajo</mat-label>
@@ -107,5 +70,14 @@
 <br>
 <br>
 <br>
-
+<dx-popup [width]="300" [height]="250" [showTitle]="true" title="Aviso" [dragEnabled]="false"
+  [closeOnOutsideClick]="false" [(visible)]="popupVisible">
+  <div class='text-center'>
+    <br>
+    <p> {{mensaje}}</p>
+    <br>
+    <dx-button icon="check" type="success" text="Done" (onClick)="doneClick()">
+    </dx-button>
+  </div>
+</dx-popup>
 <app-footer></app-footer>

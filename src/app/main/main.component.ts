@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { TasksService } from '../services/tasks.service';
-import { Task } from '../clases/Task';
 import { obj } from '../clases/obj';
 import { Practica } from '../clases/practica';
 import { UserI } from '../clases/user';
@@ -26,7 +25,7 @@ export class MainComponent implements OnInit {
   //nrSelect = 3
   panelOpenState = false;
   userName = '';
-  tasks: Task[];
+ // tasks: Task[];
   newarrs: obj[];
   objs: obj[];
   title: string;
@@ -43,12 +42,12 @@ export class MainComponent implements OnInit {
     this.idst = localStorage.getItem("ACCESS_IDS");
     this.nameusr = localStorage.getItem("ACCESS_name");
     var ok = localStorage.getItem("ACCESS_IDS");
-    console.log(ok);
+   // console.log(ok);
     this.taskService.getobj(ok)
       .subscribe(obj => {
         this.newarrs = obj;
         this.newarrs.sort((a, b) => a.pos - b.pos);
-        console.log(this.newarrs);
+        //console.log(this.newarrs);
         //this.objs = this.newarrs;
         var ids = [];
         for (var i = 0; i < this.newarrs.length; i++) {
@@ -69,22 +68,22 @@ export class MainComponent implements OnInit {
       .subscribe(prac => {
         this.ArrayPracticas = prac;
         this.ArrayPracticas.sort((a, b) => a.pos - b.pos);
+        console.log(prac);
         var arrdatanew = [];
         for (var i = 0; i < this.ArrayPracticas.length; i++) {
           const arraData = {
             _id: prac[i]._id,
-            textprac: Object.values(prac[i].id_prac)[2],
+            textprac: Object.values(prac[i].id_prac)[1],
             id_usr: prac[i].id_usr,
             id_obj: Object.values(prac[i].id_prac)[0],
             pos: prac[i].pos,
-            num: Object.values(prac[i].id_prac)[1],
+            num: Object.values(prac[i].id_prac)[4],
             nivelapli: prac[i].nivelapli
           };
           this.idArr[i] = arraData.nivelapli;
           arrdatanew.push(arraData);
         }
         this.Practicas = arrdatanew;
-    
       });
 
   }

@@ -12,6 +12,8 @@ import { UserI } from '../clases/user';
 
 export class LoginComponent implements OnInit {
 
+  popupVisible = false;
+  mensaje = "";
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
@@ -21,8 +23,15 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(form.value).subscribe(res => {
       this.router.navigateByUrl('/main');
-    });
-    
+    },
+      error => {
+        this.popupVisible = true;
+        this.mensaje = error.error;
+      });
+  }
+
+  doneClick() {
+    this.popupVisible = false;
   }
 
 }

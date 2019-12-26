@@ -105,8 +105,8 @@ export class DialogOverviewExampleDialog {
         for (var i = 0; i < pa.length; i++) {
           const arraData = {
             _id: pa[i]._id,
-            n_prac: Number(Object.values(pa[i].id_prac)[4]),
-            textprac: Object.values(pa[i].id_prac)[2],
+            n_prac: Number(Object.values(pa[i].id_prac)[3]),
+            textprac: Object.values(pa[i].id_prac)[1],
             nivelapli: pa[i].nivelapli,
             id_usr: pa[i].id_usr,
             id_eval: pa[i].id_eval,
@@ -115,6 +115,8 @@ export class DialogOverviewExampleDialog {
           prac_v[i]=arraData;
         }
       });
+
+      console.log(prac_v);
     this.ArrayPrac = prac_v;
   }
 

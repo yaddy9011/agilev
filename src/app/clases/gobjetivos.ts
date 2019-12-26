@@ -2,5 +2,5 @@ export interface Gobjetivo {
   id: string,
   descrip: string,
   clave: string,
-  _n: string
+  _n: Number
 }
