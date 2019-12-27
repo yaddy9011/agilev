@@ -51,6 +51,8 @@ export class MenuComponent implements OnInit {
           this.isShowLogo = !this.isShowLogo;
           this.isShoweval = !this.isShoweval;
           this.isShowprac = !this.isShowprac;
+          this.isShowGo = !this.isShowGo;
+          this.isShowGp =!this.isShowGp;
         } else {
           this.isShowReg = !this.isShowReg;
           this.isShowLog = !this.isShowLog;
@@ -81,6 +83,8 @@ export class MenuComponent implements OnInit {
         this.isShowLogo = !this.isShowLogo;
         this.isShoweval = !this.isShoweval;
         this.isShowprac = !this.isShowprac;
+        this.isShowGo = !this.isShowGo;
+        this.isShowGp =!this.isShowGp;
         break;
       }
 
@@ -104,6 +108,8 @@ export class MenuComponent implements OnInit {
         this.isShowLogo = !this.isShowLogo;
         this.isShoweval = !this.isShoweval;
         this.isShowprac = !this.isShowprac;
+        this.isShowGo = !this.isShowGo;
+        this.isShowGp =!this.isShowGp;
         break;
       }
 
@@ -113,6 +119,8 @@ export class MenuComponent implements OnInit {
           this.isShowLogo = !this.isShowLogo;
           this.isShoweval = !this.isShoweval;
           this.isShowprac = !this.isShowprac;
+          this.isShowGo = !this.isShowGo;
+          this.isShowGp =!this.isShowGp;
         } else {
           this.isShowReg = !this.isShowReg;
           this.isShowLog = !this.isShowLog;
@@ -126,7 +134,26 @@ export class MenuComponent implements OnInit {
         if (x == null) {
           this.isShoweval = !this.isShoweval;
           this.isShowprac = !this.isShowprac;
+          this.isShowLogo = !this.isShowLogo;  
+          this.isShowGo = !this.isShowGo;
+          this.isShowGp =!this.isShowGp;
+
+        } else {
+          this.isShowReg = !this.isShowReg;
+          this.isShowLog = !this.isShowLog;
+        }
+        if (y == 1) {
+          this.router.navigateByUrl('/home');
+        }
+        break;
+      }
+      case "/ForgotPassword": {
+        if (x == null) {
+          this.isShoweval = !this.isShoweval;
+          this.isShowprac = !this.isShowprac;
           this.isShowLogo = !this.isShowLogo;
+          this.isShowGo = !this.isShowGo;
+          this.isShowGp =!this.isShowGp;
         } else {
           this.isShowReg = !this.isShowReg;
           this.isShowLog = !this.isShowLog;

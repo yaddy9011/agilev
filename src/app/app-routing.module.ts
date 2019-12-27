@@ -7,6 +7,7 @@ import { RegisterComponent } from './register/register.component';
 import { MainComponent } from './main/main.component';
 import { GestionObjetivosComponent } from './gestion-objetivos/gestion-objetivos.component';
 import { GestionPracticasComponent } from './gestion-practicas/gestion-practicas.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,10 @@ const routes: Routes = [
   {
     path: 'Gpracticas',
     component: GestionPracticasComponent
+  },
+  {
+    path: 'ForgotPassword',
+    component: ForgotPasswordComponent
   }
 ];
 

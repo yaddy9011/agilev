@@ -41,6 +41,7 @@ import {
   DxDataGridComponent
 } from 'devextreme-angular';
 import { GestionPracticasComponent } from './gestion-practicas/gestion-practicas.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { GestionPracticasComponent } from './gestion-practicas/gestion-practicas
     DialogOverviewExampleDialog,
     FooterComponent,
     GestionObjetivosComponent,
-    GestionPracticasComponent
+    GestionPracticasComponent,
+    ForgotPasswordComponent
   ],
   entryComponents: [DialogOverviewExampleDialog],
   imports: [
