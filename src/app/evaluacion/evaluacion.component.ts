@@ -9,6 +9,19 @@ import { Practica } from '../clases/practica';
 import { Rop } from '../clases/rop';
 import { Router } from '@angular/router';
 
+
+// si todas las prácticas asociadas al objetivo tienen un nivel 
+// muy alto de aplicación (5) el objetivo debería estar 100% ágilizado 
+
+
+// Si todas las prácticas asociadas al objetivo tienen un nivel muy bajo de 
+// aplicación NO debería salir un porcentaje muy alto de agilidad del objetivo. 
+
+
+// Si todas las prácticas asociadas al objetivo tuvieran la misma contribución para ese objetivo 
+// el porcentaje de agilidad del objetivo debería reducirse al promedio de porcentaje de aplicación 
+// de las prácticas asociadas a él. 
+
 export interface DialogData {
   idEval: String;
 }
@@ -112,11 +125,11 @@ export class DialogOverviewExampleDialog {
             id_eval: pa[i].id_eval,
             id_prac: pa[i].id_prac
           };
-          prac_v[i]=arraData;
+          prac_v[i] = arraData;
         }
       });
 
-      console.log(prac_v);
+    // console.log(prac_v);
     this.ArrayPrac = prac_v;
   }
 
@@ -148,8 +161,7 @@ export class DialogOverviewExampleDialog {
     this.taskService.getrop()
       .subscribe(v => {
         var y = [];
-        var ArrayMaxSum: number[] = [];
-
+        //var ArrayMaxSum: number[] = [];
         for (let elemento of v) {
           y.push(elemento);
         }
@@ -162,11 +174,43 @@ export class DialogOverviewExampleDialog {
           this.BuscarRelacionOP(n_obj);
           var rsum = this.SumarTotales();
           for (let elemento of this.ArrayRelacion) {
+
+            let n_a;
+            switch (elemento.na) {
+              case 0: {
+                break;
+              }
+              case 1: {
+                n_a = "Muy Bajo";
+                break;
+              }
+              case 2: {
+                n_a = "Bajo";
+                break;
+              }
+              case 3: {
+                n_a = "Medio";
+                break;
+              }
+              case 4: {
+                n_a = "Alto";
+                break;
+              }
+              case 5: {
+                n_a = "Muy alto";
+                break;
+              }
+              default: {
+                break;
+              }
+            }
+
+
             const CadenaFinal = {
               n_obj: n_obj,
               n_prac: elemento.n_prac,
               n_c: elemento.nivel_contribucion,
-              n_a: elemento.na,
+              n_a: n_a,
               texp: elemento.textprac
             };
             this.arrROP.push(CadenaFinal);
@@ -178,19 +222,19 @@ export class DialogOverviewExampleDialog {
             total_Eva: rsum + " %"
           };
 
-          ArrayMaxSum.push(rsum);
+          //ArrayMaxSum.push(rsum);
           TotalAgilidadObjetivos = TotalAgilidadObjetivos + rsum;
           this.DatosObj.push(datosnew);
         }
 
-        var Newmax = Math.max.apply(null, ArrayMaxSum);
-        this.AgilidadTotal = Math.round(((TotalAgilidadObjetivos / this.DatosObj.length) / Newmax) * 100);
+        // var Newmax = Math.max.apply(null, ArrayMaxSum);
+        this.AgilidadTotal = Math.round(TotalAgilidadObjetivos / this.DatosObj.length);
         // console.log(this.arrROP);
         //console.log(this.DatosObj);
       });
   }
 
-  BuscarRelacionOP(n_obj: number) {
+  BuscarRelacionOP(n_obj: Number) {
     var t = [];
     for (var i = 0; i < this.Rop.length; i++) {
       var ob = this.Rop[i].n_obj;
@@ -198,14 +242,17 @@ export class DialogOverviewExampleDialog {
         var nc = this.Rop[i].nivel_contribucion;
         var pa = this.Rop[i].n_prac;
         let arrdp = this.BuscarNA(pa);
-        const datosnew = {
-          n_obj: ob,
-          n_prac: pa,
-          nivel_contribucion: nc,
-          na: arrdp.nivelapli,
-          textprac: arrdp.textprac
-        };
-        t.push(datosnew);
+        if (arrdp.nivelapli != 0) {
+          const datosnew = {
+            n_obj: ob,
+            n_prac: pa,
+            nivel_contribucion: nc,
+            na: arrdp.nivelapli,
+            textprac: arrdp.textprac
+          };
+          t.push(datosnew);
+        }
+
         // console.log(ob);
         // console.log(pa);
         // console.log(nc);
@@ -218,7 +265,6 @@ export class DialogOverviewExampleDialog {
 
   BuscarNA(prac: Number) {
     var res;
-    
     for (var i = 0; i < this.ArrayPrac.length; i++) {
       if (prac == Number(this.ArrayPrac[i].n_prac)) {
         let DatosPrac = {
@@ -232,18 +278,60 @@ export class DialogOverviewExampleDialog {
   }
 
   SumarTotales() {
-    var arraySums: number[] = [];
-    let SumaObjetivos: number = 0;
+    //var arraySums: Number[] = [];
+    let SumaNivelAplicacion: number = 0;
     let ResulTotal: number = 0;
     for (var j = 0; j < this.ArrayRelacion.length; j++) {
-      var nc = Number(this.ArrayRelacion[j].nivel_contribucion);
+      // var nc = Number(this.ArrayRelacion[j].nivel_contribucion);
       var na = Number(this.ArrayRelacion[j].na);
-      var Mul = nc * na;
-      arraySums.push(Mul);
-      SumaObjetivos = SumaObjetivos + Mul;
+      //var Mul = nc * na;
+      // arraySums.push(Mul);
+
+      var NewValNa = 0;
+      //console.log("naaa" + na);
+      switch (na) {
+        case 0: {
+          break;
+        }
+        case 1: {
+          NewValNa = 0;
+          break;
+        }
+        case 2: {
+          NewValNa = 0.25;
+          break;
+        }
+        case 3: {
+          NewValNa = 0.50;
+          break;
+        }
+        case 4: {
+          NewValNa = 0.75;
+          break;
+        }
+        case 5: {
+          NewValNa = 1;
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+      //console.log(NewValNa);
+      SumaNivelAplicacion = SumaNivelAplicacion + NewValNa;
     }
-    var max = Math.max.apply(null, arraySums);
-    var porcentaje = (Number((SumaObjetivos / this.ArrayRelacion.length) / max)) * 100;
+
+    // var max = Math.max.apply(null, arraySums);
+    // console.log("----");
+    // console.log(SumaNivelAplicacion);
+    // console.log(this.ArrayRelacion.length / SumaNivelAplicacion);
+
+    let porcentaje: number;
+    if (SumaNivelAplicacion == 0) {
+      porcentaje = 0;
+    } else {
+      porcentaje = Number(100 / (this.ArrayRelacion.length / SumaNivelAplicacion));
+    }
     ResulTotal = Math.round(porcentaje);
     return ResulTotal;
   }
