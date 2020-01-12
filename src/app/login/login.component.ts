@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
 
   popupVisible = false;
   mensaje = "";
+  loadingVisible = false;
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
@@ -21,6 +22,7 @@ export class LoginComponent implements OnInit {
 
   onLogin(form): void {
 
+    this.loadingVisible = true;
     this.authService.login(form.value).subscribe(res => {
       this.router.navigateByUrl('/main');
     },
@@ -32,6 +34,16 @@ export class LoginComponent implements OnInit {
 
   doneClick() {
     this.popupVisible = false;
+  }
+
+
+  onShown() {
+    setTimeout(() => {
+      this.loadingVisible = false;
+    }, 3000);
+  }
+
+  onHidden() {
   }
 
 }

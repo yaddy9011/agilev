@@ -13,10 +13,16 @@
             <dxo-editing useIcons="true" mode="row" [allowUpdating]="true" [allowDeleting]="true" [allowAdding]="true">
                 <dxo-texts confirmDeleteMessage="¿Estas seguro de eliminar el registro?"></dxo-texts>
             </dxo-editing>
-            <dxi-column dataField="_n" caption="N°" [width]="50"></dxi-column>
-            <dxi-column dataField="descripcion" caption="Descripción"></dxi-column>
-            <dxi-column dataField="metodo_agil" [width]="150" caption="Metodos ágiles"></dxi-column>
-            <dxi-column dataField="Clave"  [width]="60" caption="Clave"></dxi-column>
+            <dxi-column dataField="n_prac" caption="N°" [width]="50"></dxi-column>
+            <dxi-column dataField="descripcion" caption="Descripción">
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dxi-column>
+            <dxi-column dataField="metodo_agil" [width]="150" caption="Metodos ágiles">
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dxi-column>
+            <dxi-column dataField="Clave" [width]="60" caption="Clave">
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dxi-column>
         </dx-data-grid>
         <br>
         <br>

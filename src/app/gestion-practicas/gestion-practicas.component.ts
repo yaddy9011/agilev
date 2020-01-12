@@ -16,7 +16,7 @@ export class GestionPracticasComponent implements OnInit {
   ngOnInit() {
   }
 
-  public GetPracticas() {
+ GetPracticas() {
     this.CrudGpService.GetPracticas()
       .subscribe(res => {
         this.Practicas = res;
@@ -38,7 +38,7 @@ export class GestionPracticasComponent implements OnInit {
       Clave: cl,
       descripcion: des,
       metodo:metodo,
-      _n: e.oldData._n
+      n_prac: e.oldData.n_prac
     };
 
     this.CrudGpService.UpdatePractica(ActualizacionPrac)
@@ -48,7 +48,7 @@ export class GestionPracticasComponent implements OnInit {
   }
 
   onEditorPreparing(e: any): void {
-    if (e.dataField == "_n") {
+    if (e.dataField == "n_prac") {
       e.editorOptions.disabled = !e.row.inserted;
     }
   }
@@ -65,7 +65,7 @@ export class GestionPracticasComponent implements OnInit {
     var newData = {
       descripcion: e.data.descripcion,
       metodo_agil: e.data.metodo_agil,
-      _n: this.Practicas.length + 1,
+      n_prac: this.Practicas.length + 1,
       Clave: e.data.Clave
     };
 

@@ -40,9 +40,9 @@ export class AuthService {
       );
   }
 
-  GuardarEvaluacion(id_usr): Observable<JwtResponseI> {
-    console.log(id_usr);
-    return this.httpClient.post<JwtResponseI>(`${this.AUTH_SERVER}/setEvaluationbyobj/${id_usr}`,id_usr).pipe(tap(
+  GuardarEvaluacion(DataEval): Observable<JwtResponseI> {
+
+    return this.httpClient.post<JwtResponseI>(`${this.AUTH_SERVER}/setEvaluationbyobj/${DataEval.id}`,DataEval).pipe(tap(
         (res: JwtResponseI) => {
         })
       );
@@ -73,5 +73,19 @@ export class AuthService {
     }
     return this.token;
   }
+
+
+  requestReset(body): Observable<any> {
+    return this.httpClient.post(`${this.AUTH_SERVER}/req-reset-password`, body);
+  }
+
+  newPassword(body): Observable<any> {
+    return this.httpClient.post(`${this.AUTH_SERVER}/new-password`, body);
+  }
+
+  ValidPasswordToken(body): Observable<any> {
+    return this.httpClient.post(`${this.AUTH_SERVER}/valid-password-token`, body);
+  }
+
 
 }

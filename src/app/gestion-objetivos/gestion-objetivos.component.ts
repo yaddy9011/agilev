@@ -34,7 +34,7 @@ export class GestionObjetivosComponent implements OnInit {
       _id: e.key,
       descrip: des,
       clave: clave,
-      _n: e.oldData._n
+      n_obj: e.oldData.n_obj
     };
     this.ObjCrudService.updateObjetivos(ActualizacionObj)
       .subscribe(res => {
@@ -45,7 +45,7 @@ export class GestionObjetivosComponent implements OnInit {
   }
 
   onEditorPreparing(e: any): void {
-    if (e.dataField == "_n") {
+    if (e.dataField == "n_obj") {
       e.editorOptions.disabled = !e.row.inserted;
     }
   }
@@ -64,7 +64,7 @@ export class GestionObjetivosComponent implements OnInit {
     var newData = {
       descrip: e.data.descrip,
       clave: e.data.clave,
-      _n: this.Objs.length + 1
+      n_obj: this.Objs.length + 1
     };
 
     this.ObjCrudService.insertObj(newData)

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-menu',
@@ -16,9 +16,21 @@ export class MenuComponent implements OnInit {
   isShowprac = false;
   isShowGo = false;
   isShowGp = false;
+  isShowROP = false;
+  resetToken: null;
+  idEval: String;
 
+  constructor(private AuthService: AuthService, private router: Router, private route: ActivatedRoute) {
 
-  constructor(private AuthService: AuthService, private router: Router) { }
+    this.route.params.subscribe(params => {
+      this.resetToken = params.token;
+      this.idEval = params.id_eval;
+      console.log(this.idEval);
+    });
+
+    //this.idEval =this.route.snapshot.paramMap.get('id_eval')
+
+  }
 
   ngOnInit() {
 
@@ -37,7 +49,6 @@ export class MenuComponent implements OnInit {
     this.navegacion(1);
   }
 
-
   navegacion(y) {
 
     var pagina = this.router.url;
@@ -52,7 +63,9 @@ export class MenuComponent implements OnInit {
           this.isShoweval = !this.isShoweval;
           this.isShowprac = !this.isShowprac;
           this.isShowGo = !this.isShowGo;
-          this.isShowGp =!this.isShowGp;
+          this.isShowGp = !this.isShowGp;
+          this.isShowROP = !this.isShowROP;
+
         } else {
           this.isShowReg = !this.isShowReg;
           this.isShowLog = !this.isShowLog;
@@ -84,7 +97,9 @@ export class MenuComponent implements OnInit {
         this.isShoweval = !this.isShoweval;
         this.isShowprac = !this.isShowprac;
         this.isShowGo = !this.isShowGo;
-        this.isShowGp =!this.isShowGp;
+        this.isShowGp = !this.isShowGp;
+        this.isShowROP = !this.isShowROP;
+
         break;
       }
 
@@ -109,7 +124,8 @@ export class MenuComponent implements OnInit {
         this.isShoweval = !this.isShoweval;
         this.isShowprac = !this.isShowprac;
         this.isShowGo = !this.isShowGo;
-        this.isShowGp =!this.isShowGp;
+        this.isShowGp = !this.isShowGp;
+        this.isShowROP = !this.isShowROP;
         break;
       }
 
@@ -120,7 +136,9 @@ export class MenuComponent implements OnInit {
           this.isShoweval = !this.isShoweval;
           this.isShowprac = !this.isShowprac;
           this.isShowGo = !this.isShowGo;
-          this.isShowGp =!this.isShowGp;
+          this.isShowGp = !this.isShowGp;
+          this.isShowROP = !this.isShowROP;
+
         } else {
           this.isShowReg = !this.isShowReg;
           this.isShowLog = !this.isShowLog;
@@ -134,9 +152,10 @@ export class MenuComponent implements OnInit {
         if (x == null) {
           this.isShoweval = !this.isShoweval;
           this.isShowprac = !this.isShowprac;
-          this.isShowLogo = !this.isShowLogo;  
+          this.isShowLogo = !this.isShowLogo;
           this.isShowGo = !this.isShowGo;
-          this.isShowGp =!this.isShowGp;
+          this.isShowGp = !this.isShowGp;
+          this.isShowROP = !this.isShowROP;
 
         } else {
           this.isShowReg = !this.isShowReg;
@@ -153,11 +172,75 @@ export class MenuComponent implements OnInit {
           this.isShowprac = !this.isShowprac;
           this.isShowLogo = !this.isShowLogo;
           this.isShowGo = !this.isShowGo;
-          this.isShowGp =!this.isShowGp;
+          this.isShowGp = !this.isShowGp;
+          this.isShowROP = !this.isShowROP;
         } else {
           this.isShowReg = !this.isShowReg;
           this.isShowLog = !this.isShowLog;
         }
+        if (y == 1) {
+          this.router.navigateByUrl('/home');
+        }
+        break;
+      }
+      case "/RelacionOP": {
+        if (x == null) {
+          this.isShoweval = !this.isShoweval;
+          this.isShowprac = !this.isShowprac;
+          this.isShowLogo = !this.isShowLogo;
+          this.isShowGo = !this.isShowGo;
+          this.isShowGp = !this.isShowGp;
+          this.isShowROP = !this.isShowROP;
+        } else {
+          this.isShowReg = !this.isShowReg;
+          this.isShowLog = !this.isShowLog;
+        }
+        if (y == 1) {
+          this.router.navigateByUrl('/home');
+        }
+        break;
+      }
+      case "/response-reset-password/" + this.resetToken: {
+        this.isShoweval = !this.isShoweval;
+        this.isShowprac = !this.isShowprac;
+        this.isShowLogo = !this.isShowLogo;
+        this.isShowGo = !this.isShowGo;
+        this.isShowGp = !this.isShowGp;
+        this.isShowROP = !this.isShowROP;
+        if (y == 1) {
+          this.router.navigateByUrl('/home');
+        }
+        break;
+      }
+      case "/ForgotPassword": {
+
+        this.isShoweval = !this.isShoweval;
+        this.isShowprac = !this.isShowprac;
+        this.isShowLogo = !this.isShowLogo;
+        this.isShowGo = !this.isShowGo;
+        this.isShowGp = !this.isShowGp;
+        this.isShowROP = !this.isShowROP;
+
+        if (y == 1) {
+          this.router.navigateByUrl('/home');
+        }
+        break;
+      }
+
+      case "/Graficas/" + this.idEval: {
+
+        if (x == null) {
+          this.isShoweval = !this.isShoweval;
+          this.isShowprac = !this.isShowprac;
+          this.isShowLogo = !this.isShowLogo;
+          this.isShowGo = !this.isShowGo;
+          this.isShowGp = !this.isShowGp;
+          this.isShowROP = !this.isShowROP;
+        } else {
+          this.isShowReg = !this.isShowReg;
+          this.isShowLog = !this.isShowLog;
+        }
+
         if (y == 1) {
           this.router.navigateByUrl('/home');
         }

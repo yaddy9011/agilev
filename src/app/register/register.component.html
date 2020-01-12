@@ -16,11 +16,8 @@
           <input matInput placeholder="Escribe tu nombre ..." type="text" name="name" ngModel required>
         </mat-form-field>
         <mat-form-field class="example-full-width">
-
-
           <input matInput placeholder="Email" ngModel email type="email" [(ngModel)]="correo" name="email" ngModel
             required>
-
         </mat-form-field>
         <mat-form-field class="example-full-width">
           <input matInput placeholder="Contraseña ..." type="password" name="password" ngModel required>
@@ -80,4 +77,10 @@
     </dx-button>
   </div>
 </dx-popup>
+
+<dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [position]="{ of: '#frmRegister' }" [(visible)]="loadingVisible"
+  [showIndicator]="true" [showPane]="true" [shading]="true" [closeOnOutsideClick]="false">
+</dx-load-panel>
+
+
 <app-footer></app-footer>

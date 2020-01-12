@@ -13,9 +13,14 @@
             <dxo-editing useIcons="true" mode="row" [allowUpdating]="true" [allowDeleting]="true" [allowAdding]="true">
                 <dxo-texts confirmDeleteMessage="¿Estas seguro de eliminar el registro?"></dxo-texts>
             </dxo-editing>
-            <dxi-column dataField="_n" caption="N°" [width]="50"></dxi-column>
-            <dxi-column dataField="descrip" caption="Descripción"></dxi-column>
-            <dxi-column dataField="clave"  [width]="60" caption="Clave"></dxi-column>
+            <dxi-column dataField="n_obj" caption="N°" [width]="50">
+            </dxi-column>
+            <dxi-column dataField="descrip" caption="Descripción">
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dxi-column>
+            <dxi-column dataField="clave" [width]="60" caption="Clave">
+                <dxi-validation-rule type="required"></dxi-validation-rule>
+            </dxi-column>
         </dx-data-grid>
         <br>
         <br>

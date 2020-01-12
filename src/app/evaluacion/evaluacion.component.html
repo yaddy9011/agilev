@@ -11,28 +11,44 @@
             </mat-card-title>
         </mat-card-header>
         <mat-card-content>
+            <!-- class="table table-bordered table-responsive-md table-striped text-center" -->
             <div align="center">
                 <table class="table table-bordered table-responsive-md table-striped text-center">
                     <tr>
                         <th class="text-center">Fecha de Evaluación</th>
+                        <th class="text-center">Linea de trabajo</th>
                         <th class="text-center">Ver Evaluación</th>
+                        <th class="text-center">Ver Graficas</th>
                         <th class="text-center">Eliminar</th>
                     </tr>
-                    <tr *ngFor="let newarrss of newarrs; let id = index">
-                        <td>
-                            <span>{{newarrss.fecha_creacion | date:'yyyy-MM-dd HH:mm:ss'}}</span>
-                        </td>
-                        <td>
-                            <button mat-mini-fab (click)="VerEval(id)">
-                                <mat-icon>visibility</mat-icon>
-                            </button>
-                        </td>
-                        <td>
-                            <button mat-mini-fab (click)="EliminarEval(newarrss._id)">
-                                <mat-icon>delete</mat-icon>
-                            </button>
-                        </td>
-                    </tr>
+                    <tbody>
+                        <tr
+                            *ngFor="let newarrss of newarrs | paginate: { itemsPerPage: 5, currentPage: p }; let id = index">
+                            <td>
+                                <span>{{newarrss.fecha_creacion | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+                            </td>
+                            <td>
+                                <span>{{newarrss.workLine.descripcion}}</span>
+                            </td>
+                            <td>
+                                <button mat-mini-fab (click)="VerEval(id)">
+                                    <mat-icon>visibility</mat-icon>
+                                </button>
+                            </td>
+                            <td>
+                                <button mat-mini-fab [routerLink]="['/Graficas', newarrss._id]">
+                                    <mat-icon>trending_up</mat-icon>
+                                </button>
+                            </td>
+                            <td>
+                                <button mat-mini-fab (click)="EliminarEval(newarrss._id)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <pagination-controls (pageChange)="p = $event" previousLabel="Anterior" nextLabel="Siguiente">
+                    </pagination-controls>
                 </table>
                 <br>
                 <p>
@@ -51,4 +67,25 @@
 <br>
 <br>
 <br>
+<dx-popup [width]="400" [height]="250" [showTitle]="true" title="Evaluación" [dragEnabled]="false"
+    [closeOnOutsideClick]="true" [(visible)]="popupVisible">
+    <mat-label>Selecciona una linea de trabajo.</mat-label>
+    <br>
+    <br>
+    <form (submit)="InsertEval($event)">
+        <dx-select-box #selectBox id="mySelectBox" [dataSource]="NewWl" displayExpr="descripcion" valueExpr="_id"
+            (onValueChanged)="listValueChanged($event)">
+            <dx-validator>
+                <dxi-validation-rule type="required" message="Linea de trabajo es requerida"></dxi-validation-rule>
+            </dx-validator>
+        </dx-select-box>
+        <br>
+        <div class="text-center">
+            <!-- <button type="button" class="btn btn-primary" (onClick)="InsertEval($event)" (click)="InsertEval($event)">Generar evaluación</button> -->
+            <dx-button id="button" text="Generar" type="default" [useSubmitBehavior]="true">
+            </dx-button>
+        </div>
+        <br>
+    </form>
+</dx-popup>
 <app-footer></app-footer>

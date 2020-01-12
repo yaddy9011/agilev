@@ -3,5 +3,5 @@ export interface Gpractica {
   Clave: string,
   descripcion: string,
   metodo:string,
-  _n: Number
+  n_prac: Number
 }

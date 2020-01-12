@@ -14,7 +14,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MenuComponent } from './menu/menu.component';
 import { HomeComponent } from './home/home.component';
 import { MainComponent } from './main/main.component';
-import { EvaluacionComponent, DialogOverviewExampleDialog } from './evaluacion/evaluacion.component';
+import { EvaluacionComponent } from './evaluacion/evaluacion.component';
+import { DialogOverviewExampleDialog } from './evaluacion/dialog.component';
 import { MatCardModule } from '@angular/material';
 import { RegisterComponent } from './register/register.component';
 import { FooterComponent } from './footer/footer.component';
@@ -36,12 +37,14 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DevExtremeModule } from 'devextreme-angular';
 import { MatDividerModule } from '@angular/material/divider';
-import {
-  DxDataGridModule,
-  DxDataGridComponent
-} from 'devextreme-angular';
+import { DxDataGridModule,DxDataGridComponent} from 'devextreme-angular';
 import { GestionPracticasComponent } from './gestion-practicas/gestion-practicas.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { RelacionOpComponent } from './relacion-op/relacion-op.component';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { ResponseResetComponent } from './response-reset/response-reset.component';
+import { ShowHidePasswordModule } from 'ngx-show-hide-password';
+import { GraficasComponent } from './graficas/graficas.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +59,10 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
     FooterComponent,
     GestionObjetivosComponent,
     GestionPracticasComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    RelacionOpComponent,
+    ResponseResetComponent,
+    GraficasComponent
   ],
   entryComponents: [DialogOverviewExampleDialog],
   imports: [
@@ -86,7 +92,9 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
     MatSnackBarModule,
     MatTabsModule,
     DevExtremeModule,
-    SortablejsModule.forRoot({})
+    SortablejsModule.forRoot({}),
+    NgxPaginationModule,
+    ShowHidePasswordModule,
   ],
   providers: [AuthService, TasksService, AppGlobals],
   bootstrap: [AppComponent]

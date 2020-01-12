@@ -1,21 +1,18 @@
 <app-menu></app-menu>
 
-<div class="main">
-
+<div class="main" align="center" >
   <p class="sign" align="center">Entra al sistema</p>
-
   <form #frmLogin="ngForm" class="form1" (ngSubmit)="onLogin(frmLogin)">
-
-    <input class="un" align="center" type="email" name="email" placeholder="Email" ngModel required>
-
-    <input class="pass" name="password" type="password" align="center" placeholder="Password" ngModel required>
-
+    <input class="un" type="email" name="email" placeholder="Email" ngModel required>
+    <div style="width: 300px">
+      <show-hide-password btnStyle="primary" [btnOutline]="false">
+        <input name="password" type="password" placeholder="Password" ngModel required>
+      </show-hide-password>
+    </div>
+    <br>
     <input class="submit" type="submit" value="Acceder">
-
-    <p class="forgot" align="center"><a routerLink="/ForgotPassword" >olvidaste tu contraseña?</a></p>
-
+    <p class="forgot" align="center"><a routerLink="/ForgotPassword">olvidaste tu contraseña?</a></p>
   </form>
-  
 </div>
 
 <dx-popup [width]="300" [height]="250" [showTitle]="true" title="Aviso" [dragEnabled]="false"
@@ -28,7 +25,8 @@
     </dx-button>
   </div>
 </dx-popup>
-
+<dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [position]="{ of: '#frmLogin' }" [(visible)]="loadingVisible"
+  [showIndicator]="true" [showPane]="true" [shading]="true" [closeOnOutsideClick]="false" (onShown)="onShown()"
+  (onHidden)="onHidden()">
+</dx-load-panel>
 <app-footer></app-footer>
-<!-- 
-href="#" -->

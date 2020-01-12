@@ -1,0 +1,33 @@
+<app-menu></app-menu>
+<div style="width:900;" class="text-center">
+    <br>
+    <br>
+    <br>
+    <dx-chart id="chart" [dataSource]="DatosObj">
+        <dxi-series argumentField="n_obj" valueField="total_Eva" name="Objetivos" type="bar" color="#ffaa66">
+        </dxi-series>
+    </dx-chart>
+    <br>
+    <br>
+    <dx-pie-chart id="pie" type="doughnut" title="Evaluación por Objetivos" palette="Soft Pastel"
+        [dataSource]="DatosObj">
+        <dxo-export [enabled]="true"></dxo-export>
+        <dxo-legend horizontalAlignment="center" verticalAlignment="bottom"></dxo-legend>
+        <dxi-series argumentField="n_obj" valueField="total_Eva">
+            <dxo-label [visible]="true" format="fixedPoint" [customizeText]="customizeLabel">
+                <dxo-connector [visible]="true" [width]="1">
+                </dxo-connector>
+            </dxo-label>
+        </dxi-series>
+    </dx-pie-chart>
+    <br>
+    <br>
+    <button [routerLink]="['/eval']" mat-fab>
+        <mat-icon>navigate_before</mat-icon>
+    </button>
+    <br>
+    <br>
+    <br>
+    <br>
+</div>
+<app-footer></app-footer>

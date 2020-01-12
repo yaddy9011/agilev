@@ -4,4 +4,6 @@ export class Rop {
     n_prac: Number;
     nivel_contribucion: Number;
     na: Number;
+    prac;
+    obj;
 }

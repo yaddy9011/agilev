@@ -8,6 +8,10 @@ import { MainComponent } from './main/main.component';
 import { GestionObjetivosComponent } from './gestion-objetivos/gestion-objetivos.component';
 import { GestionPracticasComponent } from './gestion-practicas/gestion-practicas.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { RelacionOpComponent } from './relacion-op/relacion-op.component';
+import { ResponseResetComponent } from './response-reset/response-reset.component';
+import { GraficasComponent } from './graficas/graficas.component';
+
 
 const routes: Routes = [
   {
@@ -41,6 +45,18 @@ const routes: Routes = [
   {
     path: 'ForgotPassword',
     component: ForgotPasswordComponent
+  },
+  {
+    path: 'RelacionOP',
+    component: RelacionOpComponent
+  },
+  {
+    path: 'response-reset-password/:token',
+    component: ResponseResetComponent
+  },
+  {
+    path: 'Graficas/:id_eval',
+    component: GraficasComponent
   }
 ];
 

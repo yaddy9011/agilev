@@ -9,6 +9,7 @@ import { Ambito } from '../clases/Ambito';
 import { numero_integrante } from '../clases/num-integrante';
 import { Eval } from '../clases/evaluacionbyobj';
 import { Rop } from '../clases/rop';
+import { WorkLine } from '../clases/workline';
 import { AppGlobals } from '../app.global';
 
 
@@ -47,6 +48,12 @@ export class TasksService {
     return this.http.get<numero_integrante[]>(`${this.domain}/api/numerointegrantes`)
       .pipe(map(res => res));
   }
+
+  getWorkLines() {
+    return this.http.get<WorkLine[]>(`${this.domain}/api/worklines`)
+      .pipe(map(res => res));
+  }
+
 
   getobj(id) {
     return this.http.get<obj[]>(`${this.domain}/api/tasks/${id}`)

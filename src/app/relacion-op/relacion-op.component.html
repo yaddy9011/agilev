@@ -1,0 +1,67 @@
+<app-menu></app-menu>
+<div id="app" align="center">
+    <br>
+    <br>
+    <br>
+    <mat-card class="example-card">
+        <mat-card-header id="mat-header">
+            <div mat-card-avatar class="example-header-image"></div>
+            <mat-card-title>
+                Relacion de objetivos y prácticas
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <br>
+            <dx-data-grid id="gridContainer" [dataSource]="Rop" [width]="750" [allowColumnReordering]="true"
+                keyExpr="_id" [showBorders]="true" (onEditorPreparing)="onEditorPreparing($event)"
+                (onRowInserting)="InsertRow($event)" (onRowUpdating)="UpdateRow($event)"
+                (onRowRemoving)="DeleteRow($event)">
+                <dxo-editing useIcons="true" mode="popup" [allowUpdating]="true" [allowDeleting]="true"
+                    [allowAdding]="true">
+                    <dxo-texts confirmDeleteMessage="¿Estas seguro de eliminar el registro?"></dxo-texts>
+                    <dxo-popup [height]="200">
+                    </dxo-popup>
+                </dxo-editing>
+                <dxi-column [width]="90" dataField="n_prac" [formItem]="{ visible: false}" caption="n° práctica">
+                </dxi-column>
+                <dxi-column [visible]="false" dataField="n_prac">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                    <dxo-form-item>
+                        <dxo-label text="Práctica asociada"></dxo-label>
+                    </dxo-form-item>
+                    <dxo-lookup [dataSource]="Practicas" displayExpr="descripcion" valueExpr="n_prac">
+                    </dxo-lookup>
+                </dxi-column>
+                <dxi-column dataField="text_prac" [formItem]="{ visible: false}" caption="Descripción">
+                </dxi-column>
+                <dxi-column [width]="150" dataField="n_c" caption="Nivel de Contribución">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                    <dxi-validation-rule type="numeric"  message="El dato proporcionado debe de ser de tipo numerico">
+                </dxi-validation-rule>
+                </dxi-column>
+                <dxi-column dataField="text_obj" [formItem]="{ visible: false}" caption="Objetivo" [groupIndex]="1">
+                </dxi-column>
+                <dxi-column dataField="n_obj" [formItem]="{ visible: false}" caption="n°" [groupIndex]="0">
+                </dxi-column>
+                <dxi-column dataField="n_obj" [visible]="false">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                    <dxo-form-item>
+                        <dxo-label text="Objetivo"></dxo-label>
+                    </dxo-form-item>
+                    <dxo-lookup [dataSource]="Objs" displayExpr="descrip" valueExpr="n_obj">
+                    </dxo-lookup>
+                </dxi-column>
+                <dxo-search-panel [visible]="true"></dxo-search-panel>
+                <dxo-paging [pageSize]="10"></dxo-paging>
+                <dxo-group-panel [visible]="true"></dxo-group-panel>
+                <dxo-grouping #expand [autoExpandAll]="false"></dxo-grouping>
+            </dx-data-grid>
+        </mat-card-content>
+        <mat-card-actions>
+        </mat-card-actions>
+    </mat-card>
+</div>
+<br>
+<br>
+<br>
+<app-footer></app-footer>

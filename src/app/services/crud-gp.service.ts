@@ -33,6 +33,4 @@ export class CrudGpService {
       .pipe(map(res => res));
   }
 
-
-
 }

@@ -42,7 +42,6 @@ export class MainComponent implements OnInit {
     this.idst = localStorage.getItem("ACCESS_IDS");
     this.nameusr = localStorage.getItem("ACCESS_name");
     var ok = localStorage.getItem("ACCESS_IDS");
-   // console.log(ok);
     this.taskService.getobj(ok)
       .subscribe(obj => {
         this.newarrs = obj;
@@ -68,7 +67,6 @@ export class MainComponent implements OnInit {
       .subscribe(prac => {
         this.ArrayPracticas = prac;
         this.ArrayPracticas.sort((a, b) => a.pos - b.pos);
-        console.log(prac);
         var arrdatanew = [];
         for (var i = 0; i < this.ArrayPracticas.length; i++) {
           const arraData = {

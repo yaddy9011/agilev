@@ -25,6 +25,10 @@
         <mat-icon>edit</mat-icon><span>Gestión de Prácticas</span>
       </button>
 
+      <button *ngIf="!isShowROP" mat-menu-item routerLink="/RelacionOP">
+        <mat-icon>edit</mat-icon><span>Relacion Prácticas-Objetivos</span>
+      </button>
+
       <button routerLink="/login" *ngIf="!isShowLog" mat-menu-item>
         <mat-icon>launch</mat-icon><span>Inicia sesión</span>
       </button>

@@ -37,12 +37,15 @@ export class RegisterComponent implements OnInit {
   numero_integrantes: numero_integrante[];
   popupVisible = false;
   mensaje = "";
+  loadingVisible = false;
 
   emailFormControl = new FormControl('', [
     Validators.required,
     Validators.email,
   ]);
+
   matcher = new MyErrorStateMatcher();
+
 
 
   constructor(private authService: AuthService, private taskService: TasksService, private router: Router, private _snackBar: MatSnackBar) {
@@ -73,14 +76,17 @@ export class RegisterComponent implements OnInit {
 
   onRegister(form): void {
 
-    this.authService.register(form.value).subscribe(res => {
-      this.router.navigateByUrl('/login');
-    },
-      error => {
-        this.popupVisible = true;
-        this.mensaje = error.error;
-      }
-    );
+    this.loadingVisible = true;
+      this.authService.register(form.value).subscribe(res => {
+       this.loadingVisible = false;
+        this.router.navigateByUrl('/login');
+      },
+        error => {
+          this.loadingVisible = false;
+          this.popupVisible = true;
+          this.mensaje = error.error;
+        }
+      );
   }
 
   doneClick() {
