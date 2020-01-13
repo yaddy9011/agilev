@@ -83,7 +83,7 @@ export class EvaluacionComponent implements OnInit {
 
   VerEval(id) {
     const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
-      width: '900px',
+      width: '1000px',
       data: { idEval: this.newarrs[id]._id }
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -93,9 +93,7 @@ export class EvaluacionComponent implements OnInit {
   EliminarEval(id) {
     this.taskService.DeleteEval(id)
       .subscribe(evals => {
-        //this.GetEvalByUSR();
       });
-    //this.router.navigateByUrl('/eval');
     location.reload();
   }
 
