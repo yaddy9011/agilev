@@ -77,11 +77,13 @@ export class Evaluacion {
                 }
                 this.Rop = y;
                 let TotalAgilidadObjetivos: number = 0;
+
                 for (var i = 0; i < this.objs.length; i++) {
                     var n_obj = this.objs[i].n_obj;
                     var var_obj = this.objs[i].objetivo;
                     var xnum = this.objs[i].num;
                     this.BuscarRelacionOP(n_obj);
+
                     var rsum = this.SumarTotales();
 
                     for (let elemento of this.ArrayRelacion) {
@@ -122,22 +124,20 @@ export class Evaluacion {
                             n_a: n_a,
                             texp: elemento.textprac
                         };
+
                         this.arrROP.push(CadenaFinal);
                     }
                     const datosnew = {
                         n_obj: n_obj,
                         objetivo: var_obj,
                         num: xnum,
-                        total_Eva: rsum + " %"
+                        total_Eva: Number(rsum)
                     };
                     TotalAgilidadObjetivos = TotalAgilidadObjetivos + rsum;
                     this.DatosObj.push(datosnew);
                 }
 
-
                 this.AgilidadTotal = Math.round(TotalAgilidadObjetivos / this.DatosObj.length);
-
-
                 this.EvalResulService.DataEvalObjetivos(this.DatosObj);
                 this.EvalResulService.DataEvalPracticas(this.arrROP);
                 this.EvalResulService.DataAgilidad(this.AgilidadTotal);
@@ -200,6 +200,7 @@ export class Evaluacion {
 
             var nc = Number(this.ArrayRelacion[j].nivel_contribucion);
             var PNCpo: number = 0;
+
             switch (nc) {
                 case 1: {
                     PNCpo = 0.30;

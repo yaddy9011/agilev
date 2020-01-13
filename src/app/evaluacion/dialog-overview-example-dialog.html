@@ -6,7 +6,8 @@
     [masterDetail]="{ enabled: true, template: 'detail' }" keyExpr="n_obj" [showBorders]="true">
     <dxi-column dataField="n_obj" [width]="100" caption="n° Objetivo"></dxi-column>
     <dxi-column dataField="objetivo" [width]="350" caption="Objetivo"></dxi-column>
-    <dxi-column dataField="total_Eva" [width]="120" caption="Total de la Evaluación"></dxi-column>
+    <dxi-column dataField="total_Eva" [width]="120" caption="Total de la Evaluación" format="fixedPoint" precision=2
+      dataType="number" [customizeText]="customizeText"></dxi-column>
     <div id="div1" *dxTemplate="let datos of 'detail'">
       <div class="master-detail-caption">{{datos.data.objetivo}}</div>
       <br>

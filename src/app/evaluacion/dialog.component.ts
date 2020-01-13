@@ -49,6 +49,10 @@ export class DialogOverviewExampleDialog {
 
     }
 
+    customizeText(cellInfo) {
+        return cellInfo.value + " %";
+    }
+
     onNoClick(): void {
         this.dialogRef.close();
         this.router.navigateByUrl('/eval');

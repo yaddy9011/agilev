@@ -9,6 +9,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './graficas.component.html',
   styleUrls: ['./graficas.component.css']
 })
+
 export class GraficasComponent implements OnInit {
 
   DatosObj = [];
@@ -16,21 +17,15 @@ export class GraficasComponent implements OnInit {
   AgilidadTotal = 0;
 
   constructor(private EvalResulService: EvalResulService, private taskService: TasksService, private route: ActivatedRoute) {
-   // console.log(this.route.snapshot.paramMap.get('id_eval'));
+
     var id_eval = this.route.snapshot.paramMap.get('id_eval');
     var p = new Evaluacion(taskService, id_eval, EvalResulService);
     p.getObjetivosByUSR();
 
     this.EvalResulService.routeDataA().subscribe(data => {
       //data.sort((a, b) => Number(a.total_Eva.substring(0, 1)) - Number(b.total_Eva.substring(0, 1)));
-      //this.DatosObj = data;
-      for (let elemento of data) {
-        const Data = {
-          n_obj: elemento.n_obj,
-          total_Eva: Number(elemento.total_Eva.substring(0, 2))
-        };
-        this.DatosObj.push(Data);
-      }
+      data.sort((a, b) => a.total_Eva - b.total_Eva);
+      this.DatosObj = data;
       console.log(this.DatosObj);
     });
 
