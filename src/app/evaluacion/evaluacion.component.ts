@@ -40,19 +40,20 @@ export class EvaluacionComponent implements OnInit {
   NewWl: WorkLine[];
   idst: string;
   popupVisible = false;
-  selectvalue=null;
+  selectvalue = null;
 
   constructor(private authService: AuthService, private router: Router, private taskService: TasksService, public dialog: MatDialog) {
     this.idst = localStorage.getItem("ACCESS_IDS");
     this.GetEvalByUSR();
-    this.GetWorkLines();
+    //this.GetWorkLines();
   }
 
   ngOnInit() {
   }
 
-  GenerarEvaluacion() {
-    this.popupVisible = true;
+  GenerarEvaluacion(e) {
+    // this.popupVisible = true;
+    this.InsertEval(e);
   }
 
   InsertEval(e) {
@@ -60,7 +61,8 @@ export class EvaluacionComponent implements OnInit {
     //console.log(this.selectvalue);
     let DataEval = {
       id: this.idst,
-      workLine:this.selectvalue
+      workLine: "5e14e3353e702d0d2c2c26e5"
+      // workLine:this.selectvalue
     }
 
     this.authService.GuardarEvaluacion(DataEval).subscribe(res => {
@@ -70,8 +72,7 @@ export class EvaluacionComponent implements OnInit {
   }
 
   listValueChanged(e) {
-    console.log(e.value);
-    this.selectvalue=e.value;
+    this.selectvalue = e.value;
   }
 
   GetEvalByUSR() {

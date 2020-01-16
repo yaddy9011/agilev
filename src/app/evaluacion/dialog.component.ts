@@ -41,12 +41,18 @@ export class DialogOverviewExampleDialog {
 
         this.EvalResulService.routeDataB().subscribe(data => {
             this.arrROP = data;
+            console.log(this.arrROP);
         });
 
         this.EvalResulService.routeDataC().subscribe(data => {
             this.AgilidadTotal = data;
         });
 
+    }
+
+    getMasterDetailGridDataSource(n_objX: number): any {
+        const result = this.arrROP.filter(d => d.n_obj == n_objX);
+        return result;
     }
 
     customizeText(cellInfo) {

@@ -1,7 +1,7 @@
 <app-menu></app-menu>
 
-<div class="main" align="center" >
-  <p class="sign" align="center">Entra al sistema</p>
+<div class="main" align="center">
+  <p class="sign" align="center">Accede al sistema</p>
   <form #frmLogin="ngForm" class="form1" (ngSubmit)="onLogin(frmLogin)">
     <input class="un" type="email" name="email" placeholder="Email" ngModel required>
     <div style="width: 300px">
@@ -10,8 +10,8 @@
       </show-hide-password>
     </div>
     <br>
-    <input class="submit" type="submit" value="Acceder">
-    <p class="forgot" align="center"><a routerLink="/ForgotPassword">olvidaste tu contraseña?</a></p>
+    <input class="submit" type="submit" value="Entrar">
+    <p class="forgot" align="center"><a routerLink="/ForgotPassword">¿Olvidaste tu contraseña?</a></p>
   </form>
 </div>
 
