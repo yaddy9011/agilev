@@ -11,6 +11,7 @@ import { Eval } from '../clases/evaluacionbyobj';
 import { Rop } from '../clases/rop';
 import { WorkLine } from '../clases/workline';
 import { AppGlobals } from '../app.global';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 
 @Injectable({
@@ -107,6 +108,8 @@ export class TasksService {
       .pipe(map(res => res));
   }
 
-
+  GetDataEval(ideval): Observable<any> {
+    return this.http.get(`${this.domain}/api/DataEval/${ideval}`);
+  }
 
 }

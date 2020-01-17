@@ -5,7 +5,8 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { EvalResulService } from '../services/eval-resul.service';
-import { Evaluacion } from '../evaluacion/eval.class';
+// import { Evaluacion } from '../evaluacion/eval.class';
+import { Evaluacion } from '../evaluacion/evaluation.class';
 
 export interface DialogData {
     idEval: String;
@@ -33,30 +34,33 @@ export class DialogOverviewExampleDialog {
 
         this._idEval = data.idEval;
         var p = new Evaluacion(taskService, this._idEval, EvalResulService);
-        p.getObjetivosByUSR();
 
+        p.GetDataEva();
         this.EvalResulService.routeDataA().subscribe(data => {
             this.DatosObj = data;
-        });
-
-        this.EvalResulService.routeDataB().subscribe(data => {
-            this.arrROP = data;
-            console.log(this.arrROP);
-        });
-
+        });     
+        
         this.EvalResulService.routeDataC().subscribe(data => {
             this.AgilidadTotal = data;
         });
 
+
+        //p.getObjetivosByUSR();
+        // this.EvalResulService.routeDataB().subscribe(data => {
+        //     this.arrROP = data;
+        //     console.log(this.arrROP);
+        // });
+
+  
     }
 
-    getMasterDetailGridDataSource(n_objX: number): any {
-        const result = this.arrROP.filter(d => d.n_obj == n_objX);
-        return result;
-    }
+    // getMasterDetailGridDataSource(n_objX: number): any {
+    //     const result = this.arrROP.filter(d => d.n_obj == n_objX);
+    //     return result;
+    // }
 
     customizeText(cellInfo) {
-        return cellInfo.value + " %";
+        return cellInfo.value + "%";
     }
 
     onNoClick(): void {

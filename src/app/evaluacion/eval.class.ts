@@ -255,6 +255,7 @@ export class Evaluacion {
         }
 
         let porcentaje: number;
+        
         if (SumaNivelAplicacion == 0) {
             porcentaje = 0;
         } else {

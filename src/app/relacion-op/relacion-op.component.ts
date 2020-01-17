@@ -32,7 +32,7 @@ export class RelacionOpComponent implements OnInit {
             n_prac: elemento.n_prac,
             n_c: elemento.nivel_contribucion,
             text_prac: elemento.prac.descripcion,
-            text_obj: elemento.obj.descrip
+            text_obj: elemento.n_obj + " " +  elemento.obj.descrip
           };
           array_new.push(DataNew);
         }

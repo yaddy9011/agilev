@@ -1,8 +1,28 @@
 <h1 mat-dialog-title>Evaluación por Objetivos</h1>
 <div mat-dialog-content>
-  <div>Agilidad por objetivos = {{AgilidadTotal}} %</div>
+  <div> 
+    <span class="label label-primary">
+      Agilidad por objetivos = {{AgilidadTotal}} %
+    </span>
+  </div>
   <br>
-  <dx-data-grid #grid id="gridContainer" [width]="900" [dataSource]="DatosObj"
+
+  <dx-data-grid id="gridContainer" [dataSource]="DatosObj" [allowColumnReordering]="true" [showBorders]="true">
+    <dxi-column dataField="n_prac" [width]="100" caption="N° Práctica"></dxi-column>
+    <dxi-column dataField="Descrip_prac" caption="Práctica"></dxi-column>
+    <dxi-column dataField="na_t" [width]="150" caption="Nivel de aplicación"></dxi-column>
+    <dxi-column dataField="nc_t" [width]="150" caption="Nivel de contribución"></dxi-column>
+    <dxi-column dataField="LaO" caption="Evaluación" [groupIndex]="0" format="fixedPoint" precision=2 dataType="number"
+      [customizeText]="customizeText"> </dxi-column>
+    <dxi-column dataField="TexObj" caption="Objetivo" sortOrder="asc" [groupIndex]="0"></dxi-column>
+    <dxo-search-panel [visible]="true"></dxo-search-panel>
+    <dxo-paging [pageSize]="10"></dxo-paging>
+    <dxo-group-panel [visible]="true"></dxo-group-panel>
+    <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
+  </dx-data-grid>
+
+
+  <!-- <dx-data-grid #grid id="gridContainer" [width]="900" [dataSource]="DatosObj"
     [masterDetail]="{ enabled: true, template: 'detail' }" keyExpr="n_obj" [showBorders]="true">
     <dxi-column dataField="n_obj" [width]="100" caption="n° Objetivo"></dxi-column>
     <dxi-column dataField="objetivo" [width]="350" caption="Objetivo"></dxi-column>
@@ -25,10 +45,11 @@
           <td width="25%" *ngIf="arrROPs.n_obj==datos.key">{{arrROPs.n_a}}</td>
         </tr>
       </table>
-      <!-- <dx-data-grid [dataSource]="getMasterDetailGridDataSource(datos.data.n_obj)" showBorders="true">
-      </dx-data-grid> -->
     </div>
-  </dx-data-grid>
+  </dx-data-grid> -->
+  <!-- <dx-data-grid [dataSource]="getMasterDetailGridDataSource(datos.data.n_obj)" showBorders="true">
+      </dx-data-grid> -->
+
   <br>
 </div>
 <div mat-dialog-actions>

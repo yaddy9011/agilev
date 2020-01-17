@@ -104,5 +104,6 @@ export class EvaluacionComponent implements OnInit {
         this.NewWl = wl;
       });
   }
+  
 
 }
