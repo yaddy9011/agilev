@@ -82,7 +82,8 @@ export class EvaluacionComponent implements OnInit {
       });
   }
 
-  VerEval(id) {
+  VerEval(id) {   
+    console.log(this.newarrs[id]._id);
     const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
       width: '1000px',
       data: { idEval: this.newarrs[id]._id }

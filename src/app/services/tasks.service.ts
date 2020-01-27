@@ -108,8 +108,8 @@ export class TasksService {
       .pipe(map(res => res));
   }
 
-  GetDataEval(ideval): Observable<any> {
-    return this.http.get(`${this.domain}/api/DataEval/${ideval}`);
+  GetDataEval(Data): Observable<any> {
+    return this.http.get(`${this.domain}/api/DataEval/${Data.id_eval}/${Data.id_usr}`);
   }
 
 }

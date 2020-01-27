@@ -38,8 +38,8 @@ export class DialogOverviewExampleDialog {
         p.GetDataEva();
         this.EvalResulService.routeDataA().subscribe(data => {
             this.DatosObj = data;
-        });     
-        
+        });
+
         this.EvalResulService.routeDataC().subscribe(data => {
             this.AgilidadTotal = data;
         });
@@ -50,8 +50,7 @@ export class DialogOverviewExampleDialog {
         //     this.arrROP = data;
         //     console.log(this.arrROP);
         // });
-
-  
+        
     }
 
     // getMasterDetailGridDataSource(n_objX: number): any {

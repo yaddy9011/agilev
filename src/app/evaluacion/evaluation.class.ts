@@ -15,7 +15,12 @@ export class Evaluacion {
 
     GetDataEva() {
 
-        this.taskService.GetDataEval(this._idEval)
+        const Data = {
+            id_eval: this._idEval,
+            id_usr: this.idst
+        };
+
+        this.taskService.GetDataEval(Data)
             .subscribe(evals => {
 
                 let levels = evals.map((ev, i) => {
@@ -97,9 +102,9 @@ export class Evaluacion {
                     return arraData;
                 });
 
-               let newlv= levels.sort((a, b) => a.n_obj - b.n_obj);
+                let newlv = levels.sort((a, b) => a.n_obj - b.n_obj);
 
-              // console.log(newlv);
+                // console.log(newlv);
 
                 const arrSuma = newlv.reduce((contador, objeto) => {
                     //console.log(objeto.n_obj + " " + objeto.na);
@@ -113,7 +118,7 @@ export class Evaluacion {
                     return contador;
                 }, {});
 
-               // console.log(arrSuma);
+                // console.log(arrSuma);
 
                 const TotalRop = levels.reduce((contador, objeto) => {
                     contador[objeto.n_obj] = (contador[objeto.n_obj] || 0) + 1;
