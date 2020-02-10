@@ -21,11 +21,9 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 export class MainComponent implements OnInit {
 
-  idArr = []
-  //nrSelect = 3
+  idArr = [];
   panelOpenState = false;
   userName = '';
- // tasks: Task[];
   newarrs: obj[];
   objs: obj[];
   title: string;
@@ -36,13 +34,16 @@ export class MainComponent implements OnInit {
   Practicas: Practica[];
   ArrayPracticas: Practica[];
   listPractica: Practica[];
+  checked = false;
+  ok = "";
 
   constructor(private taskService: TasksService) {
 
     this.idst = localStorage.getItem("ACCESS_IDS");
     this.nameusr = localStorage.getItem("ACCESS_name");
-    var ok = localStorage.getItem("ACCESS_IDS");
-    this.taskService.getobj(ok)
+    this.ok = localStorage.getItem("ACCESS_IDS");
+
+    this.taskService.getobj(this.ok)
       .subscribe(obj => {
         this.newarrs = obj;
         this.newarrs.sort((a, b) => a.pos - b.pos);
@@ -60,11 +61,18 @@ export class MainComponent implements OnInit {
           };
           ids.push(arraData);
         }
-        this.objs = ids; 
+        this.objs = ids;
       });
 
-    this.taskService.getPracticas(ok)
+    this.getPracticas(this.ok, this.checked);
+
+  }
+
+  getPracticas(ok, ap) {
+
+    this.taskService.getPracticas(ok, ap)
       .subscribe(prac => {
+        console.log(prac);
         this.ArrayPracticas = prac;
         this.ArrayPracticas.sort((a, b) => a.pos - b.pos);
         var arrdatanew = [];
@@ -76,19 +84,21 @@ export class MainComponent implements OnInit {
             id_obj: Object.values(prac[i].id_prac)[0],
             pos: prac[i].pos,
             num: Object.values(prac[i].id_prac)[4],
-            nivelapli: prac[i].nivelapli
+            nivelapli: prac[i].nivelapli,
+            aplicable: prac[i].aplicable,
+            metodologia: Object.values(prac[i].id_prac)[2],
+            notas: prac[i].notas
           };
           this.idArr[i] = arraData.nivelapli;
           arrdatanew.push(arraData);
         }
         this.Practicas = arrdatanew;
+        console.log(this.Practicas);
       });
 
   }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() { }
 
   drop(event: CdkDragDrop<number[]>) {
 
@@ -125,17 +135,18 @@ export class MainComponent implements OnInit {
 
   dropPracticas(event: CdkDragDrop<number[]>) {
 
-    moveItemInArray(this.Practicas, event.previousIndex, event.currentIndex);
+    if (this.checked == true) {
+      alert("Para priorizar es necesario tener las 42 prácticas,no ocultes las prácticas no aplicables");
+    } else {
+      moveItemInArray(this.Practicas, event.previousIndex, event.currentIndex);
+      for (var i = 0; i < this.Practicas.length; i++) {
+        this.idArr[i] = this.Practicas[i].nivelapli;
+        this.updateStatuspracticas(this.Practicas[i], i);
+      }
 
-    for (var i = 0; i < this.Practicas.length; i++) {
-
-      this.idArr[i] = this.Practicas[i].nivelapli;
-
-      this.updateStatuspracticas(this.Practicas[i], i);
     }
 
   }
-
 
   updateStatuspracticas(pra: Practica, pnew: number) {
 
@@ -149,20 +160,42 @@ export class MainComponent implements OnInit {
 
     this.taskService.updatePractica(newActualizacion)
       .subscribe(res => {
-      })
+      });
   }
 
   onChange(deviceValue) {
-
-    //console.log(this.idArr);
-
     for (var i = 0; i < this.Practicas.length; i++) {
       this.Practicas[i].nivelapli = this.idArr[i];
       this.updateStatuspracticas(this.Practicas[i], i);
     }
+  }
 
-    //this.idArr[2]=deviceValue;
-    //console.log(deviceValue);
+  FieldsChange(e) {
+    var ActPractica = {
+      _id: e.currentTarget.value,
+      aplicable: e.currentTarget.checked
+    };
+
+    this.taskService.updateAplicable(ActPractica)
+      .subscribe(res => {
+      });
+
+    this.getPracticas(this.ok, this.checked);
+
+  }
+
+  doSomething(e, id) {
+    var actNotas = {
+      _id: id,
+      notas: e.target.value
+    };
+    this.taskService.updateNotas(actNotas)
+      .subscribe(res => {
+      });
+  }
+
+  eventAplicables(e) {
+    this.getPracticas(this.ok, e.checked);
   }
 
 }

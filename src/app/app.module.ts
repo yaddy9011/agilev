@@ -45,6 +45,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { ResponseResetComponent } from './response-reset/response-reset.component';
 import { ShowHidePasswordModule } from 'ngx-show-hide-password';
 import { GraficasComponent } from './graficas/graficas.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -95,6 +96,7 @@ import { GraficasComponent } from './graficas/graficas.component';
     SortablejsModule.forRoot({}),
     NgxPaginationModule,
     ShowHidePasswordModule,
+    MatCheckboxModule
   ],
   providers: [AuthService, TasksService, AppGlobals],
   bootstrap: [AppComponent]

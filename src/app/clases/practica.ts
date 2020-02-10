@@ -8,4 +8,6 @@ export class Practica {
     n_prac: number;
     Clave: String;
     nivelapli: number;
+    aplicable: Boolean;
+    notas: string;
 }

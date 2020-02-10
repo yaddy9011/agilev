@@ -86,11 +86,19 @@ export class TasksService {
       .pipe(map(res => res));
   }
 
-  getPracticas(id) {
-    return this.http.get<Practica[]>(`${this.domain}/api/practicas/${id}`)
-      .pipe(map(res => res));
-  }
+  getPracticas(id,ap) {
 
+    var practica="";
+    if (ap == true){
+      practica="practicasAplicables"
+    } else{
+      practica="practicas"
+    }
+
+    return this.http.get<Practica[]>(`${this.domain}/api/${practica}/${id}`)
+      .pipe(map(res => res));
+
+  }
 
   getPracticasbyEval(ideval) {
     return this.http.get<Practica[]>(`${this.domain}/api/practicasbyeval/${ideval}`)
@@ -100,6 +108,16 @@ export class TasksService {
 
   updatePractica(newPractica) {
     return this.http.put<Practica>(`${this.domain}/api/practicas/${newPractica._id}`, newPractica)
+      .pipe(map(res => res));
+  }
+
+  updateAplicable(newData) {
+    return this.http.put<Practica>(`${this.domain}/api/ActAplicable/${newData._id}`, newData)
+      .pipe(map(res => res));
+  }
+
+  updateNotas(NewDatanota) {
+    return this.http.put<Practica>(`${this.domain}/api/actnotas/${NewDatanota._id}`, NewDatanota)
       .pipe(map(res => res));
   }
 
