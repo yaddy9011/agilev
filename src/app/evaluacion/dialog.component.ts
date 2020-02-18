@@ -34,8 +34,8 @@ export class DialogOverviewExampleDialog {
 
         this._idEval = data.idEval;
         var p = new Evaluacion(taskService, this._idEval, EvalResulService);
-
         p.GetDataEva();
+
         this.EvalResulService.routeDataA().subscribe(data => {
             this.DatosObj = data;
         });

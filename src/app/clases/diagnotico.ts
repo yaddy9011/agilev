@@ -1,59 +1,66 @@
 import { TasksService } from '../services/tasks.service';
 import { EvalResulService } from '../services/eval-resul.service';
 
-export class Evaluacion {
+export class Diagnostico {
 
-    idst: string;
+    id_usr: string;
     _idEval: String;
 
     constructor(private taskService: TasksService,
         public IdEval: String,
         private EvalResulService: EvalResulService) {
-        this.idst = localStorage.getItem("ACCESS_IDS");
+        this.id_usr = localStorage.getItem("ACCESS_IDS");
         this._idEval = IdEval;
     }
 
-    GetDataEva() {
+    public GetDataEva() {
 
         const Data = {
             id_eval: this._idEval,
-            id_usr: this.idst
+            id_usr: this.id_usr
         };
 
         this.taskService.GetDataEval(Data)
             .subscribe(evals => {
 
+                //relación general de objetivos y prácticas
+
                 let levels = evals.map((ev, i) => {
 
-                  
                     let nc = ev.relaop.nivel_contribucion;
                     let na = ev.prac.nivelapli;
                     let nc_title = "";
                     let na_title = "";
                     let na_new = 0;
-                    let Premio: boolean
+                    let PremioNa: boolean
+                    let PremioNc: boolean
                     let PNCpo = 0;
 
                     switch (nc) {
                         case 0:
                             nc_title = "Muy Bajo";
                             PNCpo = 0;
+                            PremioNc = false;
                             break;
                         case 0.25:
                             nc_title = "Bajo";
                             PNCpo = 0;
+                            PremioNc = false;
                             break;
                         case 0.50:
                             nc_title = "Medio";
-                            PNCpo = 0.10;
+                            PNCpo = 0.05;
+                            PremioNc = true;
                             break;
                         case 0.75:
                             nc_title = "Alto";
-                            PNCpo = 0.20;
+                            PNCpo = 0.10;
+                            PremioNc = true;
                             break;
                         case 1:
                             nc_title = "Muy Alto";
-                            PNCpo = 0.30;
+                            PNCpo = 0.15;
+                            PremioNc = true;
                             break;
                     }
 
@@ -61,57 +68,59 @@ export class Evaluacion {
                         case 0:
                             na_title = "No Aplica";
                             na_new = 0;
-                            Premio = false;
+                            PremioNa = false;
                             break;
                         case 1:
                             na_title = "Muy Bajo";
                             na_new = 0;
-                            Premio = true;
+                            PremioNa = true;
                             break;
                         case 2:
                             na_title = "Bajo";
                             na_new = 0.25;
-                            Premio = true;
+                            PremioNa = true;
                             break;
                         case 3:
                             na_title = "Medio";
                             na_new = 0.50;
-                            Premio = true;
+                            PremioNa = true;
                             break;
                         case 4:
                             na_title = "Alto";
                             na_new = 0.75;
-                            Premio = false;
+                            PremioNa = true;
                             break;
                         case 5:
                             na_title = "Muy Alto";
                             na_new = 1;
-                            Premio = false;
+                            PremioNa = false;
                             break;
                     }
 
                     const arraData = {
+                        _idpe: ev.prac._id,
                         n_obj: Number(ev.n_obj),
                         n_prac: Number(ev.relaop.n_prac),
+                        Descrip_obj: ev.Datos_obj.descrip,
+                        Descrip_prac: ev.Datos_practicas.descripcion,
                         nc_t: nc_title,
                         nc: nc,
                         na_t: na_title,
                         na: na_new,
-                        premio: Premio,
+                        premioNa: PremioNa,
+                        premioNc: PremioNc,
                         PNCpo: PNCpo
                     };
-
                     return arraData;
                 });
 
-                let newlv = levels.sort((a, b) => a.n_obj - b.n_obj);
+                console.log(levels);
 
-                // console.log(newlv);
+                //para generar suma na, na, nd
 
-                const arrSuma = newlv.reduce((contador, objeto) => {
-                    //console.log(objeto.n_obj + " " + objeto.na);
+                let arrSuma = levels.reduce((contador, objeto) => {
                     var new_na;
-                    if (objeto.premio == true) {
+                    if (objeto.premioNa && objeto.premioNc == true) {
                         new_na = objeto.na + (objeto.PNCpo * objeto.na);
                     } else {
                         new_na = objeto.na
@@ -120,54 +129,47 @@ export class Evaluacion {
                     return contador;
                 }, {});
 
-                // console.log(arrSuma);
+                console.log(arrSuma);
+
+                //conseguir el total de relaciones objetivos-prácticas
 
                 const TotalRop = levels.reduce((contador, objeto) => {
                     contador[objeto.n_obj] = (contador[objeto.n_obj] || 0) + 1;
                     return contador;
                 }, {});
 
-                var RelacionEval = evals.map(function (task, index, array) {
-                    let PorcentajeEval = Math.round(Number(100 / (TotalRop[task.n_obj] / arrSuma[task.n_obj])));
-
-                    // console.log(task.n_obj);
-                    // console.log(TotalRop[task.n_obj]);
-                    // console.log(arrSuma[task.n_obj]);
-                    // console.log(PorcentajeEval);
-
-                    const arraData = {
-                        id_eval: task.prac.id_eval,
-                        n_obj: task.n_obj,
-                        n_prac: task.relaop.n_prac,
-                        Descrip_prac: task.Datos_practicas.descripcion,
-                        Descrip_obj: task.Datos_obj.descrip,
-                        nc_t: levels[index].nc_t,
-                        nc: levels[index].nc,
-                        na_t: levels[index].na_t,
-                        na: levels[index].na,
-                        LaO: PorcentajeEval,
-                        TexObj: task.n_obj + ": " + task.Datos_obj.descrip
-                    };
-                    return arraData;
-                });
-
-                let sinRepetidos = RelacionEval.filter((valorActual, indiceActual, arreglo) => {
+                //quitamos los repetidos
+                let sinRepetidos = levels.filter((valorActual, indiceActual, arreglo) => {
                     return arreglo.findIndex(valorDelArreglo => JSON.stringify(valorDelArreglo.n_obj) === JSON.stringify(valorActual.n_obj)) === indiceActual
                 });
 
-                var total = sinRepetidos.reduce(function (contador, current) {
-                    contador = contador + current.LaO;
+                // mapeamos los datos de los objetivos y el diagnóstico
+
+                let mapObjetivos = sinRepetidos.map((mo, i) => {
+                    let PorcentajeDiagnostic = Math.round(Number(100 / (TotalRop[mo.n_obj] / arrSuma[mo.n_obj])));
+                    const DataObj = {
+                        n_obj: mo.n_obj,
+                        TexObj: mo.Descrip_obj,
+                        pd: PorcentajeDiagnostic
+                    };
+                    return DataObj;
+                });
+
+                console.log(mapObjetivos);
+
+                // reduce para obtener el promedio de agilidad por objetivos
+
+                var total_pdo = mapObjetivos.reduce(function (contador, current) {
+                    contador = contador + current.pd;
                     return contador;
                 }, 0);
 
-                var agility = Math.round(total / sinRepetidos.length);
-
-                this.EvalResulService.DataEvalObjetivos(RelacionEval);
-                this.EvalResulService.DataAgilidad(agility);
+                var DiagnosticAgilityByObjetivos = Math.round(total_pdo / mapObjetivos.length);
+                this.EvalResulService.DataEvalObjetivos(mapObjetivos);
+                this.EvalResulService.DataEvalPracticas(levels);
+                this.EvalResulService.DataAgilidad(DiagnosticAgilityByObjetivos);
 
             });
     }
-
-
 
 }

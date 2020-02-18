@@ -7,7 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  public show:boolean = true;
+
+  constructor() { 
+    var id_usr = localStorage.getItem("ACCESS_IDS");
+    if (id_usr){
+      this.show = !this.show;
+    }
+  }
 
   ngOnInit() {
   }

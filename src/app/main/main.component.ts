@@ -25,6 +25,7 @@ export class MainComponent implements OnInit {
   panelOpenState = false;
   userName = '';
   newarrs: obj[];
+  // objs: Array<obj>;
   objs: obj[];
   title: string;
   idst: string;
@@ -47,8 +48,7 @@ export class MainComponent implements OnInit {
       .subscribe(obj => {
         this.newarrs = obj;
         this.newarrs.sort((a, b) => a.pos - b.pos);
-        //console.log(this.newarrs);
-        //this.objs = this.newarrs;
+
         var ids = [];
         for (var i = 0; i < this.newarrs.length; i++) {
           const arraData = {
@@ -58,11 +58,15 @@ export class MainComponent implements OnInit {
             id_obj: Object.values(obj[i].id_obj)[0],
             pos: obj[i].pos,
             num: Object.values(obj[i].id_obj)[2],
+            NoInteresa: obj[i].NoInteresa,
+            notas: obj[i].notas
           };
           ids.push(arraData);
         }
         this.objs = ids;
       });
+
+    //this.onReorder = this.onReorder.bind(this);
 
     this.getPracticas(this.ok, this.checked);
 
@@ -72,7 +76,6 @@ export class MainComponent implements OnInit {
 
     this.taskService.getPracticas(ok, ap)
       .subscribe(prac => {
-        console.log(prac);
         this.ArrayPracticas = prac;
         this.ArrayPracticas.sort((a, b) => a.pos - b.pos);
         var arrdatanew = [];
@@ -93,7 +96,6 @@ export class MainComponent implements OnInit {
           arrdatanew.push(arraData);
         }
         this.Practicas = arrdatanew;
-        console.log(this.Practicas);
       });
 
   }
@@ -143,7 +145,6 @@ export class MainComponent implements OnInit {
         this.idArr[i] = this.Practicas[i].nivelapli;
         this.updateStatuspracticas(this.Practicas[i], i);
       }
-
     }
 
   }
@@ -175,13 +176,10 @@ export class MainComponent implements OnInit {
       _id: e.currentTarget.value,
       aplicable: e.currentTarget.checked
     };
-
     this.taskService.updateAplicable(ActPractica)
       .subscribe(res => {
+        this.getPracticas(this.ok, this.checked);
       });
-
-    this.getPracticas(this.ok, this.checked);
-
   }
 
   doSomething(e, id) {
@@ -194,9 +192,91 @@ export class MainComponent implements OnInit {
       });
   }
 
+  ChangeCheckNoInteresa(e) {
+    var actObj = {
+      _id: e.currentTarget.value,
+      NoInteresa: e.currentTarget.checked
+    };
+    this.taskService.updateNoInteresa(actObj)
+      .subscribe(res => {
+      });
+  }
+
+  ChangeNotasObj(e, id) {
+    var actNotas = {
+      _id: id,
+      notas: e.target.value
+    };
+
+    this.taskService.updateNotasObj(actNotas)
+      .subscribe(res => {
+      });
+  }
+
+
   eventAplicables(e) {
     this.getPracticas(this.ok, e.checked);
   }
+
+
+  // onReorder(e) {
+
+  //   var visibleRows = e.component.getVisibleRows(),
+  //     newOrderIndex = visibleRows[e.toIndex].data.rowIndex;
+
+  //   console.log(visibleRows);
+
+  //   console.log(visibleRows[e.toIndex]);
+  //   console.log(e);
+
+  //   console.log(e.fromIndex);
+  //   console.log(e.toIndex);
+
+  //   moveItemInArray(visibleRows, e.fromIndex, e.toIndex);
+  //   console.log(visibleRows);
+
+  //   for (var i = 0; i < visibleRows.length; i++) {
+
+  //     var newTask = {
+  //       _id: visibleRows[i].data._id,
+  //       objetivo: visibleRows[i].data.objetivo,
+  //       id_usr: visibleRows[i].data.id_usr,
+  //       id_obj: visibleRows[i].data.id_obj,
+  //       pos:i
+  //     };
+
+  //     this.taskService.updateTask(newTask)
+  //       .subscribe(res => {
+
+  //       });
+  //   }
+
+  //   this.taskService.getobj(this.ok)
+  //     .subscribe(obj => {
+  //       this.newarrs = obj;
+  //       this.newarrs.sort((a, b) => a.pos - b.pos);
+
+  //       var ids = [];
+  //       for (var i = 0; i < this.newarrs.length; i++) {
+  //         const arraData = {
+  //           _id: obj[i]._id,
+  //           objetivo: Object.values(obj[i].id_obj)[1],
+  //           id_usr: obj[i].id_usr,
+  //           id_obj: Object.values(obj[i].id_obj)[0],
+  //           pos: obj[i].pos,
+  //           num: Object.values(obj[i].id_obj)[2],
+  //         };
+  //         ids.push(arraData);
+  //       }
+  //       this.objs = ids;
+  //     });
+
+  //   e.component.refresh();
+
+  //   //this.tasksStore.update(e.itemData.ID,{ OrderIndex: newOrderIndex }).then(() => {});
+
+
+  // }
 
 }
 

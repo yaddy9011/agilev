@@ -20,7 +20,9 @@ export class MenuComponent implements OnInit {
   resetToken: null;
   idEval: String;
 
+
   constructor(private AuthService: AuthService, private router: Router, private route: ActivatedRoute) {
+
 
     this.route.params.subscribe(params => {
       this.resetToken = params.token;
@@ -227,7 +229,7 @@ export class MenuComponent implements OnInit {
         break;
       }
 
-      case "/Graficas/" + this.idEval: {
+      case "/Diagnostico_objetivos/" + this.idEval: {
 
         if (x == null) {
           this.isShoweval = !this.isShoweval;

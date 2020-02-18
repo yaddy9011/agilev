@@ -5,3 +5,8 @@
   z-index: 1;
   }
   
+  #menu_new{
+    background-color: var(--first-color);
+    color:var(--first-letra);
+  }
+

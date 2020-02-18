@@ -46,6 +46,9 @@ import { ResponseResetComponent } from './response-reset/response-reset.componen
 import { ShowHidePasswordModule } from 'ngx-show-hide-password';
 import { GraficasComponent } from './graficas/graficas.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { DiagnosticoObjetivosComponent } from './diagnostico-objetivos/diagnostico-objetivos.component';
+import { DiagnosticoAreasComponent } from './diagnostico-areas/diagnostico-areas.component';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 @NgModule({
   declarations: [
@@ -63,7 +66,9 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     ForgotPasswordComponent,
     RelacionOpComponent,
     ResponseResetComponent,
-    GraficasComponent
+    GraficasComponent,
+    DiagnosticoObjetivosComponent,
+    DiagnosticoAreasComponent
   ],
   entryComponents: [DialogOverviewExampleDialog],
   imports: [
@@ -96,7 +101,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     SortablejsModule.forRoot({}),
     NgxPaginationModule,
     ShowHidePasswordModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatButtonToggleModule
   ],
   providers: [AuthService, TasksService, AppGlobals],
   bootstrap: [AppComponent]

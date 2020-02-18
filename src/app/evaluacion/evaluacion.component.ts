@@ -57,11 +57,10 @@ export class EvaluacionComponent implements OnInit {
   }
 
   InsertEval(e) {
-
     //console.log(this.selectvalue);
     let DataEval = {
-      id: this.idst,
-      workLine: "5e14e3353e702d0d2c2c26e5"
+      id: this.idst
+      // workLine: "5e14e3353e702d0d2c2c26e5"
       // workLine:this.selectvalue
     }
 

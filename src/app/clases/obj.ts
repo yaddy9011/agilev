@@ -7,4 +7,7 @@ export class obj {
     num: String;
     n_obj:number;
     total_Eva: number;
+    pd:number;
+    NoInteresa: Boolean;
+    notas: string;
 }

@@ -21,8 +21,9 @@
       </p>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-button routerLink="/registro">Regístrate</button>
-      <button mat-button routerLink="/login">Inicia sesión </button>
+
+      <button *ngIf="show" mat-button routerLink="/registro">Regístrate</button>
+      <button *ngIf="show" mat-button routerLink="/login">Inicia sesión </button>
     </mat-card-actions>
   </mat-card>
 </div>

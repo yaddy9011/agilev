@@ -105,7 +105,6 @@ export class TasksService {
       .pipe(map(res => res));
   }
 
-
   updatePractica(newPractica) {
     return this.http.put<Practica>(`${this.domain}/api/practicas/${newPractica._id}`, newPractica)
       .pipe(map(res => res));
@@ -120,6 +119,19 @@ export class TasksService {
     return this.http.put<Practica>(`${this.domain}/api/actnotas/${NewDatanota._id}`, NewDatanota)
       .pipe(map(res => res));
   }
+
+  updateNoInteresa(newData) {
+    return this.http.put<obj>(`${this.domain}/api/ObjetivosNoInteresan/${newData._id}`, newData)
+      .pipe(map(res => res));
+  }
+
+  updateNotasObj(NewDatanota) {
+    return this.http.put<obj>(`${this.domain}/api/ObjetivosNotas/${NewDatanota._id}`, NewDatanota)
+      .pipe(map(res => res));
+  }
+
+
+
 
   DeleteEval(ideval) {
     return this.http.delete<Eval>(`${this.domain}/api/DeleteEvals/${ideval}`)

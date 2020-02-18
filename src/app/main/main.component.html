@@ -10,15 +10,25 @@
         <mat-panel-title>
           <h6 class="text-uppercase font-weight-bold">OBJETIVOS</h6>
         </mat-panel-title>
-        <mat-panel-description>
-          Ordena los objetivos segun la prioridad que consideres adecuada
-        </mat-panel-description>
       </mat-expansion-panel-header>
+      <br>
+      Ordena los objetivos segun la prioridad que consideres adecuada y marca los objetivos que no te interesen o no
+      sean relevantes para tu proyecto
+      <br>
       <br>
       <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
         <div align="left" class="example-box" *ngFor="let obj of objs" cdkDrag>
-          <span style="width:10%;" class="text-uppercase font-weight-bold" align="left"> {{ obj.num }} </span>
+          <span style="width:12%;" class="text-uppercase font-weight-bold" align="left"> {{ obj.num }} </span>
           <span align="left" style="width:85%;"> {{ obj.objetivo }} </span>
+
+          <span align="center" style="width:40%;">
+            <textarea matInput placeholder="Notas de objetivos..." (change)="ChangeNotasObj($event,obj._id)"
+              value="{{obj.notas}}"></textarea>
+          </span>
+          <span align="center" style="width:20%;">
+            <input value="{{obj._id}}" type="checkbox" (change)="ChangeCheckNoInteresa($event)"
+              [checked]="obj.NoInteresa">
+          </span>
         </div>
       </div>
       <br>
@@ -29,14 +39,39 @@
         <mat-panel-title style="width:20%;">
           <h6 class="text-uppercase font-weight-bold">PRÁCTICAS ÁGILES</h6>
         </mat-panel-title>
-        <mat-panel-description>
-          Ordena las prácticas segun la prioridad que consideres adecuada, y asigna nivel de aplicación
-        </mat-panel-description>
       </mat-expansion-panel-header>
       <br>
-      <mat-checkbox [(ngModel)]="checked" (change)="eventAplicables($event)" >Ocultar practicas no aplicables</mat-checkbox>
+      Ordena las prácticas segun la prioridad que consideres adecuada, y asigna nivel de aplicación
+      <br>
+      <br>
+      <mat-checkbox [(ngModel)]="checked" (change)="eventAplicables($event)">Ocultar practicas no aplicables
+      </mat-checkbox>
       <br>
       <div cdkDropList class="example-list" (cdkDropListDropped)="dropPracticas($event)">
+        <br>
+        <br>
+        <div class="example-box">
+          <tr style="width:100%;">
+            <td align="center" class="text-uppercase font-weight-bold" style="width:9%;">
+              N°
+            </td>
+            <td align="center" class="text-uppercase font-weight-bold" style="width:22%;">
+              Descripción
+            </td>
+            <td align="center" class="text-uppercase font-weight-bold" style="width:25%;">
+              Método Ágil
+            </td>
+            <td align="center" class="text-uppercase font-weight-bold" style="width:10%;">
+              Nivel de aplicación
+            </td>
+            <td align="right" class="text-uppercase font-weight-bold" style="width:15%;">
+              No Aplicable
+            </td>
+            <td align="center" class="text-uppercase font-weight-bold" style="width:20%;">
+              Observciones
+            </td>
+          </tr>
+        </div>
         <div align="left" class="example-box" *ngFor="let prac of Practicas; let i = index" cdkDrag>
           <span style="width:12%;" class="text-uppercase font-weight-bold" align="left"> {{ prac.num }} </span>
           <span align="left" style="width:60%;"> {{ prac.textprac }} </span>
@@ -55,12 +90,9 @@
             </mat-form-field>
           </span>
           <span align="center" style="width:20%;">
-              <mat-label>Aplicable?</mat-label>
-              <br>
-              <input value="{{prac._id}}" type="checkbox" (change)="FieldsChange($event)" [checked]="prac.aplicable">
+            <input value="{{prac._id}}" type="checkbox" (change)="FieldsChange($event)" [checked]="prac.aplicable">
           </span>
           <span align="left" style="width:40%;">
-            <mat-label class="font-weight-bold">Observaciones</mat-label>
             <textarea matInput placeholder="Notas de práctica..." (change)="doSomething($event,prac._id)"
               value="{{prac.notas}}"></textarea>
           </span>
@@ -68,6 +100,59 @@
       </div>
     </mat-expansion-panel>
   </mat-accordion>
+
+  <br>
+  <br>
+
+  <!-- 
+  <dx-data-grid id="gridContainer" [height]="600" [dataSource]="objs" [showBorders]="true">
+    <dxo-row-dragging [allowReordering]="true" [onReorder]="onReorder"></dxo-row-dragging>
+    <dxo-sorting mode="none"></dxo-sorting>
+    <dxo-scrolling mode="virtual"></dxo-scrolling>
+    <dxi-column dataField="num" caption="N°" [width]="60"></dxi-column>
+    <dxi-column dataField="objetivo" caption="Objetivo" [width]="600"></dxi-column>
+  </dx-data-grid>
+  <br>
+  <br>
+  <br>
+  <dx-check-box [value]="true"></dx-check-box>
+  <br>
+  <br>
+  <dx-data-grid id="gridContainer" [height]="1000" [dataSource]="Practicas" [showBorders]="true">
+    <dxo-row-dragging [allowReordering]="true" [onReorder]="onReorders"></dxo-row-dragging>
+    <dxo-sorting mode="none"></dxo-sorting>
+    <dxo-scrolling mode="virtual"></dxo-scrolling>
+    <dxi-column dataField="num" caption="N°" [width]="60"></dxi-column>
+    <dxi-column dataField="textprac" caption="Práctica" [width]="800"></dxi-column>
+    <dxi-column dataField="aplicable" type="selection" cellTemplate="selectionCellNa"
+      headerCellTemplate="Nivel de aplicación" [width]="200">
+    </dxi-column>
+    <div *dxTemplate="let cellInfo of 'selectionCellNa'">
+      <div class="master-detail-caption">{{cellInfo.data.aplicable}}</div> 
+      <mat-form-field>
+        <select [(ngModel)]="idArr[i]" (change)="onChange($event.target.value)" matNativeControl>
+          <option value="0">No Definido</option>
+          <option value="1">Muy Bajo</option>
+          <option value="2">Bajo</option>
+          <option value="3">Medio</option>
+          <option value="4">Alto</option>
+          <option value="5">Muy alto</option>
+        </select>
+      </mat-form-field>
+    </div>
+    <dxi-column dataField="aplicable" type="selection" cellTemplate="selectionCellTemplate"
+      headerCellTemplate="Aplicable?">
+    </dxi-column>
+    <div *dxTemplate="let cellInfo of 'selectionCellTemplate'">
+       <div class="master-detail-caption">{{cellInfo.data.aplicable}}</div>
+      <dx-check-box [value]="cellInfo.data.aplicable"></dx-check-box>
+    </div>
+  </dx-data-grid>
+ -->
+
+
+
+
 </div>
 <br>
 <br>

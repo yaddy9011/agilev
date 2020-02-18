@@ -1,4 +1,5 @@
 <mat-toolbar id="menu-tool">
+ 
   <span class="fill-remaining-space">
     <button mat-icon-button [matMenuTriggerFor]="menu">
       <mat-icon>menu</mat-icon>
@@ -10,11 +11,11 @@
       </button>
 
       <button *ngIf="!isShoweval" mat-menu-item routerLink="/eval">
-        <mat-icon>poll</mat-icon><span>Evalúa tus prácticas ágiles</span>
+        <mat-icon>show_chart</mat-icon><span>Evalúa tus prácticas ágiles</span>
       </button>
 
       <button *ngIf="!isShowprac" mat-menu-item routerLink="/main">
-        <mat-icon>add</mat-icon><span>Objetivos y prácticas</span>
+        <mat-icon>map</mat-icon><span>Roadmap</span>
       </button>
 
       <button *ngIf="!isShowGo" mat-menu-item routerLink="/Gobjetivos">
@@ -51,5 +52,22 @@
 
     </mat-menu>
   </span>
-  <span class="fill-remaining-space">Evaluación de nivel de agilidad</span>
+  <span class="fill-remaining-space"> &nbsp;&nbsp;&nbsp;&nbsp;Roadmap + Diagnóstico del nivel de agilidad 
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+  </span>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+<!-- 
+  <div  align="center" style="width:15%;">
+  <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+    <mat-button-toggle id="menu_new" value="bold">Entrar</mat-button-toggle>
+    <mat-button-toggle id="menu_new" value="italic">Registrarse</mat-button-toggle>
+    <mat-button-toggle id="menu_new" value="underline">A cerca de</mat-button-toggle>
+  </mat-button-toggle-group>
+  </div> -->
+
 </mat-toolbar>
