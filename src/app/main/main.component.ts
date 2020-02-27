@@ -5,6 +5,9 @@ import { obj } from '../clases/obj';
 import { Practica } from '../clases/practica';
 import { UserI } from '../clases/user';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CrudRopService } from '../services/crud-rop.service';
+import { EvalResulService } from '../services/eval-resul.service';
+import { Diagnostico } from '../clases/diagnotico';
 
 @Component({
   selector: 'app-main',
@@ -22,10 +25,14 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 export class MainComponent implements OnInit {
 
   idArr = [];
+  idobj = [];
+  toggle = [];
+  ArrNC = [];
+  ArrPP = [];
   panelOpenState = false;
+  panelOpenStateObj = true;
   userName = '';
   newarrs: obj[];
-  // objs: Array<obj>;
   objs: obj[];
   title: string;
   idst: string;
@@ -37,20 +44,38 @@ export class MainComponent implements OnInit {
   listPractica: Practica[];
   checked = false;
   ok = "";
+  DatosObj: obj[];
+  public showNC: boolean = false;
 
-  constructor(private taskService: TasksService) {
+  constructor(
+    private taskService: TasksService,
+    private CrudRopService: CrudRopService,
+    private EvalResulService: EvalResulService) {
 
     this.idst = localStorage.getItem("ACCESS_IDS");
     this.nameusr = localStorage.getItem("ACCESS_name");
     this.ok = localStorage.getItem("ACCESS_IDS");
+    this.GetDiagnosticLive();
+    this.getPracticas(this.ok, this.checked);
 
-    this.taskService.getobj(this.ok)
+  }
+
+  getObjetivos(ok) {
+    this.taskService.getobj(ok)
       .subscribe(obj => {
+
         this.newarrs = obj;
         this.newarrs.sort((a, b) => a.pos - b.pos);
-
         var ids = [];
+
         for (var i = 0; i < this.newarrs.length; i++) {
+
+          const b = this.DatosObj.find((item) => item.n_obj === obj[i].n_obj);
+          let pd = 0;
+          if (b) {
+            pd = b.pd;
+          }
+
           const arraData = {
             _id: obj[i]._id,
             objetivo: Object.values(obj[i].id_obj)[1],
@@ -59,16 +84,16 @@ export class MainComponent implements OnInit {
             pos: obj[i].pos,
             num: Object.values(obj[i].id_obj)[2],
             NoInteresa: obj[i].NoInteresa,
-            notas: obj[i].notas
+            notas: obj[i].notas,
+            n_obj: obj[i].n_obj,
+            pd: pd
           };
+          this.idobj[i] = false;
           ids.push(arraData);
         }
         this.objs = ids;
+        console.log(this.objs);
       });
-
-    //this.onReorder = this.onReorder.bind(this);
-
-    this.getPracticas(this.ok, this.checked);
 
   }
 
@@ -90,14 +115,29 @@ export class MainComponent implements OnInit {
             nivelapli: prac[i].nivelapli,
             aplicable: prac[i].aplicable,
             metodologia: Object.values(prac[i].id_prac)[2],
-            notas: prac[i].notas
+            notas: prac[i].notas,
+            n_prac: prac[i].n_prac
           };
           this.idArr[i] = arraData.nivelapli;
+          this.toggle[i] = false;
+          this.ArrNC[i] = 0;
+          this.ArrPP[i] = arraData.n_prac;
           arrdatanew.push(arraData);
         }
         this.Practicas = arrdatanew;
       });
 
+  }
+
+  GetDiagnosticLive() {
+    var p = new Diagnostico(this.taskService, "5e52bc768e4e3736a866f5e7", this.EvalResulService);
+    p.GetDataEva(true);
+    this.EvalResulService.routeDataA().subscribe(data => {
+      let newlv = data.sort((a, b) => a.n_obj - b.n_obj);
+      this.DatosObj = newlv;
+      console.log(this.DatosObj);
+      this.getObjetivos(this.ok);
+    });
   }
 
   ngOnInit() { }
@@ -131,11 +171,16 @@ export class MainComponent implements OnInit {
 
     this.taskService.updateTask(newTask)
       .subscribe(res => {
-        //task.isDone = !task.isDone;
       })
   }
 
   dropPracticas(event: CdkDragDrop<number[]>) {
+
+
+    if (this.toggle[event.previousIndex] == true) {
+      this.toggle[event.previousIndex] = false;
+      this.toggle[event.currentIndex] = true;
+    }
 
     if (this.checked == true) {
       alert("Para priorizar es necesario tener las 42 prácticas,no ocultes las prácticas no aplicables");
@@ -143,10 +188,10 @@ export class MainComponent implements OnInit {
       moveItemInArray(this.Practicas, event.previousIndex, event.currentIndex);
       for (var i = 0; i < this.Practicas.length; i++) {
         this.idArr[i] = this.Practicas[i].nivelapli;
+        this.ArrPP[i] = this.Practicas[i].n_prac;
         this.updateStatuspracticas(this.Practicas[i], i);
       }
     }
-
   }
 
   updateStatuspracticas(pra: Practica, pnew: number) {
@@ -169,6 +214,7 @@ export class MainComponent implements OnInit {
       this.Practicas[i].nivelapli = this.idArr[i];
       this.updateStatuspracticas(this.Practicas[i], i);
     }
+    this.GetDiagnosticLive();
   }
 
   FieldsChange(e) {
@@ -213,9 +259,76 @@ export class MainComponent implements OnInit {
       });
   }
 
-
   eventAplicables(e) {
     this.getPracticas(this.ok, e.checked);
+  }
+
+  show(e, i, no) {
+
+    // console.log(no);
+    // console.log(i);
+
+    this.idobj[i] = !this.idobj[i];
+
+    if (this.idobj[i] == true) {
+
+      this.panelOpenState = !this.panelOpenState;
+      this.panelOpenStateObj = true;
+      this.showNC = !this.showNC;
+
+      this.CrudRopService.GetRop()
+        .subscribe(rop => {
+          var arrdatanew = [];
+          var arrPPnew = [];
+          var ncarr = [];
+
+          arrdatanew = this.toggle;
+          arrPPnew = this.ArrPP;
+
+          rop.forEach(function (value) {
+            if (value.n_obj == no) {
+              let toIndex = value.n_prac.valueOf();
+              const b = arrPPnew.findIndex((item) => item === toIndex);
+              arrdatanew[b] = true;
+              ncarr[b] = value.nivel_contribucion;
+            }
+          });
+
+          for (let j in this.ArrNC) {
+            let nc_title = "";
+            switch (ncarr[j]) {
+              case 0:
+                nc_title = "Muy Bajo";
+                break;
+              case 0.25:
+                nc_title = "Bajo";
+                break;
+              case 0.50:
+                nc_title = "Medio";
+                break;
+              case 0.75:
+                nc_title = "Alto";
+                break;
+              case 1:
+                nc_title = "Muy Alto";
+                break;
+            }
+
+            this.ArrNC[j] = nc_title;
+          }
+          this.toggle = arrdatanew;
+        });
+
+    } else {
+      this.panelOpenState = false;
+      this.panelOpenStateObj = true;
+      this.showNC = false;
+      var dobles = this.toggle.map(function (num) {
+        return num = false;
+      });
+      this.toggle = dobles;
+    }
+
   }
 
 
@@ -274,7 +387,6 @@ export class MainComponent implements OnInit {
   //   e.component.refresh();
 
   //   //this.tasksStore.update(e.itemData.ID,{ OrderIndex: newOrderIndex }).then(() => {});
-
 
   // }
 

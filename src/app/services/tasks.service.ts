@@ -130,16 +130,17 @@ export class TasksService {
       .pipe(map(res => res));
   }
 
-
-
-
   DeleteEval(ideval) {
     return this.http.delete<Eval>(`${this.domain}/api/DeleteEvals/${ideval}`)
       .pipe(map(res => res));
   }
 
   GetDataEval(Data): Observable<any> {
-    return this.http.get(`${this.domain}/api/DataEval/${Data.id_eval}/${Data.id_usr}`);
+    return this.http.get(`${this.domain}/api/DataEval/${Data.id_eval}/${Data.id_usr}/${Data.live}`);
+  }
+
+  GetDiagnosticAreas(Data): Observable<any> {
+    return this.http.get(`${this.domain}/api/Diagnostico_areas/${Data.id_eval}/${Data.id_usr}`);
   }
 
 }

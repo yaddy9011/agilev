@@ -13,20 +13,25 @@ export class Diagnostico {
         this._idEval = IdEval;
     }
 
-    public GetDataEva() {
+    public GetDataEva(live) {
+
+        console.log(live);
 
         const Data = {
             id_eval: this._idEval,
-            id_usr: this.id_usr
+            id_usr: this.id_usr,
+            live: live
         };
 
         this.taskService.GetDataEval(Data)
             .subscribe(evals => {
 
+                console.log(evals);
+
                 //relación general de objetivos y prácticas
 
                 let levels = evals.map((ev, i) => {
-
+                
                     let nc = ev.relaop.nivel_contribucion;
                     let na = ev.prac.nivelapli;
                     let nc_title = "";
@@ -113,8 +118,6 @@ export class Diagnostico {
                     };
                     return arraData;
                 });
-
-                console.log(levels);
 
                 //para generar suma na, na, nd
 

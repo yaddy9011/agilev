@@ -15,7 +15,6 @@ import { MenuComponent } from './menu/menu.component';
 import { HomeComponent } from './home/home.component';
 import { MainComponent } from './main/main.component';
 import { EvaluacionComponent } from './evaluacion/evaluacion.component';
-import { DialogOverviewExampleDialog } from './evaluacion/dialog.component';
 import { MatCardModule } from '@angular/material';
 import { RegisterComponent } from './register/register.component';
 import { FooterComponent } from './footer/footer.component';
@@ -44,11 +43,13 @@ import { RelacionOpComponent } from './relacion-op/relacion-op.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ResponseResetComponent } from './response-reset/response-reset.component';
 import { ShowHidePasswordModule } from 'ngx-show-hide-password';
-import { GraficasComponent } from './graficas/graficas.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { DiagnosticoObjetivosComponent } from './diagnostico-objetivos/diagnostico-objetivos.component';
 import { DiagnosticoAreasComponent } from './diagnostico-areas/diagnostico-areas.component';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatTooltipModule} from '@angular/material/tooltip';
+
 
 @NgModule({
   declarations: [
@@ -59,18 +60,16 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     MainComponent,
     EvaluacionComponent,
     RegisterComponent,
-    DialogOverviewExampleDialog,
     FooterComponent,
     GestionObjetivosComponent,
     GestionPracticasComponent,
     ForgotPasswordComponent,
     RelacionOpComponent,
     ResponseResetComponent,
-    GraficasComponent,
     DiagnosticoObjetivosComponent,
     DiagnosticoAreasComponent
   ],
-  entryComponents: [DialogOverviewExampleDialog],
+  entryComponents: [],
   imports: [
     NgbModule,
     BrowserModule,
@@ -102,7 +101,9 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     NgxPaginationModule,
     ShowHidePasswordModule,
     MatCheckboxModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MatSlideToggleModule,
+    MatTooltipModule
   ],
   providers: [AuthService, TasksService, AppGlobals],
   bootstrap: [AppComponent]

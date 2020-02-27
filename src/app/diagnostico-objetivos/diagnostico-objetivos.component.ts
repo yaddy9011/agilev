@@ -22,13 +22,14 @@ export class DiagnosticoObjetivosComponent implements OnInit {
   constructor(private EvalResulService: EvalResulService, private taskService: TasksService, private route: ActivatedRoute) {
 
     this.tasksDataSourceStorage = [];
+
     var id_eval = this.route.snapshot.paramMap.get('id_eval');
     var p = new Diagnostico(taskService, id_eval, EvalResulService);
-    p.GetDataEva();
-
+    p.GetDataEva(false);
 
     this.EvalResulService.routeDataA().subscribe(data => {
-      this.DatosObj = data;
+      let newlv = data.sort((a, b) => a.n_obj - b.n_obj);
+      this.DatosObj = newlv;
     });
 
     this.EvalResulService.routeDataB().subscribe(data => {
@@ -38,8 +39,7 @@ export class DiagnosticoObjetivosComponent implements OnInit {
     this.EvalResulService.routeDataC().subscribe(data => {
       this.AgilidadTotal = data;
     });
-
-    console.log(this.DatosObj);
+ 
   }
 
   getPracticas(key) {
@@ -62,6 +62,13 @@ export class DiagnosticoObjetivosComponent implements OnInit {
 
   customizeText(cellInfo) {
     return cellInfo.value + "%";
+  }
+
+  customizeTooltip(arg) {
+    var datashow = arg.point.data.TexObj;
+    return {
+      text: arg.argumentText + "<br/>" + datashow + "<br><br>" + arg.value + "%"
+    };
   }
 
   ngOnInit() {

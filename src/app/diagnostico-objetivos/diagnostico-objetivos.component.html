@@ -2,47 +2,47 @@
 <div id="app" align="center">
     <br>
     <br>
-    <mat-tab-group id="tab">
-        <mat-tab label="Diagnóstico por Objetivos">
-            <span class="label label-primary">
-                Agilidad por objetivos = {{AgilidadTotal}} %
-            </span>
-            <dx-data-grid id="gridContainer" [dataSource]="DatosObj"
-                [masterDetail]="{ enabled: true, template: 'detail' }" keyExpr="n_obj" [showBorders]="true">
-                <dxi-column dataField="n_obj" [width]="70" caption="N°"></dxi-column>
-                <dxi-column dataField="TexObj" caption="Objetivo" [width]="600"></dxi-column>
-                <dxi-column dataField="pd" caption="Diagnóstico" [customizeText]="customizeText" [width]="100">
+    <br>
+    <span class="label label-primary"> Agilidad por objetivos = {{AgilidadTotal}}%</span>
+    <br>
+    <br>
+    <dx-polar-chart id="chart" [useSpiderWeb]="true" title="Diagnóstico del nivel de agilidad por objetivos Representación Gráfica"
+        [dataSource]="DatosObj">
+        <dxi-series argumentField="n_obj" valueField="pd" name="Nivel de agilidad del objetivo"></dxi-series>
+        <dxo-common-series-settings type="line"></dxo-common-series-settings>
+        <dxo-export [enabled]="false"></dxo-export>
+        <dxo-tooltip [enabled]="true"  [customizeTooltip]="customizeTooltip"></dxo-tooltip>
+        <dxo-size [height]="450" [width]="1000">
+        </dxo-size>
+    </dx-polar-chart>
+    <br>
+    <span class="label label-primary">Representación Tabular</span>
+    <br>
+    <br>
+    <dx-data-grid id="gridContainer" [dataSource]="DatosObj" [masterDetail]="{ enabled: true, template: 'detail' }"
+        keyExpr="n_obj" [showBorders]="true">
+        <dxi-column dataField="n_obj" [width]="70" caption="N°"></dxi-column>
+        <dxi-column dataField="TexObj" caption="Objetivo" [width]="600"></dxi-column>
+        <dxi-column dataField="pd" caption="Diagnóstico" [customizeText]="customizeText" [width]="100">
+        </dxi-column>
+        <div *dxTemplate="let obj of 'detail'">
+            <dx-data-grid [dataSource]="getPracticas(obj.key)" [showBorders]="true" [columnAutoWidth]="true">
+                <dxi-column dataField="n_prac" [width]="70" caption="N°"></dxi-column>
+                <dxi-column dataField="Descrip_prac" [width]="300" caption="Práctica"></dxi-column>
+                <dxi-column dataField="na_t" [width]="150" caption="Nivel de aplicación">
                 </dxi-column>
-                <div *dxTemplate="let obj of 'detail'">
-                    <dx-data-grid [dataSource]="getPracticas(obj.key)" [showBorders]="true" [columnAutoWidth]="true">
-                        <dxi-column dataField="n_prac" [width]="70" caption="N°"></dxi-column>
-                        <dxi-column dataField="Descrip_prac" [width]="300" caption="Práctica"></dxi-column>
-                        <dxi-column dataField="na_t" [width]="150" caption="Nivel de aplicación">
-                        </dxi-column>
-                        <dxi-column dataField="nc_t" [width]="150" caption="Nivel de contribución">
-                        </dxi-column>
-                    </dx-data-grid>
-                </div>
+                <dxi-column dataField="nc_t" [width]="150" caption="Nivel de contribución">
+                </dxi-column>
             </dx-data-grid>
+        </div>
+    </dx-data-grid>
+    <!-- <mat-tab-group id="tab">
+        <mat-tab label="Diagnóstico por Objetivos">
         </mat-tab>
         <mat-tab label="Representación Gráfica">
-            <dx-polar-chart id="chart" [useSpiderWeb]="true" title="Diagnóstico del nivel de agilidad por objetivos"
-                [dataSource]="DatosObj">
-                <dxi-series argumentField="n_obj" valueField="pd" name="Nivel de agilidad del objetivo"></dxi-series>
-                <dxo-common-series-settings type="line"></dxo-common-series-settings>
-                <dxo-export [enabled]="false"></dxo-export>
-                <dxo-tooltip [enabled]="true"></dxo-tooltip>
-                <dxo-size [height]="450" [width]="600">
-                </dxo-size>
-            </dx-polar-chart>
         </mat-tab>
-    </mat-tab-group>
+    </mat-tab-group> -->
 </div>
-<br>
-<br>
-<br>
-<br>
-<br>
 <br>
 <br>
 <br>

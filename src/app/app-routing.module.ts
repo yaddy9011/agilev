@@ -10,7 +10,6 @@ import { GestionPracticasComponent } from './gestion-practicas/gestion-practicas
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { RelacionOpComponent } from './relacion-op/relacion-op.component';
 import { ResponseResetComponent } from './response-reset/response-reset.component';
-import { GraficasComponent } from './graficas/graficas.component';
 import {DiagnosticoObjetivosComponent} from './diagnostico-objetivos/diagnostico-objetivos.component';
 import {DiagnosticoAreasComponent} from './diagnostico-areas/diagnostico-areas.component';
 
@@ -63,10 +62,6 @@ const routes: Routes = [
   {
     path: 'Diagnostico_areas/:id_eval',
     component: DiagnosticoAreasComponent
-  },
-  {
-    path: 'Graficas/:id_eval',
-    component: GraficasComponent
   }
 ];
 

@@ -8,8 +8,6 @@ import { obj } from '../clases/obj';
 import { Practica } from '../clases/practica';
 import { Rop } from '../clases/rop';
 import { Router } from '@angular/router';
-import { WorkLine } from '../clases/workline';
-import { DialogOverviewExampleDialog } from '../evaluacion/dialog.component';
 
 // si todas las prácticas asociadas al objetivo tienen un nivel
 // muy alto de aplicación (5) el objetivo debería estar 100% ágilizado
@@ -37,7 +35,6 @@ import { DialogOverviewExampleDialog } from '../evaluacion/dialog.component';
 export class EvaluacionComponent implements OnInit {
 
   newarrs: Eval[];
-  NewWl: WorkLine[];
   idst: string;
   popupVisible = false;
   selectvalue = null;
@@ -45,7 +42,6 @@ export class EvaluacionComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router, private taskService: TasksService, public dialog: MatDialog) {
     this.idst = localStorage.getItem("ACCESS_IDS");
     this.GetEvalByUSR();
-    //this.GetWorkLines();
   }
 
   ngOnInit() {
@@ -65,7 +61,6 @@ export class EvaluacionComponent implements OnInit {
     }
 
     this.authService.GuardarEvaluacion(DataEval).subscribe(res => {
-      console.log(res);
     });
     location.reload();
   }
@@ -77,19 +72,21 @@ export class EvaluacionComponent implements OnInit {
   GetEvalByUSR() {
     this.taskService.getEvalByObj(this.idst)
       .subscribe(evals => {
+        // let newdiag = evals.sort((a, b) => a._id - b._id);
         this.newarrs = evals;
       });
   }
 
-  VerEval(id) {   
-    console.log(this.newarrs[id]._id);
-    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
-      width: '1000px',
-      data: { idEval: this.newarrs[id]._id }
-    });
-    dialogRef.afterClosed().subscribe(result => {
-    });
-  }
+  // VerEval(id) {   
+  //  // console.log(this.newarrs[id]._id);
+  //   const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+  //     width: '1000px',
+  //     data: { idEval: this.newarrs[id]._id }
+  //   });
+  //   dialogRef.afterClosed().subscribe(result => {
+  //   });
+  // }
+
 
   EliminarEval(id) {
     this.taskService.DeleteEval(id)
@@ -97,13 +94,10 @@ export class EvaluacionComponent implements OnInit {
       });
     location.reload();
   }
-
-  GetWorkLines() {
-    this.taskService.getWorkLines()
-      .subscribe(wl => {
-        this.NewWl = wl;
-      });
-  }
-  
-
+  // GetWorkLines() {
+  //   this.taskService.getWorkLines()
+  //     .subscribe(wl => {
+  //       this.NewWl = wl;
+  //     });
+  // }
 }

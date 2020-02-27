@@ -248,6 +248,30 @@ export class MenuComponent implements OnInit {
         }
         break;
       }
+
+      case "/Diagnostico_areas/" + this.idEval: {
+
+        if (x == null) {
+          this.isShoweval = !this.isShoweval;
+          this.isShowprac = !this.isShowprac;
+          this.isShowLogo = !this.isShowLogo;
+          this.isShowGo = !this.isShowGo;
+          this.isShowGp = !this.isShowGp;
+          this.isShowROP = !this.isShowROP;
+        } else {
+          this.isShowReg = !this.isShowReg;
+          this.isShowLog = !this.isShowLog;
+        }
+
+        if (y == 1) {
+          this.router.navigateByUrl('/home');
+        }
+        break;
+      }
+
+
+
+
     }
   }
 }

@@ -5,25 +5,41 @@
   <br>
   <br>
   <mat-accordion>
-    <mat-expansion-panel style="width:80%;" [expanded]="true">
+    <mat-expansion-panel style="width:90%;" [expanded]="panelOpenStateObj">
       <mat-expansion-panel-header class="mheader">
         <mat-panel-title>
           <h6 class="text-uppercase font-weight-bold">OBJETIVOS</h6>
         </mat-panel-title>
       </mat-expansion-panel-header>
       <br>
-      Ordena los objetivos segun la prioridad que consideres adecuada y marca los objetivos que no te interesen o no
-      sean relevantes para tu proyecto
+      Ordena los objetivos segun la prioridad que consideres adecuada.
       <br>
       <br>
       <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
-        <div align="left" class="example-box" *ngFor="let obj of objs" cdkDrag>
-          <span style="width:12%;" class="text-uppercase font-weight-bold" align="left"> {{ obj.num }} </span>
-          <span align="left" style="width:85%;"> {{ obj.objetivo }} </span>
-
-          <span align="center" style="width:40%;">
-            <textarea matInput placeholder="Notas de objetivos..." (change)="ChangeNotasObj($event,obj._id)"
-              value="{{obj.notas}}"></textarea>
+        <div class="example-box">
+          <tr style="width:100%;">
+            <th align="center" style="width:10%;"> N°</th>
+            <th align="center" style="width:52%;">Objetivo</th>
+            <th align="center" style="width:30%;">Notas</th>
+            <th align="center" style="width:20%;">No Interesan</th>
+          </tr>
+        </div>
+        <div align="left" class="example-box" *ngFor="let obj of objs; let i = index" cdkDrag>
+          <span style="width:12%;" class="text-uppercase font-weight-bold" align="left"> 
+            {{ obj.num }}
+            <br>
+            <button style="width:15%;" id={{obj.num}} value="{{obj.num}}" mat-icon-button matSuffix
+              matTooltip="Ver prácticas relacionadas"
+              aria-label="Button that displays a tooltip when focused or hovered over" (click)="show($event,i,obj.n_obj)"
+              [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+              <mat-icon [inline]="true">{{ idobj[i] ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+          </span>
+          <span align="left" style="width:85%;"> {{ obj.objetivo }} <br><br> Diagnóstico {{ obj.pd }} %
+          </span>
+          <span align="center" style="width:30%;">
+            <textarea cols="50" rows="5" style="border:solid 1px blue;" matInput
+              (change)="ChangeNotasObj($event,obj._id)" value="{{obj.notas}}"></textarea>
           </span>
           <span align="center" style="width:20%;">
             <input value="{{obj._id}}" type="checkbox" (change)="ChangeCheckNoInteresa($event)"
@@ -34,7 +50,8 @@
       <br>
     </mat-expansion-panel>
     <br>
-    <mat-expansion-panel style="width:90%;" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+    <mat-expansion-panel style="width:90%;" [expanded]="panelOpenState" (opened)="panelOpenState = true"
+      (closed)="panelOpenState = false">
       <mat-expansion-panel-header class="mheader">
         <mat-panel-title style="width:20%;">
           <h6 class="text-uppercase font-weight-bold">PRÁCTICAS ÁGILES</h6>
@@ -70,10 +87,14 @@
             <td align="center" class="text-uppercase font-weight-bold" style="width:20%;">
               Observciones
             </td>
+            <td *ngIf="showNC" align="center" class="text-uppercase font-weight-bold" style="width:20%;">
+              Nivel de Contribución
+            </td>
           </tr>
         </div>
-        <div align="left" class="example-box" *ngFor="let prac of Practicas; let i = index" cdkDrag>
-          <span style="width:12%;" class="text-uppercase font-weight-bold" align="left"> {{ prac.num }} </span>
+        <div align="left" class="example-box" *ngFor="let prac of Practicas; let i = index"
+          [style.background-color]="toggle[i] ? '#81F79F' : '#FFFFFF'" cdkDrag>
+          <span style="width:15%;" class="text-uppercase font-weight-bold" align="left"> {{ prac.num }} </span>
           <span align="left" style="width:60%;"> {{ prac.textprac }} </span>
           <span align="center" style="width:40%;"> {{ prac.metodologia }} </span>
           <span align="right" style="width:30%;">
@@ -93,14 +114,14 @@
             <input value="{{prac._id}}" type="checkbox" (change)="FieldsChange($event)" [checked]="prac.aplicable">
           </span>
           <span align="left" style="width:40%;">
-            <textarea matInput placeholder="Notas de práctica..." (change)="doSomething($event,prac._id)"
-              value="{{prac.notas}}"></textarea>
+            <textarea cols="50" rows="5" style="border:solid 1px blue;" matInput placeholder="Notas de práctica..."
+              (change)="doSomething($event,prac._id)" value="{{prac.notas}}"></textarea>
           </span>
+          <span *ngIf="showNC" align="center" style="width:40%;"> {{this.ArrNC[i]}} </span>
         </div>
       </div>
     </mat-expansion-panel>
   </mat-accordion>
-
   <br>
   <br>
 
