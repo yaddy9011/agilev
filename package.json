@@ -29,6 +29,9 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.26",
     "@fortawesome/free-solid-svg-icons": "^5.12.0",
     "@ng-bootstrap/ng-bootstrap": "^5.1.4",
+    "@syncfusion/ej2-angular-buttons": "^17.4.51",
+    "@syncfusion/ej2-angular-charts": "*",
+    "@syncfusion/ej2-angular-grids": "*",
     "angular-animate": "^1.7.8",
     "angular-sortablejs": "^2.7.0",
     "bootstrap": "^4.3.1",
@@ -76,5 +79,3 @@
     "npm": "~6.4.1"
   }
 }
-
-

@@ -49,6 +49,7 @@ import { DiagnosticoAreasComponent } from './diagnostico-areas/diagnostico-areas
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { GridModule } from '@syncfusion/ej2-angular-grids';
 
 
 @NgModule({
@@ -103,7 +104,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatCheckboxModule,
     MatButtonToggleModule,
     MatSlideToggleModule,
-    MatTooltipModule
+    MatTooltipModule,
+    GridModule
   ],
   providers: [AuthService, TasksService, AppGlobals],
   bootstrap: [AppComponent]

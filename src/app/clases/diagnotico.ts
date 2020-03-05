@@ -26,8 +26,6 @@ export class Diagnostico {
         this.taskService.GetDataEval(Data)
             .subscribe(evals => {
 
-                console.log(evals);
-
                 //relación general de objetivos y prácticas
 
                 let levels = evals.map((ev, i) => {
@@ -132,8 +130,6 @@ export class Diagnostico {
                     return contador;
                 }, {});
 
-                console.log(arrSuma);
-
                 //conseguir el total de relaciones objetivos-prácticas
 
                 const TotalRop = levels.reduce((contador, objeto) => {
@@ -157,8 +153,6 @@ export class Diagnostico {
                     };
                     return DataObj;
                 });
-
-                console.log(mapObjetivos);
 
                 // reduce para obtener el promedio de agilidad por objetivos
 

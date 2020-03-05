@@ -10,4 +10,5 @@ export class Practica {
     nivelapli: number;
     aplicable: Boolean;
     notas: string;
+    desafio: number;
 }

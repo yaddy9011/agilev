@@ -8,11 +8,14 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CrudRopService } from '../services/crud-rop.service';
 import { EvalResulService } from '../services/eval-resul.service';
 import { Diagnostico } from '../clases/diagnotico';
+import { RowDDService, SelectionService } from '@syncfusion/ej2-angular-grids';
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css'],
+  providers: [RowDDService,
+    SelectionService],
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({ height: '0px', minHeight: '0' })),
@@ -25,14 +28,14 @@ import { Diagnostico } from '../clases/diagnotico';
 export class MainComponent implements OnInit {
 
   idArr = [];
-  idobj = [];
+  idPracDesa = [];
+  ShowROP = [];
   toggle = [];
   ArrNC = [];
   ArrPP = [];
   panelOpenState = false;
   panelOpenStateObj = true;
   userName = '';
-  newarrs: obj[];
   objs: obj[];
   title: string;
   idst: string;
@@ -43,63 +46,64 @@ export class MainComponent implements OnInit {
   ArrayPracticas: Practica[];
   listPractica: Practica[];
   checked = false;
-  ok = "";
-  DatosObj: obj[];
-  public showNC: boolean = false;
+  checkedPriorizar = false;
+  DisablePriorizacion = false;
+  
+  checkedObjetivosNI = false;
+  id_usr = "";
+  showNC: boolean = false;
+
+  public selectOptions: Object;
 
   constructor(
+
     private taskService: TasksService,
     private CrudRopService: CrudRopService,
     private EvalResulService: EvalResulService) {
 
-    this.idst = localStorage.getItem("ACCESS_IDS");
     this.nameusr = localStorage.getItem("ACCESS_name");
-    this.ok = localStorage.getItem("ACCESS_IDS");
+    this.id_usr = localStorage.getItem("ACCESS_IDS");
     this.GetDiagnosticLive();
-    this.getPracticas(this.ok, this.checked);
+    this.getPracticas(this.id_usr, this.checked);
 
   }
 
-  getObjetivos(ok) {
-    this.taskService.getobj(ok)
+  getObjetivos(id_usr, diagnosticObjs) {
+    this.taskService.getobj(id_usr)
       .subscribe(obj => {
-
-        this.newarrs = obj;
-        this.newarrs.sort((a, b) => a.pos - b.pos);
-        var ids = [];
-
-        for (var i = 0; i < this.newarrs.length; i++) {
-
-          const b = this.DatosObj.find((item) => item.n_obj === obj[i].n_obj);
+        var NewShowROP = [];
+        var objss = obj.map(function (task, index, array) {
+          const fd = diagnosticObjs.find((item) => item.n_obj === obj[index].n_obj);
           let pd = 0;
-          if (b) {
-            pd = b.pd;
+          if (fd) {
+            pd = fd.pd;
           }
-
           const arraData = {
-            _id: obj[i]._id,
-            objetivo: Object.values(obj[i].id_obj)[1],
-            id_usr: obj[i].id_usr,
-            id_obj: Object.values(obj[i].id_obj)[0],
-            pos: obj[i].pos,
-            num: Object.values(obj[i].id_obj)[2],
-            NoInteresa: obj[i].NoInteresa,
-            notas: obj[i].notas,
-            n_obj: obj[i].n_obj,
-            pd: pd
+            _id: obj[index]._id,
+            objetivo: Object.values(obj[index].id_obj)[1],
+            id_usr: obj[index].id_usr,
+            id_obj: Object.values(obj[index].id_obj)[0],
+            pos: obj[index].pos,
+            num: Object.values(obj[index].id_obj)[2],
+            NoInteresa: obj[index].NoInteresa,
+            notas: obj[index].notas,
+            n_obj: obj[index].n_obj,
+            pd: pd + "%"
           };
-          this.idobj[i] = false;
-          ids.push(arraData);
-        }
-        this.objs = ids;
+          NewShowROP[index] = false;
+          return arraData;
+        });
+        this.ShowROP = NewShowROP;
+        this.objs = objss;
+        this.objs.sort((a, b) => a.pos - b.pos);
         console.log(this.objs);
       });
 
   }
 
-  getPracticas(ok, ap) {
+  getPracticas(id_usr, ap) {
 
-    this.taskService.getPracticas(ok, ap)
+    this.taskService.getPracticas(id_usr, ap)
       .subscribe(prac => {
         this.ArrayPracticas = prac;
         this.ArrayPracticas.sort((a, b) => a.pos - b.pos);
@@ -116,9 +120,12 @@ export class MainComponent implements OnInit {
             aplicable: prac[i].aplicable,
             metodologia: Object.values(prac[i].id_prac)[2],
             notas: prac[i].notas,
-            n_prac: prac[i].n_prac
+            n_prac: prac[i].n_prac,
+            desafio: prac[i].desafio
           };
+
           this.idArr[i] = arraData.nivelapli;
+          this.idPracDesa[i] = arraData.desafio;
           this.toggle[i] = false;
           this.ArrNC[i] = 0;
           this.ArrPP[i] = arraData.n_prac;
@@ -133,19 +140,20 @@ export class MainComponent implements OnInit {
     var p = new Diagnostico(this.taskService, "5e52bc768e4e3736a866f5e7", this.EvalResulService);
     p.GetDataEva(true);
     this.EvalResulService.routeDataA().subscribe(data => {
-      let newlv = data.sort((a, b) => a.n_obj - b.n_obj);
-      this.DatosObj = newlv;
-      console.log(this.DatosObj);
-      this.getObjetivos(this.ok);
+      let newDiag = data.sort((a, b) => a.n_obj - b.n_obj);
+      this.getObjetivos(this.id_usr, newDiag);
     });
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+
+    this.selectOptions = { type: 'Multiple' };
+
+  }
 
   drop(event: CdkDragDrop<number[]>) {
 
     moveItemInArray(this.objs, event.previousIndex, event.currentIndex);
-    // console.log(this.objs);
     for (var i = 0; i < this.objs.length; i++) {
       this.updateStatus(this.objs[i], i);
     }
@@ -176,7 +184,6 @@ export class MainComponent implements OnInit {
 
   dropPracticas(event: CdkDragDrop<number[]>) {
 
-
     if (this.toggle[event.previousIndex] == true) {
       this.toggle[event.previousIndex] = false;
       this.toggle[event.currentIndex] = true;
@@ -201,7 +208,8 @@ export class MainComponent implements OnInit {
       id_usr: pra.id_usr,
       id_obj: pra.id_prac,
       pos: pnew,
-      nivelapli: pra.nivelapli
+      nivelapli: pra.nivelapli,
+      desafio: pra.desafio
     };
 
     this.taskService.updatePractica(newActualizacion)
@@ -209,12 +217,18 @@ export class MainComponent implements OnInit {
       });
   }
 
-  onChange(deviceValue) {
+  onChange(deviceValue, desaf) {
+
     for (var i = 0; i < this.Practicas.length; i++) {
       this.Practicas[i].nivelapli = this.idArr[i];
+      this.Practicas[i].desafio = this.idPracDesa[i];
       this.updateStatuspracticas(this.Practicas[i], i);
     }
-    this.GetDiagnosticLive();
+
+    if (desaf == false) {
+      this.GetDiagnosticLive();
+    }
+
   }
 
   FieldsChange(e) {
@@ -224,7 +238,7 @@ export class MainComponent implements OnInit {
     };
     this.taskService.updateAplicable(ActPractica)
       .subscribe(res => {
-        this.getPracticas(this.ok, this.checked);
+        this.getPracticas(this.id_usr, this.checked);
       });
   }
 
@@ -233,6 +247,7 @@ export class MainComponent implements OnInit {
       _id: id,
       notas: e.target.value
     };
+
     this.taskService.updateNotas(actNotas)
       .subscribe(res => {
       });
@@ -259,18 +274,21 @@ export class MainComponent implements OnInit {
       });
   }
 
-  eventAplicables(e) {
-    this.getPracticas(this.ok, e.checked);
+  ChangeCheckBloquePriorizacion(e) {
+    this.DisablePriorizacion = !this.DisablePriorizacion;
   }
 
-  show(e, i, no) {
+  eventAplicables(e) {
+    this.getPracticas(this.id_usr, e.checked);
+  }
 
-    // console.log(no);
-    // console.log(i);
+  EventshowROP(e, i, no) {
 
-    this.idobj[i] = !this.idobj[i];
+    console.log(i);
+    console.log(this.ShowROP);
 
-    if (this.idobj[i] == true) {
+    this.ShowROP[i] = !this.ShowROP[i];
+    if (this.ShowROP[i] == true) {
 
       this.panelOpenState = !this.panelOpenState;
       this.panelOpenStateObj = true;
@@ -331,64 +349,16 @@ export class MainComponent implements OnInit {
 
   }
 
-
-  // onReorder(e) {
-
-  //   var visibleRows = e.component.getVisibleRows(),
-  //     newOrderIndex = visibleRows[e.toIndex].data.rowIndex;
-
-  //   console.log(visibleRows);
-
-  //   console.log(visibleRows[e.toIndex]);
-  //   console.log(e);
-
-  //   console.log(e.fromIndex);
-  //   console.log(e.toIndex);
-
-  //   moveItemInArray(visibleRows, e.fromIndex, e.toIndex);
-  //   console.log(visibleRows);
-
-  //   for (var i = 0; i < visibleRows.length; i++) {
-
-  //     var newTask = {
-  //       _id: visibleRows[i].data._id,
-  //       objetivo: visibleRows[i].data.objetivo,
-  //       id_usr: visibleRows[i].data.id_usr,
-  //       id_obj: visibleRows[i].data.id_obj,
-  //       pos:i
-  //     };
-
-  //     this.taskService.updateTask(newTask)
-  //       .subscribe(res => {
-
-  //       });
-  //   }
-
-  //   this.taskService.getobj(this.ok)
-  //     .subscribe(obj => {
-  //       this.newarrs = obj;
-  //       this.newarrs.sort((a, b) => a.pos - b.pos);
-
-  //       var ids = [];
-  //       for (var i = 0; i < this.newarrs.length; i++) {
-  //         const arraData = {
-  //           _id: obj[i]._id,
-  //           objetivo: Object.values(obj[i].id_obj)[1],
-  //           id_usr: obj[i].id_usr,
-  //           id_obj: Object.values(obj[i].id_obj)[0],
-  //           pos: obj[i].pos,
-  //           num: Object.values(obj[i].id_obj)[2],
-  //         };
-  //         ids.push(arraData);
-  //       }
-  //       this.objs = ids;
-  //     });
-
-  //   e.component.refresh();
-
-  //   //this.tasksStore.update(e.itemData.ID,{ OrderIndex: newOrderIndex }).then(() => {});
-
-  // }
+  rowDragObj(e) {
+    // console.log(e);
+  }
+  rowDropObj(e) {
+    moveItemInArray(this.objs, e.fromIndex, e.dropIndex);
+    for (var i = 0; i < this.objs.length; i++) {
+      this.updateStatus(this.objs[i], i);
+    }
+    this.GetDiagnosticLive();
+  }
 
 }
 

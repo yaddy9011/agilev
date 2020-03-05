@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 @Injectable()
 export class AppGlobals {
-   // public domain: string = 'http://localhost:3000';
+    public domain: string = 'http://localhost:3000';
     //public domain: string = 'https://agile-backend.herokuapp.com';
-    public domain: string = 'https://backendroadmap.herokuapp.com';
+    //public domain: string = 'https://backendroadmap.herokuapp.com';
 }

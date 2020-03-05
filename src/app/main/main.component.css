@@ -1,6 +1,6 @@
 
   .example-list {
-    width: 1000px;
+    width: 100%;
     max-width: 100%;
     border: solid 1px #ccc;
     min-height: 60px;
@@ -12,7 +12,7 @@
   
   .example-box {
     padding: 20px 10px;
-    width: 1000px;
+    width: 100%;
     max-width: 100%;
     border-bottom: solid 1px #ccc;
     color: rgba(0, 0, 0, 0.87);
@@ -25,6 +25,22 @@
     background: white;
     font-size: 14px;
   }
+
+  .example-boxHeader {
+    padding: 20px 10px;
+    width: 100%;
+    max-width: 100%;
+    border-bottom: solid 1px #ccc;
+    color: rgba(0, 0, 0, 0.87);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    background: white;
+    font-size: 14px;
+  }
+
   
   .cdk-drag-preview {
     box-sizing: border-box;
@@ -61,4 +77,14 @@
     background-color: var(--second-color) !important;
     color: var(--second-letra)!important;
   }
+
+  .example-box.cdk-drag-disabled {
+    cursor: default;
+  }
+
+
+
+  
+  
+
   
