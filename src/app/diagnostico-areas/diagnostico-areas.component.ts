@@ -117,7 +117,6 @@ export class DiagnosticoAreasComponent implements OnInit {
 
   }
 
-
   getPracticas(key) {
     let item = this.tasksDataSourceStorage.find((i) => i.key === key);
     if (!item) {

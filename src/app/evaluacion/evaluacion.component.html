@@ -71,15 +71,14 @@
     <mat-card class="example-card">
         <mat-card-header id="mat-header">
             <div mat-card-avatar class="example-header-image"></div>
-            <mat-card-title>Evaluaciones Generadas</mat-card-title>
+            <mat-card-title>Diagnósticos generados</mat-card-title>
         </mat-card-header>
         <mat-card-content>
             <div align="center">
                 <table class="table table-bordered table-responsive-md table-striped text-center">
                     <tr>
                         <th class="text-center">Fecha de Evaluación</th>
-                        <th class="text-center">Ver diagnóstico por objetivos</th>
-                        <th class="text-center">Ver diagnóstico por áreas</th>
+                        <th class="text-center">Ver diagnóstico</th>
                         <th class="text-center">Eliminar</th>
                     </tr>
                     <tbody>
@@ -90,11 +89,6 @@
                             </td>
                             <td>
                                 <button mat-mini-fab [routerLink]="['/Diagnostico_objetivos', newarrss._id]">
-                                    <mat-icon>visibility</mat-icon>
-                                </button>
-                            </td>
-                            <td>
-                                <button mat-mini-fab [routerLink]="['/Diagnostico_areas', newarrss._id]">
                                     <mat-icon>visibility</mat-icon>
                                 </button>
                             </td>

@@ -9,6 +9,7 @@ import { DxDataGridComponent } from 'devextreme-angular';
   styleUrls: ['./gestion-objetivos.component.css']
 })
 export class GestionObjetivosComponent implements OnInit {
+  
   @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
   Objs: Gobjetivo[];
 

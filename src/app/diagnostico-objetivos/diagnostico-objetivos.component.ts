@@ -18,13 +18,21 @@ export class DiagnosticoObjetivosComponent implements OnInit {
   DataRop = [];
   tasksDataSourceStorage: any;
   AgilidadTotal = 0;
+  panelOpenState = false;
+  id_usr: String;
+  _idEval: String;
+  DataAreas = [];
+  DataRpa = [];
+  tasksDataSourceStorageAreas: any;
 
   constructor(private EvalResulService: EvalResulService, private taskService: TasksService, private route: ActivatedRoute) {
 
     this.tasksDataSourceStorage = [];
+    this.tasksDataSourceStorageAreas = [];
+    this.id_usr = localStorage.getItem("ACCESS_IDS");
+    this._idEval = this.route.snapshot.paramMap.get('id_eval');
 
-    var id_eval = this.route.snapshot.paramMap.get('id_eval');
-    var p = new Diagnostico(taskService, id_eval, EvalResulService);
+    var p = new Diagnostico(taskService, this._idEval , EvalResulService);
     p.GetDataEva(false);
 
     this.EvalResulService.routeDataA().subscribe(data => {
@@ -39,7 +47,9 @@ export class DiagnosticoObjetivosComponent implements OnInit {
     this.EvalResulService.routeDataC().subscribe(data => {
       this.AgilidadTotal = data;
     });
- 
+
+    this.GenerarDiagnosticoareas();
+
   }
 
   getPracticas(key) {
@@ -71,6 +81,125 @@ export class DiagnosticoObjetivosComponent implements OnInit {
     };
   }
 
+  onLegendClick(e) {
+    console.log(e);
+    let series = e.target;
+    if (series.isVisible()) {
+      series.hide();
+    } else {
+      series.hide();
+    }
+  }
+
+  GenerarDiagnosticoareas() {
+    const Data = {
+      id_eval: this._idEval,
+      id_usr: this.id_usr
+    };
+
+    this.taskService.GetDiagnosticAreas(Data)
+      .subscribe(diags => {
+
+        let levels = diags.map((ev, i) => {
+
+          let na = ev.nivelapli;
+          let na_title = "";
+          let na_new = 0;
+
+          switch (na) {
+            case 0:
+              na_title = "No Aplica";
+              na_new = 0;
+              break;
+            case 1:
+              na_title = "Muy Bajo";
+              na_new = 20;
+              break;
+            case 2:
+              na_title = "Bajo";
+              na_new = 40;
+              break;
+            case 3:
+              na_title = "Medio";
+              na_new = 60;
+              break;
+            case 4:
+              na_title = "Alto";
+              na_new = 80;
+              break;
+            case 5:
+              na_title = "Muy Alto";
+              na_new = 100;
+              break;
+          }
+
+          const arraData = {
+            _id: ev._id,
+            n_prac: Number(ev.n_prac),
+            Descrip_prac: ev.Datos_practicas.descripcion,
+            n_area: Number(ev.rpa.n_area),
+            name_area: ev.area.name,
+            na_t: na_title,
+            na: na_new,
+          };
+          return arraData;
+        });
+
+
+        let arrSuma = levels.reduce((contador, objeto) => {
+          contador[objeto.n_area] = (contador[objeto.n_area] || 0) + objeto.na;
+          return contador;
+        }, {});
+
+
+        const TotalRpa = levels.reduce((contador, objeto) => {
+          contador[objeto.n_area] = (contador[objeto.n_area] || 0) + 1;
+          return contador;
+        }, {});
+
+
+        let areas = levels.filter((valorActual, indiceActual, arreglo) => {
+          return arreglo.findIndex(valorDelArreglo => JSON.stringify(valorDelArreglo.n_area) === JSON.stringify(valorActual.n_area)) === indiceActual
+        });
+
+        let mapAreas = areas.map((mo, i) => {
+          let PorcentajeDiagnostic = Math.round(Number(arrSuma[mo.n_area] / TotalRpa[mo.n_area]));
+          const Data = {
+            n_area: mo.n_area,
+            title_area: mo.name_area,
+            tnaa: arrSuma[mo.n_area],
+            trpa: TotalRpa[mo.n_area],
+            da: PorcentajeDiagnostic
+          };
+          return Data;
+        });
+
+        this.DataAreas = mapAreas;
+        this.DataRpa = levels;
+        console.log(mapAreas);
+
+      });
+
+  }
+
+  getPracticasAreas(key) {
+    let item = this.tasksDataSourceStorageAreas.find((i) => i.key === key);
+    if (!item) {
+      item = {
+        key: key,
+        dataSourceInstance: new DataSource({
+          store: new ArrayStore({
+            data: this.DataRpa,
+            key: "_id"
+          }),
+          filter: ["n_area", "=", key]
+        })
+      };
+      this.tasksDataSourceStorageAreas.push(item)
+    }
+    return item.dataSourceInstance;
+  }
+  
   ngOnInit() {
   }
 

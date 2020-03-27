@@ -3,39 +3,87 @@
     <br>
     <br>
     <br>
-    <span class="label label-primary"> Agilidad por objetivos = {{AgilidadTotal}}%</span>
     <br>
-    <br>
-    <dx-polar-chart id="chart" [useSpiderWeb]="true" title="Diagnóstico del nivel de agilidad por objetivos Representación Gráfica"
-        [dataSource]="DatosObj">
-        <dxi-series argumentField="n_obj" valueField="pd" name="Nivel de agilidad del objetivo"></dxi-series>
-        <dxo-common-series-settings type="line"></dxo-common-series-settings>
-        <dxo-export [enabled]="false"></dxo-export>
-        <dxo-tooltip [enabled]="true"  [customizeTooltip]="customizeTooltip"></dxo-tooltip>
-        <dxo-size [height]="450" [width]="1000">
-        </dxo-size>
-    </dx-polar-chart>
-    <br>
-    <span class="label label-primary">Representación Tabular</span>
-    <br>
-    <br>
-    <dx-data-grid id="gridContainer" [dataSource]="DatosObj" [masterDetail]="{ enabled: true, template: 'detail' }"
-        keyExpr="n_obj" [showBorders]="true">
-        <dxi-column dataField="n_obj" [width]="70" caption="N°"></dxi-column>
-        <dxi-column dataField="TexObj" caption="Objetivo" [width]="600"></dxi-column>
-        <dxi-column dataField="pd" caption="Diagnóstico" [customizeText]="customizeText" [width]="100">
-        </dxi-column>
-        <div *dxTemplate="let obj of 'detail'">
-            <dx-data-grid [dataSource]="getPracticas(obj.key)" [showBorders]="true" [columnAutoWidth]="true">
-                <dxi-column dataField="n_prac" [width]="70" caption="N°"></dxi-column>
-                <dxi-column dataField="Descrip_prac" [width]="300" caption="Práctica"></dxi-column>
-                <dxi-column dataField="na_t" [width]="150" caption="Nivel de aplicación">
+    <mat-accordion>
+        <mat-expansion-panel style="width:90%;">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Diagnóstico de agilidad por objetivos
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <br>
+            <br>
+            <dx-polar-chart id="chart" [useSpiderWeb]="true" [dataSource]="DatosObj">
+                <dxi-series argumentField="n_obj" valueField="pd"></dxi-series>
+                <dxo-legend [visible]="false"></dxo-legend>
+                <dxo-value-axis [visualRange]="[0, 100]"></dxo-value-axis>
+                <dxo-common-series-settings type="line"></dxo-common-series-settings>
+                <dxo-export [enabled]="false"></dxo-export>
+                <dxo-tooltip [enabled]="true" [customizeTooltip]="customizeTooltip"></dxo-tooltip>
+                <dxo-size [height]="450" [width]="1000">
+                </dxo-size>
+            </dx-polar-chart>
+            <br>
+            <br>
+            <dx-data-grid id="gridContainer" [dataSource]="DatosObj"
+                [masterDetail]="{ enabled: true, template: 'detail' }" keyExpr="n_obj" [showBorders]="true">
+                <dxi-column dataField="n_obj" [width]="70" caption="N°"></dxi-column>
+                <dxi-column dataField="TexObj" caption="Objetivo" [width]="600"></dxi-column>
+                <dxi-column dataField="pd" caption="Diagnóstico" [customizeText]="customizeText" [width]="100">
                 </dxi-column>
-                <dxi-column dataField="nc_t" [width]="150" caption="Nivel de contribución">
-                </dxi-column>
+                <div *dxTemplate="let obj of 'detail'">
+                    <dx-data-grid [dataSource]="getPracticas(obj.key)" [showBorders]="true" [columnAutoWidth]="true">
+                        <dxi-column dataField="n_prac" [width]="70" caption="N°"></dxi-column>
+                        <dxi-column dataField="Descrip_prac" [width]="300" caption="Práctica"></dxi-column>
+                        <dxi-column dataField="na_t" [width]="150" caption="Nivel de aplicación">
+                        </dxi-column>
+                        <dxi-column dataField="nc_t" [width]="150" caption="Nivel de contribución">
+                        </dxi-column>
+                    </dx-data-grid>
+                </div>
             </dx-data-grid>
-        </div>
-    </dx-data-grid>
+        </mat-expansion-panel>
+        <br>
+        <br>
+        <mat-expansion-panel style="width:90%;" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Diagnóstico de agilidad por áreas
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <br>
+            <br>
+            <dx-polar-chart id="chart" [useSpiderWeb]="true" [dataSource]="DataAreas">
+                <dxi-series argumentField="title_area" valueField="da" name="Agilidad por área"></dxi-series>
+                <dxo-common-series-settings type="line"></dxo-common-series-settings>
+                <dxo-legend [visible]="false"></dxo-legend>
+                <dxo-value-axis [visualRange]="[0, 100]"></dxo-value-axis>
+                <dxo-export [enabled]="false"></dxo-export>
+                <dxo-tooltip [enabled]="true"></dxo-tooltip>
+                <!-- <dxo-size [height]="600" [width]="500"></dxo-size> -->
+            </dx-polar-chart>
+            <br>
+            <br>
+            <dx-data-grid id="gridContainer" [dataSource]="DataAreas"
+                [masterDetail]="{ enabled: true, template: 'detail' }" keyExpr="n_area" [showBorders]="true">
+                <dxi-column dataField="n_area" [width]="70" caption="N°"></dxi-column>
+                <dxi-column dataField="title_area" caption="Área" [width]="600"></dxi-column>
+                <div *dxTemplate="let area of 'detail'">
+                    <dx-data-grid [dataSource]="getPracticasAreas(area.key)" [showBorders]="true"
+                        [columnAutoWidth]="true">
+                        <dxi-column dataField="n_prac" [width]="70" caption="N°"></dxi-column>
+                        <dxi-column dataField="Descrip_prac" [width]="300" caption="Práctica"></dxi-column>
+                        <dxi-column dataField="na_t" [width]="150" caption="Nivel de aplicación">
+                        </dxi-column>
+                    </dx-data-grid>
+                </div>
+            </dx-data-grid>
+        </mat-expansion-panel>
+    </mat-accordion>
+    <br>
+    <br>
+    <br>
+    <!-- <span class="label label-primary"> Agilidad por objetivos = {{AgilidadTotal}}%</span> -->
     <!-- <mat-tab-group id="tab">
         <mat-tab label="Diagnóstico por Objetivos">
         </mat-tab>
