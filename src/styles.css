@@ -16,8 +16,15 @@ body{
 }
 
 .example-card {
-    max-width: 800px;
+    max-width: 90%;
   }
+
+  .Appcontainer {
+    min-height: calc(100vh - 100px - 50px);
+    /* border: 10px solid red; */
+  }
+    
+    
   
 #mat-header{
   background-color: var(--first-color);

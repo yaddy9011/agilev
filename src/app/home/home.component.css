@@ -1,5 +1,4 @@
 
-  
   .example-header-image {
     background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
     background-size: cover;
@@ -264,3 +263,11 @@
   background-color: var(--first-color);
   color:var(--first-letra);
 }
+
+
+.contenthome {
+  display:table;
+ }
+ .col1, .col2, .col3 {
+  display:table-cell;
+ }

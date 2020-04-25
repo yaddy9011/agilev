@@ -11,7 +11,6 @@ import { Diagnostico } from '../clases/diagnotico';
 import { RowDDService, SelectionService } from '@syncfusion/ej2-angular-grids';
 import { GridComponent } from '@syncfusion/ej2-angular-grids';
 import { ViewportScroller } from '@angular/common';
-import { MapOperator } from 'rxjs/internal/operators/map';
 import { DxDataGridComponent } from "devextreme-angular";
 
 @Component({
@@ -31,13 +30,9 @@ import { DxDataGridComponent } from "devextreme-angular";
 
 export class MainComponent implements OnInit {
 
-
-  //revisar el nivel de contribucion no ha quedado bien y tampoco las acciones del check ocultar desocultar
-
-
-  @ViewChild('gridPrac', { static: false }) public Grid: GridComponent;
-  @ViewChild('gridObj', { static: false }) public GridObj: GridComponent;
+  // @ViewChild('gridObj', { static: false }) public GridObj: GridComponent;
   @ViewChild('clientGrid', { static: false }) clientGrid: DxDataGridComponent;
+  @ViewChild('GridPrac', { static: false }) GridPrac: DxDataGridComponent;
 
 
   idArr = [];
@@ -46,6 +41,7 @@ export class MainComponent implements OnInit {
   toggle = [];
   ArrNC = [];
   ArrPP = [];
+  ArrWND = [];
   panelOpenState = true;
   panelOpenStateObj = true;
   userName = '';
@@ -69,6 +65,8 @@ export class MainComponent implements OnInit {
   DatasourseRop = [];
   popupVisible = false;
   selectOptions: Object;
+  isNCVisible: boolean = false;
+  _nobj;
 
   constructor(
 
@@ -82,16 +80,16 @@ export class MainComponent implements OnInit {
     this.GetDiagnosticLive();
     this.getPracticas(this.id_usr, this.checked);
     this.showDragIcons = true;
-    this.onReorder = this.onReorder.bind(this);
+    this.onReorderObj = this.onReorderObj.bind(this);
     this.onReorderPrac = this.onReorderPrac.bind(this);
-
   }
 
   getObjetivos(id_usr, diagnosticObjs) {
+    var NewShowROP = [];
+    var ShopRop = [];
+    NewShowROP = this.ShowROP;
     this.taskService.getobj(id_usr)
       .subscribe(obj => {
-        var NewShowROP = [];
-
         var objss = obj.map(function (task, index, array) {
           const fd = diagnosticObjs.find((item) => item.n_obj === obj[index].n_obj);
           let pd = 0;
@@ -110,13 +108,14 @@ export class MainComponent implements OnInit {
             n_obj: obj[index].n_obj,
             pd: pd + "%"
           };
-          NewShowROP[index] = false;
+          if (NewShowROP.length > 0) {
+            ShopRop[index] = NewShowROP[index];
+          } else {
+            ShopRop[index] = false;
+          }
           return arraData;
         });
-
-
-        this.ShowROP = NewShowROP;
-
+        this.ShowROP = ShopRop;
         // para ordenamiento de objetivos 
         var map2 = objss.filter(function (task) {
           return task.NoInteresa == true;
@@ -132,9 +131,7 @@ export class MainComponent implements OnInit {
           this.objs = objss;
           this.objs.sort((a, b) => a.pos - b.pos);
         }
-
       });
-
   }
 
   getPracticas(id_usr, ap) {
@@ -158,76 +155,127 @@ export class MainComponent implements OnInit {
             n_prac: prac[i].n_prac,
             desafio: prac[i].desafio
           };
-          this.idArr[i] = arraData.nivelapli;
-          //this.idPracDesa[i] = arraData.desafio;
 
-          if (this.toggle.length > 0) {
-            console.log(this.toggle[i]);
+          var tg = this.toggle.filter(function (task) {
+            return task == true;
+          });
+
+          if (tg.length > 0) {
+            this.ArrNC[i] = this.ArrNC[i];
             this.toggle[i] = this.toggle[i];
           } else {
             this.toggle[i] = false;
+            this.ArrNC[i] = 0;
           }
 
-          this.ArrNC[i] = 0;
           this.ArrPP[i] = arraData.n_prac;
           arrdatanew.push(arraData);
+
         }
 
-        // para ordenamiento de Prácticas 
-        var NOaplicables = arrdatanew.filter(function (task) {
-          return task.aplicable == true;
+        this.Practicas = arrdatanew;
+
+        this.orderNA();
+        this.OrderAplicables();
+        this.OrdenamientoPracticas(this.Practicas);
+
+        // var NOaplicables = arrdatanew.filter(function (task) {
+        //   return task.aplicable == true;
+        // });
+        // if (NOaplicables.length >= 1) {
+        //   var Aplicables = arrdatanew.filter(function (task) {
+        //     return task.aplicable == false;
+        //   });
+        //   Aplicables.sort((a, b) => a.pos - b.pos);
+        //   var NiveApliMuyAlto = Aplicables.filter(function (task) {
+        //     return task.nivelapli == 5;
+        //   });
+        //   var NiveApliNOMuyAltos = Aplicables.filter(function (task) {
+        //     return task.nivelapli < 5;
+        //   });
+        //   if (NiveApliMuyAlto.length >= 1) {
+        //     const array3 = NiveApliNOMuyAltos.concat(NiveApliMuyAlto);
+        //     const array4 = array3.concat(NOaplicables);
+        //     this.Practicas = array4;
+        //   } else {
+        //     const array3 = Aplicables.concat(NOaplicables);
+        //     this.Practicas = array3;
+        //   }
+        // } else {
+        //   var NiveApliMuyAlto = arrdatanew.filter(function (task) {
+        //     return task.nivelapli == 5;
+        //   });
+        //   var NiveApliNOMuyAltos = arrdatanew.filter(function (task) {
+        //     return task.nivelapli < 5;
+        //   });
+        //   if (NiveApliMuyAlto.length >= 1) {
+        //     NiveApliNOMuyAltos.sort((a, b) => a.pos - b.pos);
+        //     const arrarNAfinal = NiveApliNOMuyAltos.concat(NiveApliMuyAlto);
+        //     this.Practicas = arrarNAfinal;
+        //   } else {
+        //     this.Practicas = arrdatanew;
+        //     this.Practicas.sort((a, b) => a.pos - b.pos);
+        //   }
+        // }
+
+        var arwnd = [];
+        var nass = this.Practicas.map(function (num, k) {
+          if (num.nivelapli == 0) {
+            arwnd[k] = true;
+          } else {
+            arwnd[k] = false;
+          }
+          return num.nivelapli;
         });
-
-
-        if (NOaplicables.length >= 1) {
-
-          var Aplicables = arrdatanew.filter(function (task) {
-            return task.aplicable == false;
-          });
-
-          Aplicables.sort((a, b) => a.pos - b.pos);
-
-          var NiveApliMuyAlto = Aplicables.filter(function (task) {
-            return task.nivelapli == 5;
-          });
-
-
-          var NiveApliNOMuyAltos = Aplicables.filter(function (task) {
-            return task.nivelapli < 5;
-          });
-
-          if (NiveApliMuyAlto.length >= 1) {
-            const array3 = NiveApliNOMuyAltos.concat(NiveApliMuyAlto);
-            const array4 = array3.concat(NOaplicables);
-            this.Practicas = array4;
-          } else {
-            const array3 = Aplicables.concat(NOaplicables);
-            this.Practicas = array3;
-          }
-
-        } else {
-
-          var NiveApliMuyAlto = arrdatanew.filter(function (task) {
-            return task.nivelapli == 5;
-          });
-
-          var NiveApliNOMuyAltos = arrdatanew.filter(function (task) {
-            return task.nivelapli < 5;
-          });
-
-          if (NiveApliMuyAlto.length >= 1) {
-            NiveApliNOMuyAltos.sort((a, b) => a.pos - b.pos);
-            const arrarNAfinal = NiveApliNOMuyAltos.concat(NiveApliMuyAlto);
-            this.Practicas = arrarNAfinal;
-          } else {
-            this.Practicas = arrdatanew;
-            this.Practicas.sort((a, b) => a.pos - b.pos);
-          }
-        }
-
+        this.idArr = nass;
+        this.ArrWND = arwnd;
+        console.log(this.Practicas.length)
+        //console.log(this.ArrWND);
       });
-
   }
+
+
+  OrdenamientoPracticas(ArrPrac) {
+    var NOaplicables = ArrPrac.filter(function (task) {
+      return task.aplicable == true;
+    });
+    if (NOaplicables.length >= 1) {
+      var Aplicables = ArrPrac.filter(function (task) {
+        return task.aplicable == false;
+      });
+      Aplicables.sort((a, b) => a.pos - b.pos);
+      var NiveApliMuyAlto = Aplicables.filter(function (task) {
+        return task.nivelapli == 5;
+      });
+      var NiveApliNOMuyAltos = Aplicables.filter(function (task) {
+        return task.nivelapli < 5;
+      });
+      if (NiveApliMuyAlto.length >= 1) {
+        const array3 = NiveApliNOMuyAltos.concat(NiveApliMuyAlto);
+        const array4 = array3.concat(NOaplicables);
+        this.Practicas = array4;
+      } else {
+        const array3 = Aplicables.concat(NOaplicables);
+        this.Practicas = array3;
+      }
+    } else {
+      var NiveApliMuyAlto = ArrPrac.filter(function (task) {
+        return task.nivelapli == 5;
+      });
+      var NiveApliNOMuyAltos = ArrPrac.filter(function (task) {
+        return task.nivelapli < 5;
+      });
+      if (NiveApliMuyAlto.length >= 1) {
+        NiveApliNOMuyAltos.sort((a, b) => a.pos - b.pos);
+        const arrarNAfinal = NiveApliNOMuyAltos.concat(NiveApliMuyAlto);
+        this.Practicas = arrarNAfinal;
+      } else {
+        this.Practicas = ArrPrac;
+        this.Practicas.sort((a, b) => a.pos - b.pos);
+      }
+    }
+  }
+
 
   GetDiagnosticLive() {
     var p = new Diagnostico(this.taskService, "5e52bc768e4e3736a866f5e7", this.EvalResulService);
@@ -249,23 +297,7 @@ export class MainComponent implements OnInit {
 
   }
 
-  // drop(event: CdkDragDrop<number[]>) {
-
-  //   moveItemInArray(this.objs, event.previousIndex, event.currentIndex);
-  //   for (var i = 0; i < this.objs.length; i++) {
-  //     this.updateStatus(this.objs[i], i);
-  // 
-
-  //   // let a: Number = event.previousIndex;
-  //   // let b: Number = event.currentIndex;
-  //   //console.log(this.tasks[event.currentIndex]);
-  //   // console.log(this.tasks[event.previousIndex]);
-  //   // this.updateStatus(this.tasks[event.currentIndex], event.currentIndex);
-  //   // this.updateStatus(this.tasks[event.previousIndex], event.previousIndex);
-
-  // }
-
-  updateStatus(obj: obj, pnew: number) {
+  updateStatusObj(obj: obj, pnew: number) {
 
     var newTask = {
       _id: obj._id,
@@ -280,43 +312,7 @@ export class MainComponent implements OnInit {
       })
   }
 
-  dropPracticas(event) {
-
-    moveItemInArray(this.toggle, event.fromIndex, event.dropIndex);
-    moveItemInArray(this.ArrNC, event.fromIndex, event.dropIndex);
-
-    var toggleNew = [];
-
-    for (var i = 0; i < this.toggle.length; i++) {
-      toggleNew[i] = this.toggle[i];
-    }
-
-    this.toggle = toggleNew;
-
-
-    var ArrNCNew = [];
-    for (var i = 0; i < this.ArrNC.length; i++) {
-      ArrNCNew[i] = this.ArrNC[i];
-    }
-    this.ArrNC = ArrNCNew;
-
-    moveItemInArray(this.Practicas, event.fromIndex, event.dropIndex);
-    var arrdatanewprac = [];
-    for (var i = 0; i < this.Practicas.length; i++) {
-      this.idArr[i] = this.Practicas[i].nivelapli;
-      this.ArrPP[i] = this.Practicas[i].n_prac;
-      arrdatanewprac[i] = this.Practicas[i];
-      this.updateStatuspracticas(this.Practicas[i], i);
-    }
-
-    this.Practicas = arrdatanewprac;
-
-    //this.getPracticas(this.id_usr, this.checked);
-
-  }
-
   updateStatuspracticas(pra: Practica, pnew: number) {
-
     var newActualizacion = {
       _id: pra._id,
       id_usr: pra.id_usr,
@@ -325,48 +321,56 @@ export class MainComponent implements OnInit {
       nivelapli: pra.nivelapli,
       desafio: pra.desafio
     };
-
     this.taskService.updatePractica(newActualizacion)
       .subscribe(res => {
       });
   }
 
-  onChange(deviceValue, desaf) {
-    //console.log(this.Practicas);
+  onChangeNA(deviceValue, desaf) {
     for (var i = 0; i < this.Practicas.length; i++) {
-      console.log(this.Practicas[i].n_prac + " na : " + this.idArr[i]);
+      // console.log(this.Practicas[i].n_prac + " na : " + this.idArr[i]);
       this.Practicas[i].nivelapli = this.idArr[i];
+
+      if (this.idArr[i] == 0) {
+        this.ArrWND[i] = true;
+      } else {
+        this.ArrWND[i] = false;
+      }
       //this.Practicas[i].desafio = this.idPracDesa[i];
       this.updateStatuspracticas(this.Practicas[i], i);
     }
 
+    this.GetDiagnosticLive();
 
-    if (desaf == false) {
-      this.GetDiagnosticLive();
+
+    // if (desaf == false) {
+    //   this.GetDiagnosticLive();
+    // }
+
+    if (deviceValue == 5) {
+      this.getPracticas(this.id_usr, this.checked);
     }
 
-    this.getPracticas(this.id_usr, this.checked);
+
 
   }
 
-  FieldsChange(e) {
+  onChangeAplicable(e) {
     var ActPractica = {
       _id: e.currentTarget.value,
       aplicable: e.currentTarget.checked
     };
     this.taskService.updateAplicable(ActPractica)
       .subscribe(res => {
+        this.getPracticas(this.id_usr, this.checked);
       });
-    this.Grid.refresh();
-    this.getPracticas(this.id_usr, this.checked);
   }
 
-  doSomething(e, id) {
+  onChangeNotasPracticas(e, id) {
     var actNotas = {
       _id: id,
       notas: e.target.value
     };
-
     this.taskService.updateNotas(actNotas)
       .subscribe(res => {
       });
@@ -378,9 +382,9 @@ export class MainComponent implements OnInit {
       NoInteresa: e.currentTarget.checked
     };
     this.taskService.updateNoInteresa(actObj)
-      .subscribe(res => { });
-    this.GetDiagnosticLive();
-    this.clientGrid.instance.refresh();
+      .subscribe(res => {
+        this.GetDiagnosticLive();
+      });
   }
 
   ChangeNotasObj(e, id) {
@@ -394,109 +398,141 @@ export class MainComponent implements OnInit {
       });
   }
 
-  ChangeCheckBloquePriorizacion(e) {
-    this.DisablePriorizacion = !this.DisablePriorizacion;
-  }
-
-  eventAplicables(e) {
-    this.getPracticas(this.id_usr, this.checked);
-    var arrPrac = [];
-    arrPrac = this.Practicas;
-    var arrFilter;
-    if (this.checkANA == true) {
-      arrFilter = arrPrac.filter((task) => (task.nivelapli < 5 && task.aplicable == false));
-      this.Practicas = arrFilter;
-    } else {
-      this.Practicas = arrPrac;
-    }
-  }
-
   EventshowROP(e, i, no) {
-
+    this._nobj = no;
     this.viewportScroller.scrollToAnchor("SlideTo");
-    this.ShowROP[i] = !this.ShowROP[i];
-    var column = this.Grid.getColumnByField('nc');
+    var sr = this.ShowROP.filter(function (task) {
+      return task == true;
+    });
+    if (sr.length >= 1) {
+      if (this.ShowROP[i] == false) {
+        var x = this.ShowROP.map(function (num) {
+          return num = false;
+        });
+        this.ShowROP = x;
+      } else {
+
+        this.ShowROP[i] = !this.ShowROP[i];
+      }
+    } else {
+      this.ShowROP[i] = !this.ShowROP[i];
+    }
+
+    //this.ShowROP[i] = !this.ShowROP[i];
 
     if (this.ShowROP[i] == true) {
-      column.visible = true;
-      this.CrudRopService.GetRop()
-        .subscribe(rop => {
+      this.isNCVisible = true;
 
-          var arrdatanew = [];
-          var arrPPnew = [];
-          var ncarr = [];
-          arrdatanew = this.toggle;
-          arrPPnew = this.ArrPP;
+      this.RelacionOP(no);
 
-          rop.forEach(function (value) {
-            if (value.n_obj == no) {
-              let toIndex = value.n_prac.valueOf();
-              console.log(toIndex);
-              console.log(value.n_prac);
-              const b = arrPPnew.findIndex((item) => item === toIndex);
-              arrdatanew[b] = true;
-              ncarr[b] = value.nivel_contribucion;
-            }
-          });
+      // this.CrudRopService.GetRop()
+      //   .subscribe(rop => {
+      //     var arrdatanew = [];
+      //     var arrPPnew = [];
+      //     var ncarr = [];
+      //     arrdatanew = this.toggle;
+      //     arrPPnew = this.ArrPP;
+      //     rop.forEach(function (value) {
+      //       if (value.n_obj == no) {
+      //         let toIndex = value.n_prac.valueOf();
+      //         // console.log(toIndex);
+      //         // console.log(value.n_prac);
+      //         const b = arrPPnew.findIndex((item) => item === toIndex);
+      //         arrdatanew[b] = true;
+      //         ncarr[b] = value.nivel_contribucion;
+      //       }
+      //     });
 
-          for (let j in this.ArrNC) {
-            let nc_title = "";
-            switch (ncarr[j]) {
-              case 0:
-                nc_title = "Muy Bajo";
-                break;
-              case 0.25:
-                nc_title = "Bajo";
-                break;
-              case 0.50:
-                nc_title = "Medio";
-                break;
-              case 0.75:
-                nc_title = "Alto";
-                break;
-              case 1:
-                nc_title = "Muy Alto";
-                break;
-            }
-            this.ArrNC[j] = nc_title;
-          }
+      //     for (let j in this.ArrNC) {
+      //       let nc_title = "";
+      //       switch (ncarr[j]) {
+      //         case 0:
+      //           nc_title = "Muy Bajo";
+      //           break;
+      //         case 0.25:
+      //           nc_title = "Bajo";
+      //           break;
+      //         case 0.50:
+      //           nc_title = "Medio";
+      //           break;
+      //         case 0.75:
+      //           nc_title = "Alto";
+      //           break;
+      //         case 1:
+      //           nc_title = "Muy Alto";
+      //           break;
+      //       }
+      //       this.ArrNC[j] = nc_title;
+      //     }
 
-          this.toggle = arrdatanew;
-          this.Grid.refresh();
-        });
+      //     this.toggle = arrdatanew;
+      //     //this.Grid.refresh();
+      //     // this.GridPrac.onRowPrepared;
+      //     this.GridPrac.instance.refresh();
+      //   });
+
+
     } else {
-      column.visible = false;
+      this.isNCVisible = false;
       var dobles = this.toggle.map(function (num) {
         return num = false;
       });
       this.toggle = dobles;
-      this.Grid.refresh();
+      this.GridPrac.instance.refresh();
       this.viewportScroller.scrollToAnchor("objPanel");
     }
-
   }
 
-  rowDragObj(e) {
+  RelacionOP(no) {
+    this.CrudRopService.GetRop()
+      .subscribe(rop => {
+        var arrdatanew = [];
+        var arrPPnew = [];
+        var ncarr = [];
+
+        var dobles = this.toggle.map(function (num) {
+          return num = false;
+        });
+        this.toggle = dobles;
+
+        arrdatanew = this.toggle;
+        arrPPnew = this.ArrPP;
+        rop.forEach(function (value) {
+          if (value.n_obj == no) {
+            let toIndex = value.n_prac.valueOf();
+            const b = arrPPnew.findIndex((item) => item === toIndex);
+            arrdatanew[b] = true;
+            ncarr[b] = value.nivel_contribucion;
+          }
+        });
+
+        for (let j in this.ArrNC) {
+          let nc_title = "";
+          switch (ncarr[j]) {
+            case 0:
+              nc_title = "Muy Bajo";
+              break;
+            case 0.25:
+              nc_title = "Bajo";
+              break;
+            case 0.50:
+              nc_title = "Medio";
+              break;
+            case 0.75:
+              nc_title = "Alto";
+              break;
+            case 1:
+              nc_title = "Muy Alto";
+              break;
+          }
+          this.ArrNC[j] = nc_title;
+        }
+        this.toggle = arrdatanew;
+        this.GridPrac.instance.refresh();
+      });
   }
 
-  rowDropObj(e) {
-    moveItemInArray(this.objs, e.fromIndex, e.dropIndex);
-    var ObjNewOrder = [];
-    for (var i = 0; i < this.objs.length; i++) {
-      this.updateStatus(this.objs[i], i);
-      ObjNewOrder[i] = this.objs[i];
-    }
-    this.objs = ObjNewOrder;
-  }
-
-  rowDataBound(args) {
-    const x = this.ArrPP.findIndex((item) => item === args.data.n_prac);
-    if (this.toggle[x] == true) {
-      args.row.style.backgroundColor = "#81F79F";
-    }
-  }
-
-  onReorder(e) {
+  onReorderObj(e) {
 
     var visibleRows = e.component.getVisibleRows(),
       toIndex = this.objs.indexOf(visibleRows[e.toIndex].data),
@@ -504,15 +540,13 @@ export class MainComponent implements OnInit {
     this.objs.splice(fromIndex, 1);
     this.objs.splice(toIndex, 0, e.itemData);
 
-
-
     for (var i = 0; i < this.objs.length; i++) {
-      this.updateStatus(this.objs[i], i);
+      this.updateStatusObj(this.objs[i], i);
     }
 
 
     this.GetDiagnosticLive();
-    this.clientGrid.instance.refresh();
+    //this.clientGrid.instance.refresh();
 
 
     //   var objss = this.objs.map(function (task, index, array) {
@@ -523,23 +557,47 @@ export class MainComponent implements OnInit {
 
   }
 
+  onReorderPrac(e) {
+    var visibleRows = e.component.getVisibleRows(),
+      toIndex = this.Practicas.indexOf(visibleRows[e.toIndex].data),
+      fromIndex = this.Practicas.indexOf(e.itemData);
+    this.Practicas.splice(fromIndex, 1);
+    this.Practicas.splice(toIndex, 0, e.itemData);
+    this.idArr.splice(fromIndex, 1);
+    this.idArr.splice(toIndex, 0, e.itemData.nivelapli);
+    for (var i = 0; i < this.Practicas.length; i++) {
+      this.updateStatuspracticas(this.Practicas[i], i);
+    }
+
+    // this.OrdenamientoPracticas(this.Practicas);
+
+    this.getPracticas(this.id_usr, false);
+
+    var sr = this.ShowROP.filter(function (task) {
+      return task == true;
+    });
+    if (sr.length > 0) {
+      this.RelacionOP(this._nobj);
+    }
+    // var nass = this.Practicas.map(function (num) {
+    //   return num.nivelapli;
+    // });
+    // this.idArr = nass;
+    // this.GridPrac.instance.refresh();
+  }
+
   DetalleObjetivo(e, n) {
     this.popupVisible = true;
     console.log(n);
     console.log(this.objs[n].n_obj);
     let n_ob = this.objs[n].n_obj;
     var arrPPnew = [];
-
     this.DataRop.forEach(function (value) {
       if (value.n_obj == n_ob) {
         arrPPnew.push(value);
       }
     });
-
     this.DatasourseRop = arrPPnew;
-
-    console.log(this.DatasourseRop);
-
   }
 
   OcultarObjNI(e) {
@@ -553,34 +611,49 @@ export class MainComponent implements OnInit {
     }
   }
 
-  onReorderPrac(e) {
-    var visibleRows = e.component.getVisibleRows(),
-      toIndex = this.Practicas.indexOf(visibleRows[e.toIndex].data),
-      fromIndex = this.Practicas.indexOf(e.itemData);
-    this.Practicas.splice(fromIndex, 1);
-    this.Practicas.splice(toIndex, 0, e.itemData);
+  eventAltoNA(e) {
+    this.getPracticas(this.id_usr, false);
   }
 
-  eventAltoNA(e) {
-
+  orderNA() {
     var arrPrac = [];
     arrPrac = this.Practicas;
-    var arrFilter;
-
     if (this.checkANA == true) {
-
-      if (this.checked) {
-        arrFilter = arrPrac.filter((task) => (task.nivelapli < 5 && task.aplicable == false));
-      } else {
-
-        arrFilter = arrPrac.filter((task) => task.nivelapli < 5);
-
-      }
-
+      var arrFilter;
+      arrFilter = arrPrac.filter((task) => task.nivelapli < 5);
       this.Practicas = arrFilter;
-
     } else {
-      this.getPracticas(this.id_usr, this.checked);
+      this.Practicas = arrPrac
+    }
+  }
+
+  OrderAplicables() {
+    var arrPrac = [];
+    arrPrac = this.Practicas;
+    if (this.checked == true) {
+      var aplicables = arrPrac.filter(function (task) {
+        return task.aplicable == false;
+      });
+      this.Practicas = aplicables;
+    } else {
+      this.Practicas = arrPrac;
+    }
+  }
+
+  eventAplicables(e) {
+    this.getPracticas(this.id_usr, false);
+  }
+
+  scroll(el: HTMLElement) {
+    el.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  onRowPrepared(e) {
+    if (e.data) {
+      const x = this.ArrPP.findIndex((item) => item === e.data.n_prac);
+      if (this.toggle[x] == true) {
+        e.rowElement.style.backgroundColor = "#81F79F";
+      }
     }
   }
 

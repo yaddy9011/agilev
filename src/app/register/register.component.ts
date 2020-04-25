@@ -79,7 +79,9 @@ export class RegisterComponent implements OnInit {
     this.loadingVisible = true;
       this.authService.register(form.value).subscribe(res => {
        this.loadingVisible = false;
-        this.router.navigateByUrl('/login');
+       this.popupVisible = true;
+       this.mensaje = "El registro fue exitoso, porfavor para continuar revise su correo electrónico para confirmar y finalizar su registro";
+       // this.router.navigateByUrl('/login');
       },
         error => {
           this.loadingVisible = false;
@@ -91,6 +93,7 @@ export class RegisterComponent implements OnInit {
 
   doneClick() {
     this.popupVisible = false;
+    this.router.navigateByUrl('/home');
   }
 
 }

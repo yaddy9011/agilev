@@ -1,5 +1,5 @@
 <app-menu></app-menu>
-<div align="center">
+<div  class="Appcontainer" align="center">
     <br>
     <br>
     <br>
@@ -9,8 +9,8 @@
             [allowColumnReordering]="true" [showBorders]="true" (onRowInserting)="InsertRow($event)"
             (onEditorPreparing)="onEditorPreparing($event)" (onRowUpdating)="UpdateRow($event)"
             (onRowRemoving)="DeleteRow($event)">
-            <dxo-paging [enabled]="true"></dxo-paging>
-            <dxo-editing useIcons="true" mode="row" [allowUpdating]="true" [allowDeleting]="true" [allowAdding]="true">
+            <dxo-paging [enabled]="false"></dxo-paging>
+            <dxo-editing useIcons="true" mode="row" [allowUpdating]="true" [allowDeleting]="false" [allowAdding]="false">
                 <dxo-texts confirmDeleteMessage="¿Estas seguro de eliminar el registro?"></dxo-texts>
             </dxo-editing>
             <dxi-column dataField="n_obj" caption="N°" [width]="50">
@@ -25,7 +25,5 @@
         <br>
         <br>
     </mat-accordion>
-    <br>
-    <br>
 </div>
 <app-footer></app-footer>

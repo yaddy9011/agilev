@@ -50,6 +50,8 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { GridModule } from '@syncfusion/ej2-angular-grids';
+import { EquipoAgileComponent } from './equipo-agile/equipo-agile.component';
+import { ValidEmailComponent } from './valid-email/valid-email.component';
 
 
 @NgModule({
@@ -68,7 +70,9 @@ import { GridModule } from '@syncfusion/ej2-angular-grids';
     RelacionOpComponent,
     ResponseResetComponent,
     DiagnosticoObjetivosComponent,
-    DiagnosticoAreasComponent
+    DiagnosticoAreasComponent,
+    EquipoAgileComponent,
+    ValidEmailComponent
   ],
   entryComponents: [],
   imports: [

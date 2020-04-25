@@ -1,6 +1,5 @@
 <app-menu></app-menu>
-
-<div id="app" align="center">
+<div class="Appcontainer" id="app" align="center">
   <br>
   <br>
   <br>
@@ -13,21 +12,44 @@
     </mat-card-header> -->
     <img mat-card-image src="../../assets/images/banner.png" alt="Photo of a Shiba Inu">
     <mat-card-content>
-      <p>
+      <!-- <p>
         Este sitio te ofrece conocimiento asociado a prácticas ágiles y te ayuda a establecer tu propio roadmap para
         implantación de prácticas ágiles ademas de evaluar tu nivel de agilidad.
         Reflexiona respecto de tus objetivos de mejora y detecta qué prácticas pueden ayudarte a conseguir dichos
         objetivos.
-      </p>
+      </p> -->
+      <br>
+      <div class="contenthome">
+        <div class="col1">
+          <b>Conoce las prácticas ágiles </b>
+          <br>
+          Te ofrecemos un catálogo de prácticas ágiles que provienen de los métodos ágiles más populares y están
+          explicadas de forma genérica para ser entendidas incluso en contextos diferentes al de desarrollo de software.
+        </div>
+        <div class="col2">
+          <b>Evalúa prácticas versus objetivos</b>
+          <br>
+          Reflexiona respecto de tus objetivos de mejora y detecta qué prácticas pueden ayudarte a conseguir dichos
+          objetivos.
+        </div>
+        <div class="col3">
+          <b>Construye tu Roadmap Ágil</b>
+          <br>
+          Crea tu propia lista ordenada de práctica ágiles que guiarán tus esfuerzos y estrategia de implantación del
+          agilismo en tu contexto de trabajo.
+        </div>
+      </div>
+      <br>
+      <br>
     </mat-card-content>
     <mat-card-actions>
-
       <button *ngIf="show" mat-button routerLink="/registro">Regístrate</button>
       <button *ngIf="show" mat-button routerLink="/login">Inicia sesión </button>
     </mat-card-actions>
   </mat-card>
+  <br>
+  <br>
+  <br>
+  <br>
 </div>
-<br>
-<br>
-<br>
 <app-footer></app-footer>

@@ -1,5 +1,7 @@
 <app-menu></app-menu>
 
+<div  class="Appcontainer" align="center">
+
 <div class="main" align="center">
   <p class="sign" align="center">Accede al sistema</p>
   <form #frmLogin="ngForm" class="form1" (ngSubmit)="onLogin(frmLogin)">
@@ -19,7 +21,6 @@
     </p>
   </form>
 </div>
-
 <dx-popup [width]="300" [height]="250" [showTitle]="true" title="Aviso" [dragEnabled]="false"
   [closeOnOutsideClick]="false" [(visible)]="popupVisible">
   <div class='text-center'>
@@ -34,4 +35,7 @@
   [showIndicator]="true" [showPane]="true" [shading]="true" [closeOnOutsideClick]="false" (onShown)="onShown()"
   (onHidden)="onHidden()">
 </dx-load-panel>
+
+</div>
+
 <app-footer></app-footer>

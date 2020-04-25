@@ -34,7 +34,7 @@ export class AuthService {
         (res: JwtResponseI) => {
           if (res) {
             this.saveToken(res.dataUser.accessToken, res.dataUser.expiresIn);
-            this.saveID(res.dataUser.id, res.dataUser.name);
+            this.saveID(res.dataUser.id, res.dataUser.name, res.dataUser.admin);
           }
         })
       );
@@ -62,9 +62,10 @@ export class AuthService {
     this.token = token;
   }
 
-  private saveID(ids: string, nam: string): void {
+  private saveID(ids: string, nam: string, admin:string): void {
     localStorage.setItem("ACCESS_IDS", ids);
     localStorage.setItem("ACCESS_name", nam);
+    localStorage.setItem("ACCESS_admin", admin);
   }
 
   private getToken(): string {
@@ -73,7 +74,6 @@ export class AuthService {
     }
     return this.token;
   }
-
 
   requestReset(body): Observable<any> {
     return this.httpClient.post(`${this.AUTH_SERVER}/req-reset-password`, body);
@@ -85,6 +85,10 @@ export class AuthService {
 
   ValidPasswordToken(body): Observable<any> {
     return this.httpClient.post(`${this.AUTH_SERVER}/valid-password-token`, body);
+  }
+
+  validarcorreoUsr(body): Observable<any> {
+    return this.httpClient.post(`${this.AUTH_SERVER}/validcorreousr`, body);
   }
 
 

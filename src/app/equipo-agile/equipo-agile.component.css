@@ -1,0 +1,6 @@
+.contenthome {
+    display:table;
+   }
+   .col1, .col2, .col3 {
+    display:table-cell;
+   }

@@ -32,7 +32,7 @@ export class DiagnosticoObjetivosComponent implements OnInit {
     this.id_usr = localStorage.getItem("ACCESS_IDS");
     this._idEval = this.route.snapshot.paramMap.get('id_eval');
 
-    var p = new Diagnostico(taskService, this._idEval , EvalResulService);
+    var p = new Diagnostico(taskService, this._idEval, EvalResulService);
     p.GetDataEva(false);
 
     this.EvalResulService.routeDataA().subscribe(data => {
@@ -143,6 +143,7 @@ export class DiagnosticoObjetivosComponent implements OnInit {
             na: na_new,
           };
           return arraData;
+
         });
 
 
@@ -152,8 +153,16 @@ export class DiagnosticoObjetivosComponent implements OnInit {
         }, {});
 
 
+        // var filterNa = levels.filter(function (task) {
+        //   return task.na > 0;
+        // });
+        // console.log(filterNa);
+
+
         const TotalRpa = levels.reduce((contador, objeto) => {
-          contador[objeto.n_area] = (contador[objeto.n_area] || 0) + 1;
+          if (objeto.na != 0) {
+            contador[objeto.n_area] = (contador[objeto.n_area] || 0) + 1;
+          }
           return contador;
         }, {});
 
@@ -163,7 +172,12 @@ export class DiagnosticoObjetivosComponent implements OnInit {
         });
 
         let mapAreas = areas.map((mo, i) => {
-          let PorcentajeDiagnostic = Math.round(Number(arrSuma[mo.n_area] / TotalRpa[mo.n_area]));
+          let PorcentajeDiagnostic;
+          if (TotalRpa[mo.n_area] === undefined) {
+            PorcentajeDiagnostic = 0;
+          } else {
+            PorcentajeDiagnostic = Math.round(Number(arrSuma[mo.n_area] / TotalRpa[mo.n_area]));
+          }
           const Data = {
             n_area: mo.n_area,
             title_area: mo.name_area,
@@ -176,7 +190,6 @@ export class DiagnosticoObjetivosComponent implements OnInit {
 
         this.DataAreas = mapAreas;
         this.DataRpa = levels;
-        console.log(mapAreas);
 
       });
 
@@ -199,7 +212,7 @@ export class DiagnosticoObjetivosComponent implements OnInit {
     }
     return item.dataSourceInstance;
   }
-  
+
   ngOnInit() {
   }
 

@@ -4,6 +4,7 @@ export interface JwtResponseI {
     name: string,
     email: string,
     accessToken: string,
-    expiresIn: string
+    expiresIn: string,
+    admin:string
   }
 }

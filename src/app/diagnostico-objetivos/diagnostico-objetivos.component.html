@@ -1,5 +1,5 @@
 <app-menu></app-menu>
-<div id="app" align="center">
+<div  class="Appcontainer" id="app" align="center">
     <br>
     <br>
     <br>
@@ -66,8 +66,8 @@
             <br>
             <dx-data-grid id="gridContainer" [dataSource]="DataAreas"
                 [masterDetail]="{ enabled: true, template: 'detail' }" keyExpr="n_area" [showBorders]="true">
-                <dxi-column dataField="n_area" [width]="70" caption="N°"></dxi-column>
                 <dxi-column dataField="title_area" caption="Área" [width]="600"></dxi-column>
+                <dxi-column dataField="da" caption="Diagnóstico" [customizeText]="customizeText" [width]="100"></dxi-column>
                 <div *dxTemplate="let area of 'detail'">
                     <dx-data-grid [dataSource]="getPracticasAreas(area.key)" [showBorders]="true"
                         [columnAutoWidth]="true">
