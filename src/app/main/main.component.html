@@ -15,28 +15,19 @@
       <!-- <dxo-scrolling mode="infinite" rowRenderingMode="virtual"></dxo-scrolling> -->
       <dxo-sorting mode="none"></dxo-sorting>
       <dxo-filter-row [visible]="true"></dxo-filter-row>
-
       <dxi-column dataField="n_obj" alignment="center" caption="N°" [width]="70" cellTemplate="cellTemplateOBJ">
       </dxi-column>
-
       <dxi-column dataField="objetivo" [allowFiltering]="true" [width]="500"></dxi-column>
-
-
       <dxi-column dataField="pd" caption="Diagnóstico" [allowFiltering]="true" dataType="number" alignment="center"
         cellTemplate="cellTemplateDiagnostic" [width]="100">
       </dxi-column>
-
-
       <dxi-column dataField="notas" [width]="160" [allowFiltering]="true" [allowSorting]="false"
         cellTemplate="cellTemplateNotas"></dxi-column>
-
-
       <dxi-column dataField="NoInteresa" [width]="100" [allowFiltering]="true" [allowSorting]="false"
         cellTemplate="cellTemplateNoInteresa"></dxi-column>
-
       <!-- Template Diagnostico -->
       <div *dxTemplate="let data of 'cellTemplateDiagnostic'">
-        <button mat-raised-button  (click)="DetalleObjetivo($event,data.rowIndex)">
+        <button mat-raised-button (click)="DetalleObjetivo($event,data.rowIndex)">
           {{ data.value }}
         </button>
       </div>
@@ -102,7 +93,8 @@
       </dxo-row-dragging>
       <dxo-sorting mode="none"></dxo-sorting>
       <dxo-filter-row [visible]="false"></dxo-filter-row>
-      <dxi-column [width]="70" dataField="num" alignment="center" caption="N°"></dxi-column>
+      <dxi-column [width]="120" dataField="num" cellTemplate="cellTemplateNP" alignment="center" caption="N°">
+      </dxi-column>
       <dxi-column [width]="220" dataField="textprac" caption="Práctica" [allowFiltering]="false"></dxi-column>
       <dxi-column [width]="150" dataField="metodologia" caption="Método Ágil" alignment="center"
         [allowFiltering]="false"></dxi-column>
@@ -118,9 +110,25 @@
       <dxi-column [width]="100" dataField="pos" cellTemplate="cellTemplateNC" caption="Nivel de Contribución"
         alignment="center" [allowFiltering]="false" [allowSorting]="false" [(visible)]="isNCVisible">
       </dxi-column>
+      <!-- Template BUTTONS NUEVO -->
+      <div *dxTemplate="let data of 'cellTemplateNP'">
+        <span align="center" style="width:40%;"> {{ data.value }} </span> <br>
+        <mat-icon aria-hidden="false" (click)="DetallePractica($event,data.rowIndex)"
+          matTooltip="ver detalle de prácticas" class="icon-display" aria-label="Example home icon">info</mat-icon>
+        <mat-icon aria-hidden="false" (click)="DetallePracticaObj($event,data.rowIndex)"
+          matTooltip="ver objetivos relacionados a la práctica" class="icon-display" aria-label="Example home icon">
+          adjust</mat-icon>
+        <mat-icon aria-hidden="false" (click)="DetallePracticaDesafios($event,data.rowIndex)"
+          matTooltip="ver desafíos de práctica" class="icon-display" aria-label="Example home icon">error</mat-icon>
+        <mat-icon class="icon-display" matTooltip="ver relación de la práctica con otras prácticas"
+          (click)="ShowRpp($event,data.rowIndex)" [inline]="true">
+          {{ ArrShowRpp[data.rowIndex] ? 'visibility_off' : 'visibility'}}
+        </mat-icon>
+      </div>
       <!-- Template Nivel de aplicación -->
       <div *dxTemplate="let data of 'cellTemplateNA'">
-        <select [(ngModel)]="idArr[data.rowIndex]" (change)="onChangeNA($event.target.value,false)" matNativeControl>
+        <select [(ngModel)]="idArr[data.rowIndex]"
+          (change)="onChangeNA($event.target.value,false,data.key,$event, data.rowIndex)" matNativeControl>
           <option value="0">No Definido</option>
           <option value="1">Muy Bajo</option>
           <option value="2">Bajo</option>
@@ -128,7 +136,8 @@
           <option value="4">Alto</option>
           <option value="5">Muy alto</option>
         </select>
-        <mat-icon  *ngIf="ArrWND[data.rowIndex]" [ngStyle]="{'color':'red'}" aria-hidden="false">warning</mat-icon>
+        <mat-icon *ngIf="ArrWND[data.rowIndex]" class="icon-display" [ngStyle]="{'color':'red'}" aria-hidden="false">
+          warning</mat-icon>
       </div>
       <!-- Template Notas -->
       <div *dxTemplate="let data of 'cellTemplateNotas'">
@@ -137,14 +146,38 @@
       </div>
       <!-- Template No Aplica -->
       <div *dxTemplate="let data of 'cellTemplateNoAplica'">
-        <input value="{{data.key}}" type="checkbox" (change)="onChangeAplicable($event)" 
-        [checked]="data.value">
+        <input value="{{data.key}}" type="checkbox" (change)="onChangeAplicable($event)" [checked]="data.value">
       </div>
       <!-- Template NC -->
       <div *dxTemplate="let data of 'cellTemplateNC'">
-        <span align="center" style="width:40%;"> {{ ArrNC[data.value] }} </span>
+        <span align="center" style="width:40%;"> {{ ArrNC[data.rowIndex] }} </span>
       </div>
     </dx-data-grid>
+    <dx-popup [width]="800" [height]="500" [showTitle]="true" title="Práctica" [dragEnabled]="false"
+      [closeOnOutsideClick]="true" [(visible)]="popupPracticaDescription">
+      <div *dxTemplate="let data of 'content'">
+        <dx-scroll-view #scrollView id="scrollview" [scrollByContent]="scrollByContent" [scrollByThumb]="scrollByThumb"
+          [showScrollbar]="scrollbarMode">
+          <div *ngIf="visibledescriptionprac" id="results"></div>
+          <div align="center">
+            <!-- GRID RELACION DE PRÁCTICAS OBJETIVOS-->
+            <dx-data-grid [(visible)]="visiblegridop" wordWrapEnabled="true" [dataSource]="ArrRPO" [showBorders]="true"
+              [columnAutoWidth]="true">
+              <dxo-scrolling mode="virtual"></dxo-scrolling>
+              <dxi-column dataField="obj.clave" [width]="70" caption="N°"></dxi-column>
+              <dxi-column dataField="obj.descrip" [width]="400" caption="OBJETIVO"></dxi-column>
+            </dx-data-grid>
+            <!-- GRID RELACION DE PRÁCTICAS DESAFIOS -->
+            <dx-data-grid [(visible)]="visiblegriddp" wordWrapEnabled="true" [dataSource]="DataRdp" [showBorders]="true"
+              [columnAutoWidth]="true">
+              <dxo-scrolling mode="virtual"></dxo-scrolling>
+              <dxi-column dataField="n_desafio" [width]="70" caption="N°"></dxi-column>
+              <dxi-column dataField="desafio.desafio" [width]="500" caption="Desafío"></dxi-column>
+            </dx-data-grid>
+          </div>
+        </dx-scroll-view>
+      </div>
+    </dx-popup>
   </div>
 </div>
 <button id="butt" mat-fab (click)="scroll(objPanel)">

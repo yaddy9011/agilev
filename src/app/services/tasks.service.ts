@@ -55,6 +55,23 @@ export class TasksService {
       .pipe(map(res => res));
   }
 
+  getDescriptionPracticas(n_prac) : Observable<any>  {
+    return this.http.get(`${this.domain}/api/descriptionpracticas/${n_prac}`)
+      .pipe(map(res => res));
+  }
+
+  
+  getRdp(n_prac) : Observable<any>  {
+    return this.http.get(`${this.domain}/api/desafiospracticas/${n_prac}`)
+      .pipe(map(res => res));
+  }
+
+
+  getRpp(n_prac) : Observable<any>  {
+    return this.http.get(`${this.domain}/api/relacionpp/${n_prac}`)
+      .pipe(map(res => res));
+  }
+
 
   getobj(id) {
     return this.http.get<obj[]>(`${this.domain}/api/tasks/${id}`)
@@ -86,13 +103,13 @@ export class TasksService {
       .pipe(map(res => res));
   }
 
-  getPracticas(id,ap) {
+  getPracticas(id, ap) {
 
-    var practica="";
-    if (ap == true){
-      practica="practicasAplicables"
-    } else{
-      practica="practicas"
+    var practica = "";
+    if (ap == true) {
+      practica = "practicasAplicables"
+    } else {
+      practica = "practicas"
     }
 
     return this.http.get<Practica[]>(`${this.domain}/api/${practica}/${id}`)
@@ -105,8 +122,13 @@ export class TasksService {
       .pipe(map(res => res));
   }
 
-  updatePractica(newPractica) {
-    return this.http.put<Practica>(`${this.domain}/api/practicas/${newPractica._id}`, newPractica)
+  // updatePractica(newPractica) {
+  //   return this.http.put<Practica>(`${this.domain}/api/practicas/${newPractica._id}`, newPractica)
+  //     .pipe(map(res => res));
+  // }
+
+  updatePracticanew(arr, a): Observable<any> {
+    return this.http.put(`${this.domain}/api/practicasnew/${a}`, arr)
       .pipe(map(res => res));
   }
 
@@ -117,6 +139,11 @@ export class TasksService {
 
   updateNotas(NewDatanota) {
     return this.http.put<Practica>(`${this.domain}/api/actnotas/${NewDatanota._id}`, NewDatanota)
+      .pipe(map(res => res));
+  }
+
+  updateNA(NewData) {
+    return this.http.put<Practica>(`${this.domain}/api/actna/${NewData._id}`, NewData)
       .pipe(map(res => res));
   }
 

@@ -40,7 +40,6 @@ export class MainComponent implements OnInit {
   ShowROP = [];
   toggle = [];
   ArrNC = [];
-  ArrPP = [];
   ArrWND = [];
   panelOpenState = true;
   panelOpenStateObj = true;
@@ -67,10 +66,21 @@ export class MainComponent implements OnInit {
   selectOptions: Object;
   isNCVisible: boolean = false;
   _nobj;
+  popupPracticaDescription = false;
+
+  ArrRPO = [];
+  visiblegridop = false;
+  visibledescriptionprac = false;
+
+  DataRdp = [];
+  visiblegriddp = false;
+  ArrShowRpp = [];
+
+  ArrRPP = [];
 
   constructor(
 
-    private taskService: TasksService,
+    public taskService: TasksService,
     private CrudRopService: CrudRopService,
     private viewportScroller: ViewportScroller,
     private EvalResulService: EvalResulService) {
@@ -168,12 +178,36 @@ export class MainComponent implements OnInit {
             this.ArrNC[i] = 0;
           }
 
-          this.ArrPP[i] = arraData.n_prac;
           arrdatanew.push(arraData);
 
         }
 
         this.Practicas = arrdatanew;
+
+
+
+        //para saber si una practica esta marcada para mostrar relación
+        var srpp = this.ArrShowRpp.filter(function (task) {
+          return task == true;
+        });
+
+
+
+        //para saber tener una el n_prac_previo indicado o marcado por el usr antes de actualizar
+
+        var n_prac_previo = 0;
+        if (srpp.length > 0) {
+          const v = this.ArrShowRpp.findIndex((item) => item === true);
+          n_prac_previo = this.Practicas[v].n_prac;
+          console.log(n_prac_previo);
+        }
+
+
+
+
+
+
+        // para ordenamiento
 
         this.orderNA();
         this.OrderAplicables();
@@ -219,7 +253,24 @@ export class MainComponent implements OnInit {
         // }
 
         var arwnd = [];
+        var asrpp = [];
+        var arpp = [];
+
+        var arppNew = [];
+        arppNew = this.ArrRPP;
+        var asrppNew = [];
+        asrppNew = this.ArrShowRpp;
+
         var nass = this.Practicas.map(function (num, k) {
+
+          if (srpp.length > 0) {
+            asrpp[k] = asrppNew[k];
+          } else {
+            asrpp[k] = false;
+          }
+
+          arpp[k] = false;
+
           if (num.nivelapli == 0) {
             arwnd[k] = true;
           } else {
@@ -227,13 +278,28 @@ export class MainComponent implements OnInit {
           }
           return num.nivelapli;
         });
+
         this.idArr = nass;
         this.ArrWND = arwnd;
+        this.ArrShowRpp = asrpp;
+        this.ArrRPP = arpp;
+
+        if (srpp.length > 0) {
+          this.rpp(n_prac_previo);
+        }
+
+
+        var sr = this.ShowROP.filter(function (task) {
+          return task == true;
+        });
+
+        if (sr.length > 0) {
+          this.RelacionOP(this._nobj);
+        }
+
         console.log(this.Practicas.length)
-        //console.log(this.ArrWND);
       });
   }
-
 
   OrdenamientoPracticas(ArrPrac) {
     var NOaplicables = ArrPrac.filter(function (task) {
@@ -309,50 +375,81 @@ export class MainComponent implements OnInit {
 
     this.taskService.updateTask(newTask)
       .subscribe(res => {
-      })
-  }
-
-  updateStatuspracticas(pra: Practica, pnew: number) {
-    var newActualizacion = {
-      _id: pra._id,
-      id_usr: pra.id_usr,
-      id_obj: pra.id_prac,
-      pos: pnew,
-      nivelapli: pra.nivelapli,
-      desafio: pra.desafio
-    };
-    this.taskService.updatePractica(newActualizacion)
-      .subscribe(res => {
       });
   }
 
-  onChangeNA(deviceValue, desaf) {
-    for (var i = 0; i < this.Practicas.length; i++) {
-      // console.log(this.Practicas[i].n_prac + " na : " + this.idArr[i]);
-      this.Practicas[i].nivelapli = this.idArr[i];
-
-      if (this.idArr[i] == 0) {
-        this.ArrWND[i] = true;
-      } else {
-        this.ArrWND[i] = false;
-      }
-      //this.Practicas[i].desafio = this.idPracDesa[i];
-      this.updateStatuspracticas(this.Practicas[i], i);
-    }
-
-    this.GetDiagnosticLive();
+  // updateStatuspracticas(pra: Practica, pnew: number, vna, dv) {
 
 
-    // if (desaf == false) {
-    //   this.GetDiagnosticLive();
-    // }
-
-    if (deviceValue == 5) {
-      this.getPracticas(this.id_usr, this.checked);
-    }
+  //   var newActualizacion = {
+  //     _id: pra._id,
+  //     id_usr: pra.id_usr,
+  //     id_obj: pra.id_prac,
+  //     pos: pnew,
+  //     nivelapli: pra.nivelapli,
+  //     desafio: pra.desafio
+  //   };
 
 
 
+  //   this.taskService.updatePractica(newActualizacion)
+  //     .subscribe(res => {
+  //       //console.log(res);
+  //       //this.GridPrac.instance.refresh();
+  //       // if (vna == 1) {
+  //       //   this.GetDiagnosticLive();
+  //       // }
+  //       // if (dv == 5) {
+  //       //   this.getPracticas(this.id_usr, this.checked);
+  //       // }
+  //     });
+
+
+
+  //   // this.taskService.updatePractica(newActualizacion)
+  //   //   .subscribe(
+  //   //     data => {
+  //   //         console.log(data)
+  //   //     },
+  //   //     err => {
+  //   //         console.log(err)
+  //   //     },
+  //   //     () => {
+  //   //         console.log("Complete function triggered.")
+  //   //     }
+  //   //   );
+
+  // }
+
+  onChangeNA(deviceValue, desaf, _id, e, o) {
+
+    var ActPractica = {
+      _id: _id,
+      na: deviceValue
+    };
+
+    this.taskService.updateNA(ActPractica)
+      .subscribe(res => {
+        console.log(res);
+        var sr = this.ShowROP.filter(function (task) {
+          return task == true;
+        });
+        if (sr.length > 0) {
+          this.RelacionOP(this._nobj);
+        }
+        let toIndex = _id;
+        const b = this.Practicas.findIndex((item) => item._id === toIndex);
+        if (deviceValue == 0) {
+          this.ArrWND[b] = true;
+        } else {
+          this.ArrWND[b] = false;
+        }
+
+        if (deviceValue >= 5 || this.Practicas[o].nivelapli >= 5) {
+          this.getPracticas(this.id_usr, this.checked);
+        }
+        this.GetDiagnosticLive();
+      });
   }
 
   onChangeAplicable(e) {
@@ -363,6 +460,12 @@ export class MainComponent implements OnInit {
     this.taskService.updateAplicable(ActPractica)
       .subscribe(res => {
         this.getPracticas(this.id_usr, this.checked);
+        var sr = this.ShowROP.filter(function (task) {
+          return task == true;
+        });
+        if (sr.length > 0) {
+          this.RelacionOP(this._nobj);
+        }
       });
   }
 
@@ -392,7 +495,6 @@ export class MainComponent implements OnInit {
       _id: id,
       notas: e.target.value
     };
-
     this.taskService.updateNotasObj(actNotas)
       .subscribe(res => {
       });
@@ -401,30 +503,13 @@ export class MainComponent implements OnInit {
   EventshowROP(e, i, no) {
     this._nobj = no;
     this.viewportScroller.scrollToAnchor("SlideTo");
-    var sr = this.ShowROP.filter(function (task) {
-      return task == true;
-    });
-    if (sr.length >= 1) {
-      if (this.ShowROP[i] == false) {
-        var x = this.ShowROP.map(function (num) {
-          return num = false;
-        });
-        this.ShowROP = x;
-      } else {
-
-        this.ShowROP[i] = !this.ShowROP[i];
-      }
-    } else {
-      this.ShowROP[i] = !this.ShowROP[i];
-    }
-
-    //this.ShowROP[i] = !this.ShowROP[i];
-
+    this.ShowROP[i] = !this.ShowROP[i];
     if (this.ShowROP[i] == true) {
+      var r_srow_new = this.ShowROP.map(function (p, j) { return p = false; });
+      this.ShowROP = r_srow_new;
+      this.ShowROP[i] = true;
       this.isNCVisible = true;
-
       this.RelacionOP(no);
-
       // this.CrudRopService.GetRop()
       //   .subscribe(rop => {
       //     var arrdatanew = [];
@@ -470,8 +555,6 @@ export class MainComponent implements OnInit {
       //     // this.GridPrac.onRowPrepared;
       //     this.GridPrac.instance.refresh();
       //   });
-
-
     } else {
       this.isNCVisible = false;
       var dobles = this.toggle.map(function (num) {
@@ -489,18 +572,16 @@ export class MainComponent implements OnInit {
         var arrdatanew = [];
         var arrPPnew = [];
         var ncarr = [];
-
         var dobles = this.toggle.map(function (num) {
           return num = false;
         });
         this.toggle = dobles;
-
         arrdatanew = this.toggle;
-        arrPPnew = this.ArrPP;
+        arrPPnew = this.Practicas;
         rop.forEach(function (value) {
           if (value.n_obj == no) {
             let toIndex = value.n_prac.valueOf();
-            const b = arrPPnew.findIndex((item) => item === toIndex);
+            const b = arrPPnew.findIndex((item) => item.n_prac === toIndex);
             arrdatanew[b] = true;
             ncarr[b] = value.nivel_contribucion;
           }
@@ -544,20 +625,32 @@ export class MainComponent implements OnInit {
       this.updateStatusObj(this.objs[i], i);
     }
 
-
     this.GetDiagnosticLive();
     //this.clientGrid.instance.refresh();
-
-
     //   var objss = this.objs.map(function (task, index, array) {
     //     return task.pos;
     //   });
     //  console.log(objss);
-
-
   }
 
   onReorderPrac(e) {
+
+    var n_prac_previo = 0;
+    var srpp = this.ArrShowRpp.filter(function (task) {
+      return task == true;
+    });
+    if (srpp.length > 0) {
+      const v = this.ArrShowRpp.findIndex((item) => item === true);
+      n_prac_previo = this.Practicas[v].n_prac;
+      console.log(n_prac_previo);
+    }
+    if (srpp.length > 0) {
+      this.rpp(n_prac_previo);
+      console.log("entreeee");
+    }
+
+
+
     var visibleRows = e.component.getVisibleRows(),
       toIndex = this.Practicas.indexOf(visibleRows[e.toIndex].data),
       fromIndex = this.Practicas.indexOf(e.itemData);
@@ -565,31 +658,152 @@ export class MainComponent implements OnInit {
     this.Practicas.splice(toIndex, 0, e.itemData);
     this.idArr.splice(fromIndex, 1);
     this.idArr.splice(toIndex, 0, e.itemData.nivelapli);
+    var newp = [];
     for (var i = 0; i < this.Practicas.length; i++) {
-      this.updateStatuspracticas(this.Practicas[i], i);
+      var newActualizacion = {
+        _id: this.Practicas[i]._id,
+        id_usr: this.Practicas[i].id_usr,
+        id_obj: this.Practicas[i].id_prac,
+        pos: i,
+        nivelapli: this.Practicas[i].nivelapli,
+        desafio: this.Practicas[i].desafio
+      };
+      newp[i] = newActualizacion
     }
-
-    // this.OrdenamientoPracticas(this.Practicas);
-
-    this.getPracticas(this.id_usr, false);
 
     var sr = this.ShowROP.filter(function (task) {
       return task == true;
     });
+
     if (sr.length > 0) {
       this.RelacionOP(this._nobj);
     }
-    // var nass = this.Practicas.map(function (num) {
-    //   return num.nivelapli;
+
+
+    var arwnd = [];
+    var nass = newp.map(function (num, k) {
+      if (num.nivelapli == 0) {
+        arwnd[k] = true;
+      } else {
+        arwnd[k] = false;
+      }
+      return num.nivelapli;
+    });
+
+    this.idArr = nass;
+    this.ArrWND = arwnd;
+
+
+    this.taskService.updatePracticanew(newp, "ok")
+      .subscribe(res => {
+        console.log("ok termine");
+      });
+
+
+    // for (var i = 0; i < this.Practicas.length; i++) {
+    //   this.updateStatuspracticas(this.Practicas[i], i, 0, 0);
+    // }
+
+    // async function printFiles(prax, t) {
+
+    //   for await (const p of prax) {
+
+    //     var newActualizacion = {
+    //       _id: p._id,
+    //       id_usr: p.id_usr,
+    //       id_obj: p.id_prac,
+    //       pos: p.pos,
+    //       nivelapli: p.nivelapli,
+    //       desafio: p.desafio
+    //     };
+
+
+    //      t.updatePractica(newActualizacion)
+    //       .subscribe(res => {
+    //         console.log(res);
+    //       });
+
+
+    //   }
+    // }
+
+    // printFiles(this.Practicas, this.taskService);
+
+    // for (const p of this.Practicas) {
+
+    //   var newActualizacion = {
+    //     _id: p._id,
+    //     id_usr: p.id_usr,
+    //     id_obj: p.id_prac,
+    //     pos: p.pos,
+    //     nivelapli: p.nivelapli,
+    //     desafio: p.desafio
+    //   };
+
+    //   this.taskService.updatePractica(newActualizacion)
+    //     .subscribe(res => { 
+    //       console.log(res);
+    //     });
+    // }
+
+
+
+
+
+    // const forLoop = async _ => {
+    //   console.log('Start')
+    //   for (let index = 0; index < this.Practicas.length; index++) {
+    //     const numFruit = await this.updateStatuspracticas(this.Practicas[index], index);
+    //     console.log(numFruit)
+    //   }
+    //   console.log('End')
+    // }
+
+    // forLoop(0)
+
+    // this.Practicas.forEach(async p => {
+    //   const response = await this.updateStatuspracticas(p, p.pos);
+    //   console.log(response);
     // });
-    // this.idArr = nass;
-    // this.GridPrac.instance.refresh();
+
+
+
+
+
+    // this.getPracticas(this.id_usr, false);
+
+
+
+    // var async = require('async');
+    // async.eachSeries(this.Practicas, function (rec, callback) {
+    //   console.log(rec);
+    //   callback(this.updateStatuspracticas(rec,rec.pos));
+    //   console.log("ok");
+    // }, function (err) {
+    //   console.log("funciono");
+    // });
+
+
+
+
+
+    // if (this.onRop(e) == true) {
+
+    //   this.getPracticas(this.id_usr, false);
+
+    //   console.log("ok termine");
+
+    //   var sr = this.ShowROP.filter(function (task) {
+    //     return task == true;
+    //   });
+    //   if (sr.length > 0) {
+    //     this.RelacionOP(this._nobj);
+    //   }
+    // }
   }
 
   DetalleObjetivo(e, n) {
     this.popupVisible = true;
-    console.log(n);
-    console.log(this.objs[n].n_obj);
     let n_ob = this.objs[n].n_obj;
     var arrPPnew = [];
     this.DataRop.forEach(function (value) {
@@ -650,13 +864,92 @@ export class MainComponent implements OnInit {
 
   onRowPrepared(e) {
     if (e.data) {
-      const x = this.ArrPP.findIndex((item) => item === e.data.n_prac);
+      const x = this.Practicas.findIndex((item) => item.n_prac === e.data.n_prac);
       if (this.toggle[x] == true) {
         e.rowElement.style.backgroundColor = "#81F79F";
+      }
+      if (this.ArrRPP[x] == true) {
+        // console.log(x +" : " + e.data.n_prac);
+        e.rowElement.style.backgroundColor = "#F3F781";
       }
     }
   }
 
+  DetallePractica(e, i) {
+    this.popupPracticaDescription = true;
+    this.visibledescriptionprac = true;
+    this.visiblegridop = false;
+    this.visiblegriddp = false;
+    var n_prac = this.Practicas[i].n_prac;
+    this.taskService.getDescriptionPracticas(n_prac)
+      .subscribe(res => {
+        var xmlString = res[0].description,
+          results = document.getElementById("results")
+        results.innerHTML = xmlString;
+      });
+  }
+
+  DetallePracticaObj(e, i) {
+    this.popupPracticaDescription = true;
+    this.visibledescriptionprac = false;
+    this.visiblegriddp = false;
+    this.CrudRopService.GetRop()
+      .subscribe(rop => {
+        this.visiblegridop = true;
+        var n_prac = this.Practicas[i].n_prac;
+        var rlo = rop.filter(function (task) {
+          return task.n_prac == n_prac;
+        });
+        this.ArrRPO = rlo;
+      });
+  }
+
+  DetallePracticaDesafios(e, i) {
+    var n_prac = this.Practicas[i].n_prac;
+    this.popupPracticaDescription = true;
+    this.visiblegriddp = true;
+    this.visibledescriptionprac = false;
+    this.visiblegridop = false;
+    this.taskService.getRdp(n_prac)
+      .subscribe(rdp => {
+        this.DataRdp = rdp;
+      });
+  }
+
+
+  ShowRpp(e, i) {
+    this.ArrShowRpp[i] = !this.ArrShowRpp[i];
+    if (this.ArrShowRpp[i] == true) {
+      var r_spp_new = this.ArrShowRpp.map(function (p, j) { return p = false; });
+      this.ArrShowRpp = r_spp_new;
+      this.ArrShowRpp[i] = true;
+      var n_prac = this.Practicas[i].n_prac;
+      this.rpp(n_prac);
+    } else {
+      var sr = this.ArrRPP.filter(function (task) {
+        return task == false;
+      });
+      this.ArrRPP = sr;
+      this.GridPrac.instance.refresh();
+    }
+  }
+
+  rpp(n_prac) {
+    var practicas = [];
+    practicas = this.Practicas;
+    this.taskService.getRpp(n_prac)
+      .subscribe(rpp => {
+        var r_pp_final = practicas.map(function (p, j) {
+          var r;
+          var indexP2 = rpp.find((item) => item.n_prac_2 === p.n_prac);
+          if (indexP2) { r = true; } else { r = false; }
+          // console.log(p.n_prac + " : " + r);
+          return r;
+        });
+        this.ArrRPP = r_pp_final;
+        this.GridPrac.instance.refresh();
+      });
+  }
 
 }
 
