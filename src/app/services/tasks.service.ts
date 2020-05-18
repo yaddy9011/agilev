@@ -147,6 +147,11 @@ export class TasksService {
       .pipe(map(res => res));
   }
 
+  updateDesafio(NewData) {
+    return this.http.put<Practica>(`${this.domain}/api/actdesafio/${NewData._id}`, NewData)
+      .pipe(map(res => res));
+  }
+
   updateNoInteresa(newData) {
     return this.http.put<obj>(`${this.domain}/api/ObjetivosNoInteresan/${newData._id}`, newData)
       .pipe(map(res => res));

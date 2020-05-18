@@ -14,7 +14,9 @@ import {DiagnosticoObjetivosComponent} from './diagnostico-objetivos/diagnostico
 import {DiagnosticoAreasComponent} from './diagnostico-areas/diagnostico-areas.component';
 import {EquipoAgileComponent} from './equipo-agile/equipo-agile.component';
 import {ValidEmailComponent} from './valid-email/valid-email.component';
-
+import {InfoAcercaDeComponent} from './info-acerca-de/info-acerca-de.component';
+import {InfoPasosRoadmapComponent} from './info-pasos-roadmap/info-pasos-roadmap.component';
+import {InfoPracticasComponent} from './info-practicas/info-practicas.component';
 
 const routes: Routes = [
   {
@@ -72,6 +74,21 @@ const routes: Routes = [
   {
     path: 'ValidEmail/:idusr',
     component: ValidEmailComponent
+  }
+  ,
+  {
+    path: 'InfoAcercaDe',
+    component: InfoAcercaDeComponent
+  }
+  ,
+  {
+    path: 'InfoPasosRoadmap',
+    component: InfoPasosRoadmapComponent
+  }
+  ,
+  {
+    path: 'InfoPracticas',
+    component: InfoPracticasComponent
   }
 ];
 

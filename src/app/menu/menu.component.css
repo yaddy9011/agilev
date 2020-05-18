@@ -1,12 +1,13 @@
 #menu-tool{
   background-color: var(--first-color);
   color:var(--first-letra);
-  position: fixed;
+  /* position: absolute; */
   z-index: 1;
+  width: 100%;
   }
   
-  #menu_new{
+  /* #menu_new{
     background-color: var(--first-color);
     color:var(--first-letra);
-  }
+  } */
 

@@ -32,6 +32,8 @@
     "@syncfusion/ej2-angular-buttons": "^17.4.51",
     "@syncfusion/ej2-angular-charts": "*",
     "@syncfusion/ej2-angular-grids": "*",
+    "ag-grid-angular": "^23.1.0",
+    "ag-grid-community": "^23.1.0",
     "angular-animate": "^1.7.8",
     "angular-sortablejs": "^2.7.0",
     "bootstrap": "^4.3.1",

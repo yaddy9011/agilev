@@ -1,6 +1,9 @@
-.contenthome {
+/* .contenthome {
     display:table;
    }
    .col1, .col2, .col3 {
     display:table-cell;
-   }
+   } */
+   #yes{
+    background-color: var(--first-color);
+  }

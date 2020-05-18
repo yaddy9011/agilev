@@ -8,6 +8,7 @@
     background: white;
     border-radius: 4px;
     overflow: hidden;
+    border-color: black;
   }
   
   .example-box {
@@ -41,7 +42,6 @@
     font-size: 14px;
   }
 
-  
   .cdk-drag-preview {
     box-sizing: border-box;
     border-radius: 4px;
@@ -64,18 +64,6 @@
   
   .example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-  }
-
-  .mheader{
-    background-color: var(--first-color);
-    background: var(--first-color) !important;
-    color: var(--first-letra)!important;
-  }
-
-  .mheader:hover {
-    background: var(--second-color);
-    background-color: var(--second-color) !important;
-    color: var(--second-letra)!important;
   }
 
   .example-box.cdk-drag-disabled {
@@ -102,4 +90,138 @@
 .icon-display {
   /* transform: scale(1); */
   font-size: 15px;
+}
+
+.dragCursor {
+  margin-right: 16px;
+  cursor: move;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+  0 8px 10px 1px rgba(0, 0, 0, 0.14),
+  0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drop-list-dragging .mat-row:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+
+}
+
+
+
+mat-header-cell{
+  display:flex !important;
+  font-weight: bold;
+  /* background-color:rebeccapurple; */
+  justify-content:center!important;
+
+} 
+
+/* .mat-cell {
+  border-right: 1px solid grey;
+  border-spacing: 0 8px !important;
+} */
+
+
+/* #tableprac{ 
+  border-color: black;
+  width:75%;
+} */
+
+
+
+
+
+/* .mat-header-row {
+  
+  justify-content:center!important;
+  
+  border-color: black;
+} */
+
+
+.mat-column-n_obj {
+  flex: 0 0 150px;
+  /* background-color: blueviolet; */
+}
+
+.mat-column-objetivo {
+  flex: 0 0 45%;
+  /* background-color:burlywood;  */
+  text-align: justify;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+
+.mat-column-pd {
+  flex: 0 0 15%;
+/* background-color: red;  */
+  justify-content:center;
+}
+
+
+.mat-column-notas {
+  flex: 0 0 12%;
+ /* background-color: yellowgreen;  */
+  justify-content:center;
+}
+
+.mat-column-NoInteresa {
+  flex: 0 0 15%;
+ /* background-color: orchid; */
+  justify-content:center;
+}
+
+.mat-column-n_prac {
+  flex: 0 0 15%;
+  /* background-color: blueviolet; */
+}
+
+.mat-column-textprac {
+  flex: 0 0 23%;
+  /* background-color:burlywood; */
+  text-align: justify;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+.mat-column-metodologia {
+  flex: 0 0 10%;
+   /* background-color: red; */
+  justify-content:center;
+}
+
+.mat-column-na {
+  flex: 0 0 13%;
+  /* background-color: goldenrod;  */
+  justify-content:center;
+}
+
+.mat-column-aplicable {
+  flex: 0 0 10%;
+  /* background-color: orchid;   */
+  justify-content:center;
+}
+
+.mat-column-desafio{
+  flex: 0 0 10%;
+ /* background-color: orchid;   */
+  justify-content:center;
+}
+
+.mat-column-nc{
+ flex: 0 0 8%;
+  justify-content:center;
+}
+
+.hidden-row {
+  display: none;
 }

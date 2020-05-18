@@ -31,7 +31,7 @@ export class ForgotPasswordComponent implements OnInit {
       this.authService.requestReset(this.RequestResetForm.value).subscribe(
         data => {
           this.RequestResetForm.reset();
-          this.successMessage = "El enlace para restablecer contraseña se envío a su correo electrónico con éxito.";
+          this.successMessage = "El enlace para restablecer su contraseña se envío a su correo electrónico con éxito.";
           setTimeout(() => {
             this.successMessage = null;
             //this.router.navigate(['sign-in']);

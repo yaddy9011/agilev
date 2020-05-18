@@ -3,73 +3,56 @@
     <button mat-icon-button [matMenuTriggerFor]="menu">
       <mat-icon>menu</mat-icon>
     </button>
-    <mat-menu #menu="matMenu" [overlapTrigger]="false">
 
+    <mat-menu #menu="matMenu" [overlapTrigger]="false">
       <button mat-menu-item routerLink="/home">
         <mat-icon>home</mat-icon><span>Inicio</span>
       </button>
-
       <button *ngIf="!isShowprac" mat-menu-item routerLink="/main">
         <mat-icon>map</mat-icon><span>Roadmap++</span>
       </button>
-
       <button *ngIf="!isShoweval" mat-menu-item routerLink="/eval">
         <mat-icon>show_chart</mat-icon><span>Evalúa tus prácticas ágiles</span>
       </button>
-
       <button *ngIf="!isShowGo" mat-menu-item routerLink="/Gobjetivos">
         <mat-icon>edit</mat-icon><span>Gestión de Objetivos</span>
       </button>
-
       <button *ngIf="!isShowGp" mat-menu-item routerLink="/Gpracticas">
         <mat-icon>edit</mat-icon><span>Gestión de Prácticas</span>
       </button>
-
       <button *ngIf="!isShowROP" mat-menu-item routerLink="/RelacionOP">
         <mat-icon>edit</mat-icon><span>Relacion Prácticas-Objetivos</span>
       </button>
-
       <button routerLink="/login" *ngIf="!isShowLog" mat-menu-item>
         <mat-icon>launch</mat-icon><span>Inicia sesión</span>
       </button>
-
       <button routerLink="/registro" *ngIf="!isShowReg" mat-menu-item>
         <mat-icon>person_add</mat-icon><span>Regístrate</span>
       </button>
-
       <!-- <button routerLink="/home" mat-menu-item>
         <mat-icon>location_city</mat-icon><span>Contacto</span>
       </button> -->
-
       <button routerLink="/EquipoAgile" mat-menu-item>
-        <mat-icon>mood</mat-icon><span>Equipo Agile Roadmap++</span>
+        <mat-icon>group</mat-icon><span>Equipo Agile Roadmap++</span>
       </button>
-
+      <button mat-menu-item [matMenuTriggerFor]="vertebrates">
+        <mat-icon>my_location</mat-icon><span>AGILE ROADMAP++</span>
+      </button>
       <button *ngIf="!isShowLogo" mat-menu-item (click)='salir($event)'>
         <mat-icon>exit_to_app</mat-icon><span>Cerrar Sesión</span>
       </button>
-
-      <!-- <button mat-menu-item [matMenuTriggerFor]="vertebrates">Vertebrates</button> -->
-
     </mat-menu>
-    <!-- 
     <mat-menu #vertebrates="matMenu">
-      <button mat-menu-item>Birds</button>
-      <button mat-menu-item>Mammals</button>
+      <button routerLink="/InfoAcercaDe" mat-menu-item>¿Qué es un Agile Roadmap?</button>
+      <button routerLink="/InfoPasosRoadmap" mat-menu-item>Pasos para elaborar un Roadmap</button>
+      <button routerLink="/InfoPracticas" mat-menu-item>Prácticas Ágiles de Roadmap++</button>
     </mat-menu>
- -->
+
   </span>
   <span class="fill-remaining-space">
     &nbsp;&nbsp;&nbsp;&nbsp;
     {{ titlePage }}
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   </span>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   <!-- <div  align="center" style="width:15%;">
   <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
     <mat-button-toggle id="menu_new" value="bold">Entrar</mat-button-toggle>

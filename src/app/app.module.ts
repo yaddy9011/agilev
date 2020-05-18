@@ -52,7 +52,11 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import { GridModule } from '@syncfusion/ej2-angular-grids';
 import { EquipoAgileComponent } from './equipo-agile/equipo-agile.component';
 import { ValidEmailComponent } from './valid-email/valid-email.component';
-
+import { AgGridModule } from 'ag-grid-angular';
+import { InfoAcercaDeComponent } from './info-acerca-de/info-acerca-de.component';
+import { InfoPasosRoadmapComponent } from './info-pasos-roadmap/info-pasos-roadmap.component';
+import { InfoPracticasComponent } from './info-practicas/info-practicas.component';
+import {MatGridListModule} from '@angular/material/grid-list';
 
 @NgModule({
   declarations: [
@@ -72,7 +76,10 @@ import { ValidEmailComponent } from './valid-email/valid-email.component';
     DiagnosticoObjetivosComponent,
     DiagnosticoAreasComponent,
     EquipoAgileComponent,
-    ValidEmailComponent
+    ValidEmailComponent,
+    InfoAcercaDeComponent,
+    InfoPasosRoadmapComponent,
+    InfoPracticasComponent
   ],
   entryComponents: [],
   imports: [
@@ -109,7 +116,9 @@ import { ValidEmailComponent } from './valid-email/valid-email.component';
     MatButtonToggleModule,
     MatSlideToggleModule,
     MatTooltipModule,
-    GridModule
+    GridModule,
+    MatGridListModule,
+    AgGridModule.withComponents([])
   ],
   providers: [AuthService, TasksService, AppGlobals],
   bootstrap: [AppComponent]

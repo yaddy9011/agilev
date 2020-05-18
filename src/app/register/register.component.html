@@ -1,13 +1,13 @@
 <app-menu></app-menu>
-<div  class="Appcontainer" align="center">
+<div class="Appcontainer" align="center">
   <br>
   <br>
   <br>
-  <mat-card class="example-card">
-    <mat-card-header id="mat-header">
-      <div mat-card-avatar class="example-header-image"></div>
-      <mat-card-title>Formulario de registro</mat-card-title>
-      <mat-card-subtitle>Llena los datos que solicita el formulario</mat-card-subtitle>
+  <mat-card  style="max-width: 60%;">
+    <mat-card-header >
+      <mat-card-title>Registrar una nueva cuenta
+      </mat-card-title>
+      <mat-card-subtitle>¿Ya está registrado? <a routerLink="/login">Acceda a su cuenta</a> </mat-card-subtitle>
     </mat-card-header>
     <br>
     <form #frmRegister="ngForm" class="example-form" (ngSubmit)="onRegister(frmRegister)">
@@ -79,9 +79,8 @@
   </div>
 </dx-popup>
 
-<dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [position]="{ of: '#frmRegister' }" [(visible)]="loadingVisible"
-  [showIndicator]="true" [showPane]="true" [shading]="true" [closeOnOutsideClick]="false">
+<dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [position]="{ of: '#frmRegister' }"
+  [(visible)]="loadingVisible" [showIndicator]="true" [showPane]="true" [shading]="true" [closeOnOutsideClick]="false">
 </dx-load-panel>
-
 
 <app-footer></app-footer>

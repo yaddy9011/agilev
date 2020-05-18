@@ -1,0 +1,73 @@
+/* You can add global styles to this file, and also import other style files */
+/* @import '~@angular/material/prebuilt-themes/indigo-pink.css'; */
+@import '../node_modules/@angular/material/prebuilt-themes/indigo-pink.css';
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
+
+/* @import '../node_modules/@syncfusion/ej2-base/styles/material.css';  
+@import '../node_modules/@syncfusion/ej2-angular-grids/styles/material.css';
+
+@import "../node_modules/ag-grid-community/dist/styles/ag-grid.css";
+@import "../node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css"; */
+
+
+/* html, body { height: 200%;  width: 200%; } */
+
+
+
+html {   height: 100%;  width: 100%;}
+
+body {   margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; height: 100%;  width: 100%; }
+
+/* body{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+} */
+/* 
+.example-card {
+    max-width: 90%;
+  }
+
+  .Appcontainer {
+    min-height: calc(100vh - 100px - 50px);
+    max-width: 100%;
+  }
+    
+  .maincontent {
+  width: 100%;
+height: 100%;
+  }
+    
+#mat-header{
+  background-color: var(--first-color);
+}
+
+#mat-button{
+  background-color: var(--first-color);
+}
+
+:root {
+  --first-color: #4690b0;
+  --second-color:#ff9940;
+  --first-letra: #000000;
+  --second-letra: #fff;
+}  */
+
+
+/* 
+
+  --first-color: #03A9F4;
+  --second-color:#0277BD;
+  --first-letra: #000000;
+  --second-letra: #fff;
+
+#4690b0 -->> AZUL BAJO
+#00568c -->> AZUL ALTO 
+
+#ff5757 -->> ROJO CORAL
+#ff9940 -->>  NARANJA
+#ffcc31 -->>MOSTAZA
+
+*/
+

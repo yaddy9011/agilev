@@ -1,189 +1,402 @@
-<app-menu></app-menu>
-<div class="Appcontainer" align="center">
-  <br>
-  <br>
-  <br>
-  <div #objPanel id="objPanel">
-    <h6 class="text-uppercase font-weight-bold">OBJETIVOS</h6>
-    <mat-checkbox class="matchek" (change)="OcultarObjNI($event)" [(ngModel)]="checkedObjetivosNI">Ocultar Objetivos que
-      no interesan</mat-checkbox>
+<div class="maincontent">
+  <app-menu></app-menu>
+  <div class="Appcontainer" align="center">
     <br>
-    <dx-data-grid #clientGrid id="gridContainer" keyExpr="_id" [dataSource]="objs" [showBorders]="true"
-      wordWrapEnabled="true">
-      <dxo-row-dragging [allowReordering]="true" [onReorder]="onReorderObj" [showDragIcons]="showDragIcons">
-      </dxo-row-dragging>
-      <!-- <dxo-scrolling mode="infinite" rowRenderingMode="virtual"></dxo-scrolling> -->
-      <dxo-sorting mode="none"></dxo-sorting>
-      <dxo-filter-row [visible]="true"></dxo-filter-row>
-      <dxi-column dataField="n_obj" alignment="center" caption="N°" [width]="70" cellTemplate="cellTemplateOBJ">
-      </dxi-column>
-      <dxi-column dataField="objetivo" [allowFiltering]="true" [width]="500"></dxi-column>
-      <dxi-column dataField="pd" caption="Diagnóstico" [allowFiltering]="true" dataType="number" alignment="center"
-        cellTemplate="cellTemplateDiagnostic" [width]="100">
-      </dxi-column>
-      <dxi-column dataField="notas" [width]="160" [allowFiltering]="true" [allowSorting]="false"
-        cellTemplate="cellTemplateNotas"></dxi-column>
-      <dxi-column dataField="NoInteresa" [width]="100" [allowFiltering]="true" [allowSorting]="false"
-        cellTemplate="cellTemplateNoInteresa"></dxi-column>
-      <!-- Template Diagnostico -->
-      <div *dxTemplate="let data of 'cellTemplateDiagnostic'">
-        <button mat-raised-button (click)="DetalleObjetivo($event,data.rowIndex)">
-          {{ data.value }}
-        </button>
-      </div>
-      <!-- Template Button ver prácticas relacionadas -->
-      <div *dxTemplate="let data of 'cellTemplateOBJ'; let itemIndex = index">
-        <!-- <span style="background-color:lightblue"> OBJ {{ data.value }} </span> -->
-        <span> OBJ {{ data.value }} </span>
-        <button style="width:10%;height:2%;" mat-icon-button matTooltip="Ver prácticas relacionadas"
-          (click)="EventshowROP($event,data.rowIndex,data.value)" [attr.aria-label]="'Hide password'"
-          [attr.aria-pressed]="hide">
-          <mat-icon color="primary" [inline]="true">{{ ShowROP[data.rowIndex] ? 'visibility_off' : 'visibility'}}
-          </mat-icon>
-        </button>
-      </div>
-      <!-- Template Notas -->
-      <div *dxTemplate="let data of 'cellTemplateNotas'">
-        <textarea style="border:solid 1px rgb(194, 190, 190);" matInput (change)="ChangeNotasObj($event,data.key)"
-          value="{{data.value}}"></textarea>
-      </div>
-      <!-- Template NoInteresa -->
-      <div *dxTemplate="let data of 'cellTemplateNoInteresa'">
-        <input value="{{data.key}}" type="checkbox" (change)="ChangeCheckNoInteresa($event)" [checked]="data.value">
-      </div>
-    </dx-data-grid>
-    <dx-popup [width]="800" [height]="500" [showTitle]="true" title="Prácticas Relacionadas" [dragEnabled]="false"
-      [closeOnOutsideClick]="true" [(visible)]="popupVisible">
-      <div *dxTemplate="let data of 'content'">
-        <dx-scroll-view #scrollView id="scrollview" [scrollByContent]="scrollByContent" [scrollByThumb]="scrollByThumb"
-          [showScrollbar]="scrollbarMode">
+    <mat-accordion>
+      <!-- OBJETIVOS -->
+      <div #objPanel id="objPanel">
+        <mat-expansion-panel style="width:96%;" [expanded]="panelOpenStateObj">
+          <mat-expansion-panel-header class="mheader">
+            <mat-panel-title>
+              OBJETIVOS
+            </mat-panel-title>
+          </mat-expansion-panel-header>
           <div>
-            <dx-data-grid wordWrapEnabled="true" [dataSource]="DatasourseRop" [showBorders]="true"
-              [columnAutoWidth]="true">
-              <dxo-scrolling mode="virtual"></dxo-scrolling>
-              <dxi-column dataField="n_prac" [width]="70" caption="N°"></dxi-column>
-              <dxi-column dataField="Descrip_prac" [width]="300" caption="Práctica"></dxi-column>
-              <dxi-column dataField="na_t" [width]="150" caption="Nivel de aplicación">
-              </dxi-column>
-              <dxi-column dataField="nc_t" [width]="150" caption="Nivel de contribución">
-              </dxi-column>
-            </dx-data-grid>
+            <br>
+            <mat-checkbox class="matchek" (change)="OcultarObjNI($event)" [(ngModel)]="checkedObjetivosNI">Ocultar
+              Objetivos que no interesan</mat-checkbox>
+            <br>
+            <mat-table style="width:90% !important;" class="mat-elevation-z8" #table [dataSource]="objs" cdkDropList
+              (cdkDropListDropped)="dropObjetivos($event)" cdkDropListData="objs" [cdkDropListDisabled]="dragDisabled">
+
+              <ng-container matColumnDef="n_obj" sticky>
+                <mat-header-cell *matHeaderCellDef>
+                  <div>
+                    <br>
+                    #
+                    <br>
+                    <mat-form-field style="width:80px !important">
+                      <input matInput class="form-field" (keyup)="FilterTypeTextObj($event.target.value,1)"
+                        [(ngModel)]="InputStringnobj" placeholder="">
+                    </mat-form-field>
+                  </div>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <mat-icon class="dragCursor" (mousedown)="dragDisabled = false;">reorder</mat-icon>
+                  <span style="font-size: 13px;">OBJ {{element.n_obj}} </span>
+                  <mat-icon color="primary" n matTooltip="Ver prácticas relacionadas"
+                    (click)="EventshowROP($event,element.n_obj, element.showro)" [inline]="true">
+                    {{ element.showro ? 'visibility_off' : 'visibility'}}
+                  </mat-icon>
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="objetivo">
+                <mat-header-cell *matHeaderCellDef>
+                  <div>
+                    <br>objetivo <br>
+                    <mat-form-field>
+                      <input matInput [(ngModel)]="InputStringTextObj" class="form-field"
+                        (keyup)="FilterTypeTextObj($event.target.value,2)" placeholder="">
+                    </mat-form-field>
+                  </div>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.objetivo}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="pd">
+                <mat-header-cell *matHeaderCellDef>
+                  <div> <br>
+                    Diagnóstico
+                    <br>
+                    <mat-form-field style="width:80px !important">
+                      <input matInput class="form-field" (keyup)="FilterTypeTextObj($event.target.value,3)"
+                        [(ngModel)]="InputStringDiagObj" placeholder="">
+                    </mat-form-field>
+                  </div>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <button style="font-size: 12px; width:10px;height:30px;" mat-raised-button
+                    (click)="DetalleObjetivo($event,element.n_obj)">
+                    {{ element.pd }}
+                  </button>
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="notas">
+                <mat-header-cell *matHeaderCellDef>
+                  <div>
+                    <br>
+                    Notas
+                    <br>
+                    <mat-form-field style="width:80px !important">
+                      <input matInput [(ngModel)]="InputStringNotasObj" class="form-field"
+                        (keyup)="FilterTypeTextObj($event.target.value,4)" placeholder="">
+                    </mat-form-field>
+                  </div>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <textarea rows="2" style="border:solid 1px rgb(194, 190, 190);" matInput
+                    (change)="ChangeNotasObj($event,element._id)" value="{{element.notas}}"></textarea>
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="NoInteresa">
+                <mat-header-cell *matHeaderCellDef>
+                  <div>
+                    <br>
+                    No Interesa
+                    <br>
+                    <mat-form-field style="width:80px !important">
+                      <select id="selectNoInteresa" [(ngModel)]="selectNoInteresa"
+                        (change)="FilterNoInteresa($event.target.value)" matNativeControl required>
+                        <option value="1">all</option>
+                        <option value="2">true</option>
+                        <option value="3">false</option>
+                      </select>
+                    </mat-form-field>
+                  </div>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <input value="{{element._id}}" type="checkbox" (change)="ChangeCheckNoInteresa($event)"
+                    [checked]="element.NoInteresa">
+                </mat-cell>
+              </ng-container>
+
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"
+                [style.background-color]="row.showro ? '#d1ebf7' : '#FFFFFF'" cdkDrag [cdkDragData]="row"></mat-row>
+            </mat-table>
+            <br>
+            <dx-popup [width]="600" [height]="400" [showTitle]="true" title="Prácticas Relacionadas"
+              [dragEnabled]="false" [closeOnOutsideClick]="true" [(visible)]="popupVisible">
+              <div *dxTemplate="let data of 'content'">
+                <dx-scroll-view #scrollView id="scrollview" [scrollByContent]="scrollByContent"
+                  [scrollByThumb]="scrollByThumb" [showScrollbar]="scrollbarMode">
+                  <div>
+                    <dx-data-grid wordWrapEnabled="true" [dataSource]="DatasourseRop" [showBorders]="true"
+                      [columnAutoWidth]="true">
+                      <dxo-scrolling mode="virtual"></dxo-scrolling>
+                      <dxi-column dataField="n_prac" [width]="70" caption="N°"></dxi-column>
+                      <dxi-column dataField="Descrip_prac" [width]="300" caption="Práctica"></dxi-column>
+                      <dxi-column dataField="na_t" [width]="150" caption="Nivel de aplicación">
+                      </dxi-column>
+                      <dxi-column dataField="nc_t" [width]="150" caption="Nivel de contribución">
+                      </dxi-column>
+                    </dx-data-grid>
+                    <br>
+                    <dx-button icon="check" type="success" text="Done" (onClick)="doneObj()">
+                    </dx-button>
+                  </div>
+                </dx-scroll-view>
+              </div>
+            </dx-popup>
           </div>
-        </dx-scroll-view>
+        </mat-expansion-panel>
       </div>
-    </dx-popup>
+      <br>
+      <!-- PRACTICAS -->
+      <mat-expansion-panel style="width:96%;" [expanded]="panelOpenStatePrac" (opened)="panelOpenState = true"
+        (closed)="panelOpenState = false">
+        <mat-expansion-panel-header class="mheader">
+          <mat-panel-title>
+            PRÁCTICAS ÁGILES
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div id="SlideTo">
+          <br>
+          <mat-checkbox class="matchek" [(ngModel)]="checked" (change)="eventAplicables($event)">Ocultar prácticas no
+            aplicables
+          </mat-checkbox> &nbsp;&nbsp;
+          <mat-checkbox class="matchek" (change)="eventAltoNA($event)" [(ngModel)]="checkANA">Ocultar Prácticas con Muy
+            Alto Nivel de aplicación
+          </mat-checkbox>
+          <br>
+
+          <!-- style="width:100% !important;"  -->
+
+          <div *ngIf="Practicas">
+            <p>Total de prácticas {{ Practicas.length }} </p>
+          </div>
+
+          <mat-table [style.width]="DisableNC ? '96%' : '90%'" class="mat-elevation-z8" id="tableprac" #tableprac
+            [dataSource]="Practicas" cdkDropList (cdkDropListDropped)="dropPracticas($event)"
+            cdkDropListData="Practicas" [cdkDropListDisabled]="dragDisabled">
+
+            <ng-container matColumnDef="n_prac" sticky>
+              <mat-header-cell *matHeaderCellDef>
+                <div>
+                  <br>
+                  #
+                  <br>
+                  <mat-form-field style="width:80px !important">
+                    <input matInput class="form-field" [(ngModel)]="InputStringnprac"
+                      (keyup)="FilterTypeText($event.target.value,1)" [formControl]="positionFilter" placeholder="">
+                  </mat-form-field>
+                </div>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element; let i=index;">
+                <mat-icon class="dragCursor" (mousedown)="dragDisabled = false;">reorder</mat-icon>
+                <div>
+                  <span align="center" style="width:40%;"> {{ element.num }} </span> <br><br>
+                  <mat-icon aria-hidden="false" (click)="DetallePractica($event,element.n_prac, element.textprac)"
+                    matTooltip="ver detalle de prácticas" class="icon-display" aria-label="Example home icon">info
+                  </mat-icon>
+                  <mat-icon aria-hidden="false" (click)="DetallePracticaObj($event,element.n_prac,element.textprac)"
+                    matTooltip="ver objetivos relacionados a la práctica" class="icon-display"
+                    aria-label="Example home icon">
+                    adjust</mat-icon>
+                  <mat-icon aria-hidden="false"
+                    (click)="DetallePracticaDesafios($event,element.n_prac,element.textprac)"
+                    matTooltip="ver desafíos de práctica" class="icon-display" aria-label="Example home icon">error
+                  </mat-icon>
+                  <mat-icon class="icon-display" matTooltip="ver relación de la práctica con otras prácticas"
+                    (click)="ShowRpp($event,i, element.spp, element.n_prac)" [inline]="true">
+                    {{ element.spp ? 'visibility_off' : 'visibility'}}
+                  </mat-icon>
+                </div>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="textprac">
+              <mat-header-cell *matHeaderCellDef>
+                <div>
+                  <br>
+                  Práctica
+                  <br>
+                  <mat-form-field style="width:80px !important">
+                    <input matInput class="form-field" [(ngModel)]="InputStringTextPrac"
+                      (keyup)="FilterTypeText($event.target.value,2)" placeholder="">
+                  </mat-form-field>
+                </div>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.textprac}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="metodologia">
+              <mat-header-cell *matHeaderCellDef>
+                <div>
+                  <br>
+                  Método Ágil
+                  <br>
+                  <mat-form-field style="width:80px !important">
+                    <input matInput class="form-field" [(ngModel)]="InputStringMetodo"
+                      (keyup)="FilterTypeText($event.target.value,3)" placeholder="">
+                  </mat-form-field>
+                </div>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.metodologia}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="desafio">
+              <mat-header-cell *matHeaderCellDef>
+                <div>
+                  <br>
+                  Desafío de implantación
+                  <br>
+                  <mat-form-field style="width:80px !important">
+                    <select [(ngModel)]="selectdesafioval" matNativeControl required
+                      (change)="FilterDesafio($event.target.value)">
+                      <option value="-1">reset</option>
+                      <option *ngFor="let option of optionsDesa; index as a" [value]="a">
+                        {{ option }}
+                      </option>
+                    </select>
+                  </mat-form-field>
+                </div>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <select (change)="onChangeDesafio($event.target.value,element._id,element.n_prac)">
+                  <option *ngFor="let option of optionsDesa; index as x" [value]="x" [selected]="x===element.desafio">
+                    {{ option }}
+                  </option>
+                </select>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="na">
+              <mat-header-cell *matHeaderCellDef>
+                <div>
+                  <br>
+                  Nivel de aplicación
+                  <br>
+                  <mat-form-field style="width:80px !important">
+                    <select [(ngModel)]="selectnaval" matNativeControl required
+                      (change)="FilterNA($event.target.value)">
+                      <option value="-1">reset</option>
+                      <option *ngFor="let option of optionsNa; index as in" [value]="in">
+                        {{ option }}
+                      </option>
+                    </select>
+                  </mat-form-field>
+                </div>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element; let i = index;">
+                <select (change)="onChangeNA($event.target.value,false,element._id,$event,element.n_prac)">
+                  <option *ngFor="let option of optionsNa; index as c" [value]="c" [selected]="c===element.nivelapli">
+                    {{ option }}
+                  </option>
+                </select>
+                <mat-icon *ngIf="element.sw" class="icon-display" [ngStyle]="{'color':'red'}" aria-hidden="false">
+                  warning</mat-icon>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="notas">
+              <mat-header-cell *matHeaderCellDef>
+                <div>
+                  <br>
+                  Notas
+                  <br>
+                  <mat-form-field style="width:80px !important">
+                    <input matInput class="form-field" [(ngModel)]="InputStringNotasPrac"
+                      (keyup)="FilterTypeText($event.target.value,4)" placeholder="">
+                  </mat-form-field>
+                </div>
+
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <textarea rows="2" style="border:solid 1px rgb(194, 190, 190);" matInput
+                  (change)="onChangeNotasPracticas($event,element._id)" value="{{element.notas}}"></textarea>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="aplicable">
+              <mat-header-cell *matHeaderCellDef>
+                <div>
+                  <br>
+                  No Aplicable
+                  <br>
+                  <mat-form-field style="width:80px !important">
+                    <select id="selectAplicable" [(ngModel)]="selectaplicableval"
+                      (change)="FilterAplicable($event.target.value)" matNativeControl required>
+                      <option value="1">All</option>
+                      <option value="2">true</option>
+                      <option value="3">false</option>
+                    </select>
+                  </mat-form-field>
+                </div>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <input value="{{element._id}}" type="checkbox" (change)="onChangeAplicable($event,element.num)"
+                  [checked]="element.aplicable">
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="nc" *ngIf="DisableNC">
+              <mat-header-cell *matHeaderCellDef> Nivel de contribución </mat-header-cell>
+              <mat-cell *matCellDef="let element">{{element.nivel_contribucion}}</mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumnsPrac"></mat-header-row>
+            <mat-row [ngStyle]="{'background-color': getColor(row.colorROP, row.colorRPP, row.spp)}"
+              [cdkDragDisabled]="DisablePriorizacion" *matRowDef="let row;let i=index; columns: displayedColumnsPrac;"
+              cdkDrag [cdkDragData]="row"></mat-row>
+          </mat-table>
+
+
+          <!-- [ngStyle]="{'background-color':
+            toggle[i] == false ? 'white': 
+            toggle[i] == true ? '#81F79F' : 
+            ArrRPP[i] == true ? 'Red' : 'blue'}" -->
+
+          <!-- *ngIf="row.availableBalance > 0" [ngStyle]="{'color': getColor(row.availableBalance)}" > {{row.availableBalance}}
+ -->
+          <!-- [style.background-color]="toggle[i] ? '#81F79F' : '#FFFFFF'" -->
+
+
+          <dx-popup [width]="500" [height]="450" [showTitle]="true" title="Práctica" [dragEnabled]="false"
+            [closeOnOutsideClick]="true" [(visible)]="popupPracticaDescription">
+            <div *dxTemplate="let data of 'content'">
+              <dx-scroll-view #scrollView id="scrollview" [scrollByContent]="scrollByContent"
+                [scrollByThumb]="scrollByThumb" [showScrollbar]="scrollbarMode">
+                <p>
+                  {{ TextP}}
+                </p>
+                <br>
+                <div *ngIf="visibledescriptionprac" id="results"></div>
+                <div align="center">
+                  <!-- GRID RELACION DE PRÁCTICAS OBJETIVOS-->
+                  <dx-data-grid [(visible)]="visiblegridop" wordWrapEnabled="true" [dataSource]="ArrRPO"
+                    [showBorders]="true" [columnAutoWidth]="true">
+                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                    <dxi-column dataField="obj.clave" [width]="70" caption="N°"></dxi-column>
+                    <dxi-column dataField="obj.descrip" [width]="400" caption="OBJETIVO"></dxi-column>
+                  </dx-data-grid>
+                  <!-- GRID RELACION DE PRÁCTICAS DESAFIOS -->
+                  <dx-data-grid [(visible)]="visiblegriddp" wordWrapEnabled="true" [dataSource]="DataRdp"
+                    [showBorders]="true" [columnAutoWidth]="true">
+                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                    <dxi-column dataField="n_desafio" [width]="70" caption="N°"></dxi-column>
+                    <dxi-column dataField="desafio.desafio" [width]="500" caption="Desafío"></dxi-column>
+                  </dx-data-grid>
+                </div>
+                <br>
+                <dx-button icon="check" type="success" text="Done" (onClick)="doneClick()">
+                </dx-button>
+              </dx-scroll-view>
+            </div>
+          </dx-popup>
+
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <button id="butt" mat-fab (click)="scroll(objPanel)">
+      <mat-icon>arrow_upward</mat-icon>
+    </button>
   </div>
   <br>
   <br>
-  <div id="SlideTo">
-    <h6 class="text-uppercase font-weight-bold">PRÁCTICAS ÁGILES</h6>
-    <mat-checkbox class="matchek" [(ngModel)]="checked" (change)="eventAplicables($event)">Ocultar prácticas no
-      aplicables
-    </mat-checkbox> &nbsp;&nbsp;
-    <mat-checkbox class="matchek" (change)="eventAltoNA($event)" [(ngModel)]="checkANA">Ocultar Prácticas con Muy Alto
-      Nivel
-      de aplicación
-    </mat-checkbox>
-    <br>
-    <br>
-    <dx-data-grid #GridPrac id="gridprac" keyExpr="_id" [dataSource]="Practicas" [showBorders]="true"
-      wordWrapEnabled="true" (onRowPrepared)="onRowPrepared($event)">
-      <dxo-paging [enabled]="false"></dxo-paging>
-      <dxo-row-dragging [allowReordering]="true" [onReorder]="onReorderPrac" [showDragIcons]="showDragIcons">
-      </dxo-row-dragging>
-      <dxo-sorting mode="none"></dxo-sorting>
-      <dxo-filter-row [visible]="false"></dxo-filter-row>
-      <dxi-column [width]="120" dataField="num" cellTemplate="cellTemplateNP" alignment="center" caption="N°">
-      </dxi-column>
-      <dxi-column [width]="220" dataField="textprac" caption="Práctica" [allowFiltering]="false"></dxi-column>
-      <dxi-column [width]="150" dataField="metodologia" caption="Método Ágil" alignment="center"
-        [allowFiltering]="false"></dxi-column>
-      <dxi-column [width]="150" dataField="pos" cellTemplate="cellTemplateNA" caption="Nivel de aplicación"
-        alignment="center" [allowFiltering]="false" [allowSorting]="false">
-      </dxi-column>
-      <dxi-column [width]="160" dataField="notas" cellTemplate="cellTemplateNotas" caption="Notas" alignment="center"
-        [allowFiltering]="false" [allowSorting]="false">
-      </dxi-column>
-      <dxi-column [width]="100" dataField="aplicable" cellTemplate="cellTemplateNoAplica" caption="No Aplicable"
-        alignment="center" [allowFiltering]="false" [allowSorting]="false">
-      </dxi-column>
-      <dxi-column [width]="100" dataField="pos" cellTemplate="cellTemplateNC" caption="Nivel de Contribución"
-        alignment="center" [allowFiltering]="false" [allowSorting]="false" [(visible)]="isNCVisible">
-      </dxi-column>
-      <!-- Template BUTTONS NUEVO -->
-      <div *dxTemplate="let data of 'cellTemplateNP'">
-        <span align="center" style="width:40%;"> {{ data.value }} </span> <br>
-        <mat-icon aria-hidden="false" (click)="DetallePractica($event,data.rowIndex)"
-          matTooltip="ver detalle de prácticas" class="icon-display" aria-label="Example home icon">info</mat-icon>
-        <mat-icon aria-hidden="false" (click)="DetallePracticaObj($event,data.rowIndex)"
-          matTooltip="ver objetivos relacionados a la práctica" class="icon-display" aria-label="Example home icon">
-          adjust</mat-icon>
-        <mat-icon aria-hidden="false" (click)="DetallePracticaDesafios($event,data.rowIndex)"
-          matTooltip="ver desafíos de práctica" class="icon-display" aria-label="Example home icon">error</mat-icon>
-        <mat-icon class="icon-display" matTooltip="ver relación de la práctica con otras prácticas"
-          (click)="ShowRpp($event,data.rowIndex)" [inline]="true">
-          {{ ArrShowRpp[data.rowIndex] ? 'visibility_off' : 'visibility'}}
-        </mat-icon>
-      </div>
-      <!-- Template Nivel de aplicación -->
-      <div *dxTemplate="let data of 'cellTemplateNA'">
-        <select [(ngModel)]="idArr[data.rowIndex]"
-          (change)="onChangeNA($event.target.value,false,data.key,$event, data.rowIndex)" matNativeControl>
-          <option value="0">No Definido</option>
-          <option value="1">Muy Bajo</option>
-          <option value="2">Bajo</option>
-          <option value="3">Medio</option>
-          <option value="4">Alto</option>
-          <option value="5">Muy alto</option>
-        </select>
-        <mat-icon *ngIf="ArrWND[data.rowIndex]" class="icon-display" [ngStyle]="{'color':'red'}" aria-hidden="false">
-          warning</mat-icon>
-      </div>
-      <!-- Template Notas -->
-      <div *dxTemplate="let data of 'cellTemplateNotas'">
-        <textarea style="border:solid 1px rgb(194, 190, 190);" matInput
-          (change)="onChangeNotasPracticas($event,data.key)" value="{{data.value}}"></textarea>
-      </div>
-      <!-- Template No Aplica -->
-      <div *dxTemplate="let data of 'cellTemplateNoAplica'">
-        <input value="{{data.key}}" type="checkbox" (change)="onChangeAplicable($event)" [checked]="data.value">
-      </div>
-      <!-- Template NC -->
-      <div *dxTemplate="let data of 'cellTemplateNC'">
-        <span align="center" style="width:40%;"> {{ ArrNC[data.rowIndex] }} </span>
-      </div>
-    </dx-data-grid>
-    <dx-popup [width]="800" [height]="500" [showTitle]="true" title="Práctica" [dragEnabled]="false"
-      [closeOnOutsideClick]="true" [(visible)]="popupPracticaDescription">
-      <div *dxTemplate="let data of 'content'">
-        <dx-scroll-view #scrollView id="scrollview" [scrollByContent]="scrollByContent" [scrollByThumb]="scrollByThumb"
-          [showScrollbar]="scrollbarMode">
-          <div *ngIf="visibledescriptionprac" id="results"></div>
-          <div align="center">
-            <!-- GRID RELACION DE PRÁCTICAS OBJETIVOS-->
-            <dx-data-grid [(visible)]="visiblegridop" wordWrapEnabled="true" [dataSource]="ArrRPO" [showBorders]="true"
-              [columnAutoWidth]="true">
-              <dxo-scrolling mode="virtual"></dxo-scrolling>
-              <dxi-column dataField="obj.clave" [width]="70" caption="N°"></dxi-column>
-              <dxi-column dataField="obj.descrip" [width]="400" caption="OBJETIVO"></dxi-column>
-            </dx-data-grid>
-            <!-- GRID RELACION DE PRÁCTICAS DESAFIOS -->
-            <dx-data-grid [(visible)]="visiblegriddp" wordWrapEnabled="true" [dataSource]="DataRdp" [showBorders]="true"
-              [columnAutoWidth]="true">
-              <dxo-scrolling mode="virtual"></dxo-scrolling>
-              <dxi-column dataField="n_desafio" [width]="70" caption="N°"></dxi-column>
-              <dxi-column dataField="desafio.desafio" [width]="500" caption="Desafío"></dxi-column>
-            </dx-data-grid>
-          </div>
-        </dx-scroll-view>
-      </div>
-    </dx-popup>
-  </div>
+  <br>
+  <app-footer></app-footer>
 </div>
-<button id="butt" mat-fab (click)="scroll(objPanel)">
-  <mat-icon>arrow_upward</mat-icon>
-</button>
-<br>
-<br>
-<br>
-<app-footer></app-footer>

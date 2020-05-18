@@ -10,6 +10,7 @@ export class EvalResulService {
   private subjecta = new Subject<any>();
   private subjectb = new Subject<any>();
   private subjectc = new Subject<any>();
+  private subjectob = new Subject<any>();
 
   constructor() { }
 
@@ -25,6 +26,10 @@ export class EvalResulService {
     this.subjectc.next(data);
   }
 
+  DatasetObjetivos(data) {
+    this.subjectob.next(data);
+  }
+
   routeDataA(): Observable<any> {
     return this.subjecta.asObservable();
   }
@@ -36,6 +41,11 @@ export class EvalResulService {
   routeDataC(): Observable<any> {
     return this.subjectc.asObservable();
   }
+
+  routeDataOB(): Observable<any> {
+    return this.subjectob.asObservable();
+  }
+
 
 
 

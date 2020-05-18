@@ -141,6 +141,8 @@ export class DiagnosticoObjetivosComponent implements OnInit {
             name_area: ev.area.name,
             na_t: na_title,
             na: na_new,
+            na_c:na,
+            aplicable:ev.aplicable
           };
           return arraData;
 
@@ -211,6 +213,26 @@ export class DiagnosticoObjetivosComponent implements OnInit {
       this.tasksDataSourceStorageAreas.push(item)
     }
     return item.dataSourceInstance;
+  }
+
+  onRowPreparedOBJ(e) {
+    if (e.data) {
+      if (e.data.NoInteresa == true) {
+        e.rowElement.style.backgroundColor = "#E6E6FA";
+      }
+    }
+  }
+
+  onRowPreparedPrac(e) {
+    var color;
+    if (e.data) {
+      if (e.data.aplicable == true) {
+        color = "#EEE8AA";
+      } else if (e.data.na == 0) {
+        color = "#FFDAB9";
+      }
+      e.rowElement.style.backgroundColor = color;
+    }
   }
 
   ngOnInit() {

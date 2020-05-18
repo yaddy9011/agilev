@@ -1,55 +1,86 @@
-<app-menu></app-menu>
-<div class="Appcontainer" id="app" align="center">
-  <br>
-  <br>
-  <br>
-  <br>
-  <mat-card class="example-card">
-    <!-- <mat-card-header id="mat-header">
-      <div mat-card-avatar class="example-header-image"></div>
-      <mat-card-title>Shiba Inu</mat-card-title>
-      <mat-card-subtitle>Dog Breed</mat-card-subtitle>
-    </mat-card-header> -->
-    <img mat-card-image src="../../assets/images/banner.png" alt="Photo of a Shiba Inu">
-    <mat-card-content>
-      <!-- <p>
-        Este sitio te ofrece conocimiento asociado a prácticas ágiles y te ayuda a establecer tu propio roadmap para
-        implantación de prácticas ágiles ademas de evaluar tu nivel de agilidad.
-        Reflexiona respecto de tus objetivos de mejora y detecta qué prácticas pueden ayudarte a conseguir dichos
-        objetivos.
-      </p> -->
+<div class="maincontent">
+  <div class="Appcontainer" id="app" align="center">
+    <app-menu></app-menu>
+    <div class="x">
+      <img class="z" src="../../assets/images/banner.png">
       <br>
-      <div class="contenthome">
-        <div class="col1">
-          <b>Conoce las prácticas ágiles </b>
-          <br>
-          Te ofrecemos un catálogo de prácticas ágiles que provienen de los métodos ágiles más populares y están
-          explicadas de forma genérica para ser entendidas incluso en contextos diferentes al de desarrollo de software.
+      <!-- About Section-->
+      <section class="page-section bg-primary text-white mb-0" id="about">
+        <div class="container">
+          <!-- About Section Heading-->
+          <h2 class="page-section-heading text-center text-uppercase text-white">ROADMAP++</h2>
+          <!-- Icon Divider-->
+          <div class="divider-custom divider-light">
+            <div class="divider-custom-line"></div>
+            <div class="divider-custom-icon"><mat-icon>star</mat-icon></div>
+            <div class="divider-custom-line"></div>
+          </div>
+          <!-- About Section Content-->
+          <div class="row">
+            <div class="col-lg-4 ml-auto">
+
+              <p class="lead">
+                <b>Conoce las prácticas ágiles </b>
+                <br>
+                Te ofrecemos un catálogo de prácticas ágiles que provienen de los métodos ágiles más populares y están
+                explicadas de forma genérica para ser entendidas incluso en contextos diferentes al de desarrollo de
+                software..</p>
+            </div>
+            <div class="col-lg-4 mr-auto">
+              <p class="lead">
+                <b>Evalúa prácticas versus objetivos</b>
+                <br>
+                Reflexiona respecto de tus objetivos de mejora y detecta qué prácticas pueden ayudarte a conseguir
+                dichos objetivos.</p>
+            </div>
+            <div class="col-lg-4 mr-auto">
+              <p class="lead">
+                <b>Construye tu Roadmap Ágil</b>
+                <br>
+                Crea tu propia lista ordenada de práctica ágiles que guiarán tus esfuerzos y estrategia de implantación
+                del
+                agilismo en tu contexto de trabajo.
+              </p>
+            </div>
+          </div>
         </div>
-        <div class="col2">
-          <b>Evalúa prácticas versus objetivos</b>
+      </section>
+
+<!-- 
+      <mat-card class="example-card">
+        <mat-card-content>
           <br>
-          Reflexiona respecto de tus objetivos de mejora y detecta qué prácticas pueden ayudarte a conseguir dichos
-          objetivos.
-        </div>
-        <div class="col3">
-          <b>Construye tu Roadmap Ágil</b>
+          <div class="contenthome">
+            <div class="col1">
+              <b>Conoce las prácticas ágiles </b>
+              <br>
+              Te ofrecemos un catálogo de prácticas ágiles que provienen de los métodos ágiles más populares y están
+              explicadas de forma genérica para ser entendidas incluso en contextos diferentes al de desarrollo de
+              software.
+            </div>
+            <div class="col2">
+              <b>Evalúa prácticas versus objetivos</b>
+              <br>
+              Reflexiona respecto de tus objetivos de mejora y detecta qué prácticas pueden ayudarte a conseguir dichos
+              objetivos.
+            </div>
+            <div class="col3">
+              <b>Construye tu Roadmap Ágil</b>
+              <br>
+              Crea tu propia lista ordenada de práctica ágiles que guiarán tus esfuerzos y estrategia de implantación
+              del
+              agilismo en tu contexto de trabajo.
+            </div>
+          </div>
           <br>
-          Crea tu propia lista ordenada de práctica ágiles que guiarán tus esfuerzos y estrategia de implantación del
-          agilismo en tu contexto de trabajo.
-        </div>
-      </div>
-      <br>
-      <br>
-    </mat-card-content>
-    <mat-card-actions>
-      <button *ngIf="show" mat-button routerLink="/registro">Regístrate</button>
-      <button *ngIf="show" mat-button routerLink="/login">Inicia sesión </button>
-    </mat-card-actions>
-  </mat-card>
-  <br>
-  <br>
-  <br>
-  <br>
+          <br>
+        </mat-card-content>
+        <mat-card-actions>
+          <button *ngIf="show" mat-button routerLink="/registro">Regístrate</button>
+          <button *ngIf="show" mat-button routerLink="/login">Inicia sesión </button>
+        </mat-card-actions>
+      </mat-card> -->
+    </div>
+  </div>
+  <app-footer></app-footer>
 </div>
-<app-footer></app-footer>

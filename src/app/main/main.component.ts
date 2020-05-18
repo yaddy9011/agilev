@@ -4,21 +4,23 @@ import { TasksService } from '../services/tasks.service';
 import { obj } from '../clases/obj';
 import { Practica } from '../clases/practica';
 import { UserI } from '../clases/user';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CrudRopService } from '../services/crud-rop.service';
 import { EvalResulService } from '../services/eval-resul.service';
 import { Diagnostico } from '../clases/diagnotico';
 import { RowDDService, SelectionService } from '@syncfusion/ej2-angular-grids';
-import { GridComponent } from '@syncfusion/ej2-angular-grids';
 import { ViewportScroller } from '@angular/common';
-import { DxDataGridComponent } from "devextreme-angular";
+import notify from 'devextreme/ui/notify';
+import { MatTable } from '@angular/material/table';
+import { CdkDragDrop, CdkDragStart, moveItemInArray, transferArrayItem, CdkDragHandle } from '@angular/cdk/drag-drop';
+import { FormControl } from '@angular/forms';
+import { MatTableDataSource } from '@angular/material';
+
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css'],
-  providers: [RowDDService,
-    SelectionService],
+  providers: [],
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({ height: '0px', minHeight: '0' })),
@@ -30,53 +32,76 @@ import { DxDataGridComponent } from "devextreme-angular";
 
 export class MainComponent implements OnInit {
 
-  // @ViewChild('gridObj', { static: false }) public GridObj: GridComponent;
-  @ViewChild('clientGrid', { static: false }) clientGrid: DxDataGridComponent;
-  @ViewChild('GridPrac', { static: false }) GridPrac: DxDataGridComponent;
+
+  @ViewChild('table', { static: true }) table: MatTable<obj>;
+  @ViewChild('tableprac', { static: true }) tableprac: MatTable<Practica>;
 
 
-  idArr = [];
-  idPracDesa = [];
-  ShowROP = [];
-  toggle = [];
-  ArrNC = [];
-  ArrWND = [];
   panelOpenState = true;
   panelOpenStateObj = true;
   userName = '';
   objs: obj[];
+  Subobjs: obj[];
   title: string;
-  idst: string;
   nameusr: string;
-  arr: string[];
-  list: obj[];
   Practicas: Practica[];
   ArrayPracticas: Practica[];
-  listPractica: Practica[];
+  SubPracticas: Practica[];
   checked = false;
   checkANA = false;
-  checkedPriorizar = false;
-  DisablePriorizacion = false;
   checkedObjetivosNI = false;
   id_usr = "";
-  showDragIcons: boolean;
   DataRop = [];
   DatasourseRop = [];
   popupVisible = false;
-  selectOptions: Object;
-  isNCVisible: boolean = false;
-  _nobj;
+  _nobj = 0;
+  _nprac = 0;
   popupPracticaDescription = false;
-
   ArrRPO = [];
   visiblegridop = false;
   visibledescriptionprac = false;
-
   DataRdp = [];
   visiblegriddp = false;
-  ArrShowRpp = [];
+  panelOpenStatePrac = false;
+  dragDisabled = true;
+  hiddenNC: Boolean = true;
+  positionFilter = new FormControl();
+  optionsNa: string[];
+  optionsDesa: string[];
+  displayedColumns: string[];
+  displayedColumnsPrac: string[];
 
-  ArrRPP = [];
+  filterbyAplicable: boolean;
+  FILTRO_: boolean;
+  FILTRO_NA: boolean;
+  FILTRO_DE: boolean;
+  FILTRO_NOAP: boolean;
+  filterbyNA;
+  filterbyDE;
+  filterbyNOAP;
+  DisablePriorizacion = false;
+  DisablePriorizacionobj = false;
+
+  DisableNC = false;
+
+
+  InputStringnprac: string;
+  InputStringTextPrac: string;
+  InputStringMetodo: string;
+  InputStringNotasPrac: string;
+  selectaplicableval = 1;
+  selectdesafioval = -1;
+  selectnaval = -1;
+
+  InputStringnobj: string;
+  InputStringTextObj: string;
+  InputStringDiagObj: string;
+  InputStringNotasObj: string;
+  selectNoInteresa = 1;
+
+  TextP: string;
+
+
 
   constructor(
 
@@ -85,19 +110,44 @@ export class MainComponent implements OnInit {
     private viewportScroller: ViewportScroller,
     private EvalResulService: EvalResulService) {
 
+    this.optionsNa = ['No Definido ', ' Muy Bajo', 'Bajo', 'Medio', 'Alto', 'Muy alto'];
+    this.optionsDesa = [' Muy Bajo', 'Bajo', 'Medio', 'Alto', 'Muy alto'];
+    this.displayedColumns = ['n_obj', 'objetivo', 'pd', 'notas', 'NoInteresa'];
+    this.showColumn();
     this.nameusr = localStorage.getItem("ACCESS_name");
     this.id_usr = localStorage.getItem("ACCESS_IDS");
     this.GetDiagnosticLive();
     this.getPracticas(this.id_usr, this.checked);
-    this.showDragIcons = true;
-    this.onReorderObj = this.onReorderObj.bind(this);
-    this.onReorderPrac = this.onReorderPrac.bind(this);
+  }
+
+  ngOnInit() { }
+
+  // METODOS PARA OBJETIVOS
+
+  GetDiagnosticLive() {
+    var p = new Diagnostico(this.taskService, "5e52bc768e4e3736a866f5e7", this.EvalResulService);
+    p.GetDataEva(true);
+    this.EvalResulService.routeDataA().subscribe(data => {
+      let newDiag = data.sort((a, b) => a.n_obj - b.n_obj);
+      this.getObjetivos(this.id_usr, newDiag);
+    });
+
+    this.EvalResulService.routeDataB().subscribe(data => {
+      this.DataRop = data;
+    });
+
   }
 
   getObjetivos(id_usr, diagnosticObjs) {
-    var NewShowROP = [];
-    var ShopRop = [];
-    NewShowROP = this.ShowROP;
+    var showre;
+    var Numnobj = this._nobj
+
+    if (this._nobj > 0) {
+      showre = true;
+    } else {
+      showre = false;
+    }
+
     this.taskService.getobj(id_usr)
       .subscribe(obj => {
         var objss = obj.map(function (task, index, array) {
@@ -106,6 +156,18 @@ export class MainComponent implements OnInit {
           if (fd) {
             pd = fd.pd;
           }
+
+          var SwrFinal;
+          if (showre == true) {
+            if (Numnobj == obj[index].n_obj) {
+              SwrFinal = true;
+            } else {
+              SwrFinal = false;
+            }
+          } else {
+            SwrFinal = false
+          }
+
           const arraData = {
             _id: obj[index]._id,
             objetivo: Object.values(obj[index].id_obj)[1],
@@ -116,31 +178,314 @@ export class MainComponent implements OnInit {
             NoInteresa: obj[index].NoInteresa,
             notas: obj[index].notas,
             n_obj: obj[index].n_obj,
-            pd: pd + "%"
+            pd: pd + "%",
+            showro: SwrFinal
           };
-          if (NewShowROP.length > 0) {
-            ShopRop[index] = NewShowROP[index];
-          } else {
-            ShopRop[index] = false;
-          }
+
           return arraData;
         });
-        this.ShowROP = ShopRop;
-        // para ordenamiento de objetivos 
-        var map2 = objss.filter(function (task) {
-          return task.NoInteresa == true;
-        });
-        if (map2.length >= 1) {
-          var map1 = objss.filter(function (task) {
-            return task.NoInteresa == false;
-          });
-          map1.sort((a, b) => a.pos - b.pos);
-          const array3 = map1.concat(map2);
-          this.objs = array3;
+        this.objs = objss;
+        this.Subobjs = this.objs;
+        this.objs.sort((a, b) => a.pos - b.pos);
+
+      });
+
+  }
+
+  reorderobj(objss) {
+    var map2 = objss.filter(function (task) {
+      return task.NoInteresa == true;
+    });
+    if (map2.length >= 1) {
+      var map1 = objss.filter(function (task) {
+        return task.NoInteresa == false;
+      });
+      map1.sort((a, b) => a.pos - b.pos);
+      const array3 = map1.concat(map2);
+      this.objs = array3;
+    } else {
+      this.objs = objss;
+      this.objs.sort((a, b) => a.pos - b.pos);
+    }
+  }
+
+  updateStatusObj(obj: obj, pnew: number) {
+    var newTask = {
+      _id: obj._id,
+      objetivo: obj.objetivo,
+      id_usr: obj.id_usr,
+      id_obj: obj.id_obj,
+      pos: pnew
+    };
+    this.taskService.updateTask(newTask)
+      .subscribe(res => {
+      });
+  }
+
+  ChangeCheckNoInteresa(e) {
+    var actObj = {
+      _id: e.currentTarget.value,
+      NoInteresa: e.currentTarget.checked
+    };
+    var ch = e.currentTarget.checked;
+    var id = e.currentTarget.value;
+    this.taskService.updateNoInteresa(actObj)
+      .subscribe(res => {
+        const v = this.objs.findIndex((item) => item._id === id);
+        this.objs[v].NoInteresa = ch;
+        if (this.FILTRO_NOAP == true) {
+          var filter = this.objs.filter(x => x.NoInteresa == this.filterbyNOAP);
+          this.objs = filter;
         } else {
-          this.objs = objss;
-          this.objs.sort((a, b) => a.pos - b.pos);
+          this.GetDiagnosticLive();
+          if (ch == true) {
+            let array = this.objs.concat(this.objs.splice(v, 1));
+            this.objs = array;
+            this.Subobjs = this.objs;
+            this.ActualizarOrderRow();
+            notify("La objetivo  OBJ" + this.objs[v].n_obj + " se ha movido hacia final de la lista.", "success", 3000);
+          }
         }
+      });
+  }
+
+  ChangeNotasObj(e, id) {
+    var actNotas = {
+      _id: id,
+      notas: e.target.value
+    };
+    this.taskService.updateNotasObj(actNotas)
+      .subscribe(res => {
+      });
+  }
+
+  EventshowROP(e, no, SHOWROP) {
+    SHOWROP = !SHOWROP;
+    var r_srow_new = this.objs.map(function (p, j) { return p.showro = false; });
+    if (SHOWROP === true) {
+      this.DisableNC = true;
+      var prac = this.Practicas.map(function (num) {
+        num.colorRPP = false;
+        num.spp = false;
+        return num;
+      });
+      this._nprac = 0;
+      this._nobj = no;
+      this.panelOpenStatePrac = !this.panelOpenStatePrac;
+      this.viewportScroller.scrollToAnchor("SlideTo");
+      const index = this.objs.findIndex(element => element.n_obj == no);
+      this.objs[index].showro = true;
+      this.hiddenNC = false;
+      this.RelacionOP(no);
+    } else {
+      this.DisableNC = false;
+      this._nobj = 0;
+      this.hiddenNC = true;
+      var prac = this.Practicas.map(function (num) {
+        num.colorROP = false;
+        num.nivel_contribucion = "";
+        return num;
+      });
+      this.Practicas = prac
+    }
+    this.showColumn();
+  }
+
+  dropObjetivos(event: CdkDragDrop<[]>) {
+    this.dragDisabled = true;
+    const previousIndex = this.objs.findIndex((d) => d === event.item.data);
+    moveItemInArray(this.objs, previousIndex, event.currentIndex);
+    this.table.renderRows();
+    this.ActualizarOrderRow();
+  }
+
+  DetalleObjetivo(e, n_ob) {
+    this.popupVisible = true;
+    var arrPPnew = [];
+    this.DataRop.forEach(function (value) {
+      if (value.n_obj == n_ob) {
+        arrPPnew.push(value);
+      }
+    });
+    this.DatasourseRop = arrPPnew;
+  }
+
+  OcultarObjNI(e) {
+    var arrObj = [];
+    this.objs = this.Subobjs;
+    arrObj = this.objs
+    this.FILTRO_NOAP = false;
+    this.selectNoInteresa = 1;
+    this.LimpiarFiltrosStringObjetivos(1);
+    if (this.checkedObjetivosNI == true) {
+      var arrFilter = arrObj.filter((task) => task.NoInteresa == false);
+      this.objs = arrFilter;
+    } else {
+      this.GetDiagnosticLive()
+    }
+  }
+
+  ActualizarOrderRow() {
+    var newo = [];
+    for (var i = 0; i < this.objs.length; i++) {
+      this.updateStatusObj(this.objs[i], i);
+      newo[i] = this.objs[i];
+    }
+  }
+
+  FilterNoInteresa(e) {
+    var objetivos = [];
+    objetivos = this.Subobjs;
+    var nointeress;
+    this.LimpiarFiltrosStringObjetivos(1);
+    if (Number(e) == 1) {
+      this.FILTRO_NOAP = false;
+      this.GetDiagnosticLive();
+    } else {
+
+      switch (Number(e)) {
+        case 2: {
+          this.FILTRO_NOAP = true;
+          nointeress = true;
+          break;
+        }
+        case 3: {
+          this.FILTRO_NOAP = true;
+          nointeress = false;
+          break;
+        }
+      }
+
+      this.filterbyNOAP = nointeress;
+      var filter = objetivos.filter(x => x.NoInteresa == nointeress);
+      this.objs = filter;
+    }
+
+
+  }
+
+  FilterTypeTextObj(filterValue: string, colum: number) {
+    var columnaname;
+    var objetivos = [];
+    if (filterValue === "undefined" || filterValue === "") {
+      this.GetDiagnosticLive();
+    } else {
+      this.DisablePriorizacionobj = true;
+      objetivos = this.Subobjs;
+      columnaname = "";
+      var data;
+      if (colum == 1) {
+        columnaname = "num";
+        data = objetivos.filter(x => x.n_obj == parseInt(filterValue));
+        this.LimpiarFiltrosStringObjetivos(2);
+      } else {
+
+        switch (colum) {
+          case 2: {
+            this.LimpiarFiltrosStringObjetivos(3);
+            columnaname = "objetivo";
+            break;
+          }
+          case 3: {
+            this.LimpiarFiltrosStringObjetivos(4);
+            columnaname = "pd";
+            break;
+          }
+          case 4: {
+            this.LimpiarFiltrosStringObjetivos(5);
+            columnaname = "notas";
+            break;
+          }
+        }
+        data = objetivos.filter(x => x[columnaname].toLowerCase().includes(filterValue.toLowerCase()));
+      }
+
+      this.objs = data;
+    }
+
+
+
+  }
+
+  LimpiarFiltrosStringObjetivos(n) {
+    switch (n) {
+      case 1: {
+        this.InputStringnobj = '';
+        this.InputStringTextObj = '';
+        this.InputStringDiagObj = '';
+        this.InputStringNotasObj = '';
+        break;
+      }
+      case 2: {
+        this.InputStringTextObj = '';
+        this.InputStringDiagObj = '';
+        this.InputStringNotasObj = '';
+        this.selectNoInteresa = 1;
+        break;
+      }
+      case 3: {
+        this.InputStringnobj = '';
+        this.InputStringDiagObj = '';
+        this.InputStringNotasObj = '';
+        this.selectNoInteresa = 1;
+        break;
+      }
+      case 4: {
+        this.InputStringnobj = '';
+        this.InputStringTextObj = '';
+        this.InputStringNotasPrac = '';
+        this.selectNoInteresa = 1;
+        break;
+      }
+      case 5: {
+        this.InputStringnobj = '';
+        this.InputStringTextObj = '';
+        this.InputStringDiagObj = '';
+        this.selectNoInteresa = 1;
+        break;
+      }
+    }
+  }
+
+  // METODOS PARA PRÁCTICAS
+
+  RelacionOP(no) {
+    this.CrudRopService.GetRop()
+      .subscribe(rop => {
+        var arrPPnew = [];
+        arrPPnew = this.Practicas;
+        rop.forEach(function (value) {
+          if (value.n_obj == no) {
+            let p = value.n_prac.valueOf();
+            const b = arrPPnew.findIndex((item) => item.n_prac === p);
+
+            if (b > -1) {
+              arrPPnew[b].colorROP = true;
+              let nc_title = "";
+              switch (value.nivel_contribucion) {
+                case 0:
+                  nc_title = "Muy Bajo";
+                  break;
+                case 0.25:
+                  nc_title = "Bajo";
+                  break;
+                case 0.50:
+                  nc_title = "Medio";
+                  break;
+                case 0.75:
+                  nc_title = "Alto";
+                  break;
+                case 1:
+                  nc_title = "Muy Alto";
+                  break;
+              }
+              arrPPnew[b].nivel_contribucion = nc_title;
+            }
+
+
+          }
+        });
+        this.Practicas = arrPPnew;
       });
   }
 
@@ -150,7 +495,20 @@ export class MainComponent implements OnInit {
         this.ArrayPracticas = prac;
         this.ArrayPracticas.sort((a, b) => a.pos - b.pos);
         var arrdatanew = [];
+
+        //Asignar datos actualizados de practicas
+
         for (var i = 0; i < this.ArrayPracticas.length; i++) {
+
+          //PARA EL WARNING DEL NA
+          var showwarningna;
+          if (prac[i].nivelapli == 0) {
+            showwarningna = true;
+          } else {
+            showwarningna = false;
+          }
+          var showpp = false;
+
           const arraData = {
             _id: prac[i]._id,
             textprac: Object.values(prac[i].id_prac)[1],
@@ -163,139 +521,47 @@ export class MainComponent implements OnInit {
             metodologia: Object.values(prac[i].id_prac)[2],
             notas: prac[i].notas,
             n_prac: prac[i].n_prac,
-            desafio: prac[i].desafio
+            desafio: prac[i].desafio,
+            sw: showwarningna,
+            colorROP: false,
+            colorRPP: false,
+            nivel_contribucion: "",
+            spp: showpp
           };
-
-          var tg = this.toggle.filter(function (task) {
-            return task == true;
-          });
-
-          if (tg.length > 0) {
-            this.ArrNC[i] = this.ArrNC[i];
-            this.toggle[i] = this.toggle[i];
-          } else {
-            this.toggle[i] = false;
-            this.ArrNC[i] = 0;
-          }
-
           arrdatanew.push(arraData);
-
         }
 
         this.Practicas = arrdatanew;
-
-
-
-        //para saber si una practica esta marcada para mostrar relación
-        var srpp = this.ArrShowRpp.filter(function (task) {
-          return task == true;
-        });
-
-
-
-        //para saber tener una el n_prac_previo indicado o marcado por el usr antes de actualizar
-
-        var n_prac_previo = 0;
-        if (srpp.length > 0) {
-          const v = this.ArrShowRpp.findIndex((item) => item === true);
-          n_prac_previo = this.Practicas[v].n_prac;
-          console.log(n_prac_previo);
-        }
-
-
-
-
-
+        this.Practicas.sort((a, b) => a.pos - b.pos);
+        this.SubPracticas = this.Practicas;
 
         // para ordenamiento
 
         this.orderNA();
         this.OrderAplicables();
-        this.OrdenamientoPracticas(this.Practicas);
-
-        // var NOaplicables = arrdatanew.filter(function (task) {
-        //   return task.aplicable == true;
-        // });
-        // if (NOaplicables.length >= 1) {
-        //   var Aplicables = arrdatanew.filter(function (task) {
-        //     return task.aplicable == false;
-        //   });
-        //   Aplicables.sort((a, b) => a.pos - b.pos);
-        //   var NiveApliMuyAlto = Aplicables.filter(function (task) {
-        //     return task.nivelapli == 5;
-        //   });
-        //   var NiveApliNOMuyAltos = Aplicables.filter(function (task) {
-        //     return task.nivelapli < 5;
-        //   });
-        //   if (NiveApliMuyAlto.length >= 1) {
-        //     const array3 = NiveApliNOMuyAltos.concat(NiveApliMuyAlto);
-        //     const array4 = array3.concat(NOaplicables);
-        //     this.Practicas = array4;
-        //   } else {
-        //     const array3 = Aplicables.concat(NOaplicables);
-        //     this.Practicas = array3;
-        //   }
-        // } else {
-        //   var NiveApliMuyAlto = arrdatanew.filter(function (task) {
-        //     return task.nivelapli == 5;
-        //   });
-        //   var NiveApliNOMuyAltos = arrdatanew.filter(function (task) {
-        //     return task.nivelapli < 5;
-        //   });
-        //   if (NiveApliMuyAlto.length >= 1) {
-        //     NiveApliNOMuyAltos.sort((a, b) => a.pos - b.pos);
-        //     const arrarNAfinal = NiveApliNOMuyAltos.concat(NiveApliMuyAlto);
-        //     this.Practicas = arrarNAfinal;
-        //   } else {
-        //     this.Practicas = arrdatanew;
-        //     this.Practicas.sort((a, b) => a.pos - b.pos);
-        //   }
-        // }
-
-        var arwnd = [];
-        var asrpp = [];
-        var arpp = [];
-
-        var arppNew = [];
-        arppNew = this.ArrRPP;
-        var asrppNew = [];
-        asrppNew = this.ArrShowRpp;
-
-        var nass = this.Practicas.map(function (num, k) {
-
-          if (srpp.length > 0) {
-            asrpp[k] = asrppNew[k];
-          } else {
-            asrpp[k] = false;
-          }
-
-          arpp[k] = false;
-
-          if (num.nivelapli == 0) {
-            arwnd[k] = true;
-          } else {
-            arwnd[k] = false;
-          }
-          return num.nivelapli;
-        });
-
-        this.idArr = nass;
-        this.ArrWND = arwnd;
-        this.ArrShowRpp = asrpp;
-        this.ArrRPP = arpp;
-
-        if (srpp.length > 0) {
-          this.rpp(n_prac_previo);
-        }
 
 
-        var sr = this.ShowROP.filter(function (task) {
-          return task == true;
-        });
-
-        if (sr.length > 0) {
+        if (this._nobj > 0) {
           this.RelacionOP(this._nobj);
         }
+
+        // //Para Recolorear al momento de hacer llamado a GET RPP
+
+        if (this._nprac > 0) {
+          const index = this.Practicas.findIndex(element => element.n_prac == this._nprac);
+          if (index > -1) {
+            this.Practicas[index].spp = true;
+            this.rpp(this._nprac);
+          }
+        }
+
+
+
+        // this.OrdenamientoPracticas(this.Practicas);
+
+        //Para Recolorear al momento de hacer llamado a GET ROP
+
+
 
         console.log(this.Practicas.length)
       });
@@ -342,130 +608,104 @@ export class MainComponent implements OnInit {
     }
   }
 
-
-  GetDiagnosticLive() {
-    var p = new Diagnostico(this.taskService, "5e52bc768e4e3736a866f5e7", this.EvalResulService);
-    p.GetDataEva(true);
-    this.EvalResulService.routeDataA().subscribe(data => {
-      let newDiag = data.sort((a, b) => a.n_obj - b.n_obj);
-      this.getObjetivos(this.id_usr, newDiag);
-    });
-
-    this.EvalResulService.routeDataB().subscribe(data => {
-      this.DataRop = data;
-    });
-
-  }
-
-  ngOnInit() {
-
-    this.selectOptions = { type: 'Multiple' };
-
-  }
-
-  updateStatusObj(obj: obj, pnew: number) {
-
-    var newTask = {
-      _id: obj._id,
-      objetivo: obj.objetivo,
-      id_usr: obj.id_usr,
-      id_obj: obj.id_obj,
-      pos: pnew
-    };
-
-    this.taskService.updateTask(newTask)
-      .subscribe(res => {
-      });
-  }
-
-  // updateStatuspracticas(pra: Practica, pnew: number, vna, dv) {
-
-
-  //   var newActualizacion = {
-  //     _id: pra._id,
-  //     id_usr: pra.id_usr,
-  //     id_obj: pra.id_prac,
-  //     pos: pnew,
-  //     nivelapli: pra.nivelapli,
-  //     desafio: pra.desafio
-  //   };
-
-
-
-  //   this.taskService.updatePractica(newActualizacion)
-  //     .subscribe(res => {
-  //       //console.log(res);
-  //       //this.GridPrac.instance.refresh();
-  //       // if (vna == 1) {
-  //       //   this.GetDiagnosticLive();
-  //       // }
-  //       // if (dv == 5) {
-  //       //   this.getPracticas(this.id_usr, this.checked);
-  //       // }
-  //     });
-
-
-
-  //   // this.taskService.updatePractica(newActualizacion)
-  //   //   .subscribe(
-  //   //     data => {
-  //   //         console.log(data)
-  //   //     },
-  //   //     err => {
-  //   //         console.log(err)
-  //   //     },
-  //   //     () => {
-  //   //         console.log("Complete function triggered.")
-  //   //     }
-  //   //   );
-
-  // }
-
-  onChangeNA(deviceValue, desaf, _id, e, o) {
+  onChangeNA(deviceValue, desaf, _id, e, n_prac) {
 
     var ActPractica = {
       _id: _id,
-      na: deviceValue
+      na: Number(deviceValue)
     };
 
     this.taskService.updateNA(ActPractica)
       .subscribe(res => {
-        console.log(res);
-        var sr = this.ShowROP.filter(function (task) {
-          return task == true;
-        });
-        if (sr.length > 0) {
-          this.RelacionOP(this._nobj);
-        }
-        let toIndex = _id;
-        const b = this.Practicas.findIndex((item) => item._id === toIndex);
+        const index = this.Practicas.findIndex(element => element.n_prac == n_prac);
+        var showwarningna;
         if (deviceValue == 0) {
-          this.ArrWND[b] = true;
+          showwarningna = true;
         } else {
-          this.ArrWND[b] = false;
+          showwarningna = false;
+        }
+        this.Practicas[index].sw = showwarningna;
+        this.Practicas[index].nivelapli = Number(deviceValue);
+
+        if (this.FILTRO_NA == true) {
+          var filter = this.Practicas.filter(x => x.nivelapli == this.filterbyNA);
+          this.Practicas = filter;
+        } else {
+          if (Number(deviceValue) == 5) {
+            let array = this.Practicas.concat(this.Practicas.splice(index, 1));
+            this.Practicas = array;
+            this.reOrderPrac();
+            this.orderNA();
+            this.OrderAplicables();
+            notify("La práctica " + this.Practicas[index].num + " se ha movido hacia final de la lista.", "success", 3000);
+          }
+
         }
 
-        if (deviceValue >= 5 || this.Practicas[o].nivelapli >= 5) {
-          this.getPracticas(this.id_usr, this.checked);
-        }
+
+
+
+
+
+
+
+
+        this.tableprac.renderRows();
         this.GetDiagnosticLive();
       });
   }
 
-  onChangeAplicable(e) {
+  onChangeDesafio(deviceValue, _id, n_prac) {
+
+    var ActPractica = {
+      _id: _id,
+      desafio: Number(deviceValue)
+    };
+
+    this.taskService.updateDesafio(ActPractica)
+      .subscribe(res => {
+
+        const index = this.Practicas.findIndex(element => element._id == _id);
+        this.Practicas[index].desafio = Number(deviceValue);
+
+        if (this.FILTRO_DE == true) {
+          var filter = this.Practicas.filter(x => x.desafio == this.filterbyDE);
+          this.Practicas = filter;
+        }
+
+      });
+  }
+
+  onChangeAplicable(e, num) {
+
     var ActPractica = {
       _id: e.currentTarget.value,
       aplicable: e.currentTarget.checked
     };
+
+    var id = e.currentTarget.value;
+    var aplicable = e.currentTarget.checked
+
     this.taskService.updateAplicable(ActPractica)
       .subscribe(res => {
-        this.getPracticas(this.id_usr, this.checked);
-        var sr = this.ShowROP.filter(function (task) {
-          return task == true;
-        });
-        if (sr.length > 0) {
-          this.RelacionOP(this._nobj);
+        const v = this.Practicas.findIndex((item) => item._id === id);
+        this.Practicas[v].aplicable = aplicable;
+
+        if (this.FILTRO_) {
+          var filter = this.Practicas.filter(x => x.aplicable == this.filterbyAplicable);
+          this.Practicas = filter;
+        } else {
+          if (aplicable == true) {
+            let array = this.Practicas.concat(this.Practicas.splice(v, 1));
+            this.Practicas = array;
+            notify("La práctica " + num + " se ha movido hacia final de la lista.", "success", 3000);
+            this.orderNA();
+            this.OrderAplicables();
+            this.reOrderPrac();
+          }
+          this.SubPracticas = this.Practicas;
         }
+        this.GetDiagnosticLive();
       });
   }
 
@@ -479,185 +719,15 @@ export class MainComponent implements OnInit {
       });
   }
 
-  ChangeCheckNoInteresa(e) {
-    var actObj = {
-      _id: e.currentTarget.value,
-      NoInteresa: e.currentTarget.checked
-    };
-    this.taskService.updateNoInteresa(actObj)
-      .subscribe(res => {
-        this.GetDiagnosticLive();
-      });
+  dropPracticas(event: CdkDragDrop<[]>) {
+    this.dragDisabled = true;
+    const previousIndex = this.Practicas.findIndex((d) => d === event.item.data);
+    moveItemInArray(this.Practicas, previousIndex, event.currentIndex);
+    this.tableprac.renderRows();
+    this.reOrderPrac();
   }
 
-  ChangeNotasObj(e, id) {
-    var actNotas = {
-      _id: id,
-      notas: e.target.value
-    };
-    this.taskService.updateNotasObj(actNotas)
-      .subscribe(res => {
-      });
-  }
-
-  EventshowROP(e, i, no) {
-    this._nobj = no;
-    this.viewportScroller.scrollToAnchor("SlideTo");
-    this.ShowROP[i] = !this.ShowROP[i];
-    if (this.ShowROP[i] == true) {
-      var r_srow_new = this.ShowROP.map(function (p, j) { return p = false; });
-      this.ShowROP = r_srow_new;
-      this.ShowROP[i] = true;
-      this.isNCVisible = true;
-      this.RelacionOP(no);
-      // this.CrudRopService.GetRop()
-      //   .subscribe(rop => {
-      //     var arrdatanew = [];
-      //     var arrPPnew = [];
-      //     var ncarr = [];
-      //     arrdatanew = this.toggle;
-      //     arrPPnew = this.ArrPP;
-      //     rop.forEach(function (value) {
-      //       if (value.n_obj == no) {
-      //         let toIndex = value.n_prac.valueOf();
-      //         // console.log(toIndex);
-      //         // console.log(value.n_prac);
-      //         const b = arrPPnew.findIndex((item) => item === toIndex);
-      //         arrdatanew[b] = true;
-      //         ncarr[b] = value.nivel_contribucion;
-      //       }
-      //     });
-
-      //     for (let j in this.ArrNC) {
-      //       let nc_title = "";
-      //       switch (ncarr[j]) {
-      //         case 0:
-      //           nc_title = "Muy Bajo";
-      //           break;
-      //         case 0.25:
-      //           nc_title = "Bajo";
-      //           break;
-      //         case 0.50:
-      //           nc_title = "Medio";
-      //           break;
-      //         case 0.75:
-      //           nc_title = "Alto";
-      //           break;
-      //         case 1:
-      //           nc_title = "Muy Alto";
-      //           break;
-      //       }
-      //       this.ArrNC[j] = nc_title;
-      //     }
-
-      //     this.toggle = arrdatanew;
-      //     //this.Grid.refresh();
-      //     // this.GridPrac.onRowPrepared;
-      //     this.GridPrac.instance.refresh();
-      //   });
-    } else {
-      this.isNCVisible = false;
-      var dobles = this.toggle.map(function (num) {
-        return num = false;
-      });
-      this.toggle = dobles;
-      this.GridPrac.instance.refresh();
-      this.viewportScroller.scrollToAnchor("objPanel");
-    }
-  }
-
-  RelacionOP(no) {
-    this.CrudRopService.GetRop()
-      .subscribe(rop => {
-        var arrdatanew = [];
-        var arrPPnew = [];
-        var ncarr = [];
-        var dobles = this.toggle.map(function (num) {
-          return num = false;
-        });
-        this.toggle = dobles;
-        arrdatanew = this.toggle;
-        arrPPnew = this.Practicas;
-        rop.forEach(function (value) {
-          if (value.n_obj == no) {
-            let toIndex = value.n_prac.valueOf();
-            const b = arrPPnew.findIndex((item) => item.n_prac === toIndex);
-            arrdatanew[b] = true;
-            ncarr[b] = value.nivel_contribucion;
-          }
-        });
-
-        for (let j in this.ArrNC) {
-          let nc_title = "";
-          switch (ncarr[j]) {
-            case 0:
-              nc_title = "Muy Bajo";
-              break;
-            case 0.25:
-              nc_title = "Bajo";
-              break;
-            case 0.50:
-              nc_title = "Medio";
-              break;
-            case 0.75:
-              nc_title = "Alto";
-              break;
-            case 1:
-              nc_title = "Muy Alto";
-              break;
-          }
-          this.ArrNC[j] = nc_title;
-        }
-        this.toggle = arrdatanew;
-        this.GridPrac.instance.refresh();
-      });
-  }
-
-  onReorderObj(e) {
-
-    var visibleRows = e.component.getVisibleRows(),
-      toIndex = this.objs.indexOf(visibleRows[e.toIndex].data),
-      fromIndex = this.objs.indexOf(e.itemData);
-    this.objs.splice(fromIndex, 1);
-    this.objs.splice(toIndex, 0, e.itemData);
-
-    for (var i = 0; i < this.objs.length; i++) {
-      this.updateStatusObj(this.objs[i], i);
-    }
-
-    this.GetDiagnosticLive();
-    //this.clientGrid.instance.refresh();
-    //   var objss = this.objs.map(function (task, index, array) {
-    //     return task.pos;
-    //   });
-    //  console.log(objss);
-  }
-
-  onReorderPrac(e) {
-
-    var n_prac_previo = 0;
-    var srpp = this.ArrShowRpp.filter(function (task) {
-      return task == true;
-    });
-    if (srpp.length > 0) {
-      const v = this.ArrShowRpp.findIndex((item) => item === true);
-      n_prac_previo = this.Practicas[v].n_prac;
-      console.log(n_prac_previo);
-    }
-    if (srpp.length > 0) {
-      this.rpp(n_prac_previo);
-      console.log("entreeee");
-    }
-
-
-
-    var visibleRows = e.component.getVisibleRows(),
-      toIndex = this.Practicas.indexOf(visibleRows[e.toIndex].data),
-      fromIndex = this.Practicas.indexOf(e.itemData);
-    this.Practicas.splice(fromIndex, 1);
-    this.Practicas.splice(toIndex, 0, e.itemData);
-    this.idArr.splice(fromIndex, 1);
-    this.idArr.splice(toIndex, 0, e.itemData.nivelapli);
+  reOrderPrac() {
     var newp = [];
     for (var i = 0; i < this.Practicas.length; i++) {
       var newActualizacion = {
@@ -670,163 +740,34 @@ export class MainComponent implements OnInit {
       };
       newp[i] = newActualizacion
     }
-
-    var sr = this.ShowROP.filter(function (task) {
-      return task == true;
-    });
-
-    if (sr.length > 0) {
-      this.RelacionOP(this._nobj);
-    }
-
-
-    var arwnd = [];
-    var nass = newp.map(function (num, k) {
-      if (num.nivelapli == 0) {
-        arwnd[k] = true;
-      } else {
-        arwnd[k] = false;
-      }
-      return num.nivelapli;
-    });
-
-    this.idArr = nass;
-    this.ArrWND = arwnd;
-
-
     this.taskService.updatePracticanew(newp, "ok")
       .subscribe(res => {
         console.log("ok termine");
       });
-
-
-    // for (var i = 0; i < this.Practicas.length; i++) {
-    //   this.updateStatuspracticas(this.Practicas[i], i, 0, 0);
-    // }
-
-    // async function printFiles(prax, t) {
-
-    //   for await (const p of prax) {
-
-    //     var newActualizacion = {
-    //       _id: p._id,
-    //       id_usr: p.id_usr,
-    //       id_obj: p.id_prac,
-    //       pos: p.pos,
-    //       nivelapli: p.nivelapli,
-    //       desafio: p.desafio
-    //     };
-
-
-    //      t.updatePractica(newActualizacion)
-    //       .subscribe(res => {
-    //         console.log(res);
-    //       });
-
-
-    //   }
-    // }
-
-    // printFiles(this.Practicas, this.taskService);
-
-    // for (const p of this.Practicas) {
-
-    //   var newActualizacion = {
-    //     _id: p._id,
-    //     id_usr: p.id_usr,
-    //     id_obj: p.id_prac,
-    //     pos: p.pos,
-    //     nivelapli: p.nivelapli,
-    //     desafio: p.desafio
-    //   };
-
-    //   this.taskService.updatePractica(newActualizacion)
-    //     .subscribe(res => { 
-    //       console.log(res);
-    //     });
-    // }
-
-
-
-
-
-    // const forLoop = async _ => {
-    //   console.log('Start')
-    //   for (let index = 0; index < this.Practicas.length; index++) {
-    //     const numFruit = await this.updateStatuspracticas(this.Practicas[index], index);
-    //     console.log(numFruit)
-    //   }
-    //   console.log('End')
-    // }
-
-    // forLoop(0)
-
-    // this.Practicas.forEach(async p => {
-    //   const response = await this.updateStatuspracticas(p, p.pos);
-    //   console.log(response);
-    // });
-
-
-
-
-
-    // this.getPracticas(this.id_usr, false);
-
-
-
-    // var async = require('async');
-    // async.eachSeries(this.Practicas, function (rec, callback) {
-    //   console.log(rec);
-    //   callback(this.updateStatuspracticas(rec,rec.pos));
-    //   console.log("ok");
-    // }, function (err) {
-    //   console.log("funciono");
-    // });
-
-
-
-
-
-    // if (this.onRop(e) == true) {
-
-    //   this.getPracticas(this.id_usr, false);
-
-    //   console.log("ok termine");
-
-    //   var sr = this.ShowROP.filter(function (task) {
-    //     return task == true;
-    //   });
-    //   if (sr.length > 0) {
-    //     this.RelacionOP(this._nobj);
-    //   }
-    // }
-  }
-
-  DetalleObjetivo(e, n) {
-    this.popupVisible = true;
-    let n_ob = this.objs[n].n_obj;
-    var arrPPnew = [];
-    this.DataRop.forEach(function (value) {
-      if (value.n_obj == n_ob) {
-        arrPPnew.push(value);
-      }
-    });
-    this.DatasourseRop = arrPPnew;
-  }
-
-  OcultarObjNI(e) {
-    var arrObj = [];
-    arrObj = this.objs
-    if (this.checkedObjetivosNI == true) {
-      var arrFilter = arrObj.filter((task) => task.NoInteresa == false);
-      this.objs = arrFilter;
-    } else {
-      this.GetDiagnosticLive()
-    }
   }
 
   eventAltoNA(e) {
+    this.selectaplicableval = 1;
+    this.selectdesafioval = -1;
+    this.selectnaval = -1;
+    this.FILTRO_DE = false;
+    this.FILTRO_NA = false;
+    this.FILTRO_ = false;
+    this.LimpiarFiltrosString(1);
     this.getPracticas(this.id_usr, false);
+    this.DisablePriorizacion = false;
+  }
+
+  eventAplicables(e) {
+    this.selectaplicableval = 1;
+    this.selectdesafioval = -1;
+    this.selectnaval = -1;
+    this.FILTRO_DE = false;
+    this.FILTRO_NA = false;
+    this.FILTRO_ = false;
+    this.LimpiarFiltrosString(1);
+    this.getPracticas(this.id_usr, false);
+    this.DisablePriorizacion = false;
   }
 
   orderNA() {
@@ -854,34 +795,13 @@ export class MainComponent implements OnInit {
     }
   }
 
-  eventAplicables(e) {
-    this.getPracticas(this.id_usr, false);
-  }
-
-  scroll(el: HTMLElement) {
-    el.scrollIntoView({ behavior: 'smooth' });
-  }
-
-  onRowPrepared(e) {
-    if (e.data) {
-      const x = this.Practicas.findIndex((item) => item.n_prac === e.data.n_prac);
-      if (this.toggle[x] == true) {
-        e.rowElement.style.backgroundColor = "#81F79F";
-      }
-      if (this.ArrRPP[x] == true) {
-        // console.log(x +" : " + e.data.n_prac);
-        e.rowElement.style.backgroundColor = "#F3F781";
-      }
-    }
-  }
-
-  DetallePractica(e, i) {
+  DetallePractica(e, p, textpr) {
     this.popupPracticaDescription = true;
     this.visibledescriptionprac = true;
     this.visiblegridop = false;
     this.visiblegriddp = false;
-    var n_prac = this.Practicas[i].n_prac;
-    this.taskService.getDescriptionPracticas(n_prac)
+    this.TextP = "PRA " + p + ": " + textpr + " ";
+    this.taskService.getDescriptionPracticas(p)
       .subscribe(res => {
         var xmlString = res[0].description,
           results = document.getElementById("results")
@@ -889,14 +809,16 @@ export class MainComponent implements OnInit {
       });
   }
 
-  DetallePracticaObj(e, i) {
+  DetallePracticaObj(e, p, textpr) {
     this.popupPracticaDescription = true;
     this.visibledescriptionprac = false;
     this.visiblegriddp = false;
+    this.TextP = "PRA " + p + ": " + textpr + " ";
+
     this.CrudRopService.GetRop()
       .subscribe(rop => {
         this.visiblegridop = true;
-        var n_prac = this.Practicas[i].n_prac;
+        var n_prac = p;
         var rlo = rop.filter(function (task) {
           return task.n_prac == n_prac;
         });
@@ -904,33 +826,51 @@ export class MainComponent implements OnInit {
       });
   }
 
-  DetallePracticaDesafios(e, i) {
-    var n_prac = this.Practicas[i].n_prac;
+  DetallePracticaDesafios(e, p, textpr) {
     this.popupPracticaDescription = true;
     this.visiblegriddp = true;
     this.visibledescriptionprac = false;
     this.visiblegridop = false;
-    this.taskService.getRdp(n_prac)
+    this.TextP = "PRA " + p + ": " + textpr + " ";
+
+    this.taskService.getRdp(p)
       .subscribe(rdp => {
         this.DataRdp = rdp;
       });
   }
 
+  ShowRpp(e, i, SHOWRPP, n_prac) {
+    SHOWRPP = !SHOWRPP;
+    if (SHOWRPP == true) {
 
-  ShowRpp(e, i) {
-    this.ArrShowRpp[i] = !this.ArrShowRpp[i];
-    if (this.ArrShowRpp[i] == true) {
-      var r_spp_new = this.ArrShowRpp.map(function (p, j) { return p = false; });
-      this.ArrShowRpp = r_spp_new;
-      this.ArrShowRpp[i] = true;
-      var n_prac = this.Practicas[i].n_prac;
+      this.hiddenNC = true;
+      this.showColumn();
+      var prac = this.Practicas.map(function (num) {
+        num.colorROP = false;
+        num.nivel_contribucion = "";
+        return num;
+      });
+
+      if (this._nobj) {
+        const y = this.objs.findIndex(element => element.n_obj == this._nobj);
+        this.objs[y].showro = false;
+        this._nobj = 0;
+      }
+
+      this._nprac = n_prac;
+      var r_spp_new = this.Practicas.map(function (p, j) { p.spp = false; return p });
+      const index = this.Practicas.findIndex(element => element.n_prac == n_prac);
+      this.Practicas = r_spp_new;
+      this.Practicas[index].spp = true;
       this.rpp(n_prac);
     } else {
-      var sr = this.ArrRPP.filter(function (task) {
-        return task == false;
+      this._nprac = 0;
+      var prac = this.Practicas.map(function (num) {
+        num.colorRPP = false;
+        num.spp = false;
+        return num;
       });
-      this.ArrRPP = sr;
-      this.GridPrac.instance.refresh();
+      this.Practicas = prac;
     }
   }
 
@@ -940,16 +880,231 @@ export class MainComponent implements OnInit {
     this.taskService.getRpp(n_prac)
       .subscribe(rpp => {
         var r_pp_final = practicas.map(function (p, j) {
-          var r;
           var indexP2 = rpp.find((item) => item.n_prac_2 === p.n_prac);
-          if (indexP2) { r = true; } else { r = false; }
-          // console.log(p.n_prac + " : " + r);
-          return r;
+          if (indexP2) { p.colorRPP = true; }
+          else { p.colorRPP = false; }
+          return p;
         });
-        this.ArrRPP = r_pp_final;
-        this.GridPrac.instance.refresh();
+        this.Practicas = r_pp_final;
       });
   }
+
+  public getColor(crop: boolean, crpp: boolean, cspp: boolean): string {
+    var color;
+    if (crop == true) {
+      color = "#bfefbb";
+    } else if (crpp == true) {
+      color = "#FFFACD";
+    } else if (cspp == true) {
+      color = "#d1ebf7";
+    } else {
+      color = "white";
+    }
+    return color;
+    // var color;
+    // if (crop == true) {
+    //   color = "#81F79F";
+    // } else if (crpp == true) {
+    //   color = "#F3F781";
+    // } else {
+    //   color = "white";
+    // }
+    // return crop == true ? "#81F79F" : "white";
+  }
+
+  showColumn() {
+    if (this.hiddenNC == false) {
+      this.displayedColumnsPrac.push('nc');
+    } else {
+      this.displayedColumnsPrac = ['n_prac', 'textprac', 'metodologia', 'desafio', 'na', 'notas', 'aplicable'];
+    }
+  }
+
+  //Filtros Practicas
+
+  FilterDesafio(e: number) {
+    this.selectaplicableval = 1;
+    this.selectnaval = -1;
+    this.LimpiarFiltrosString(1);
+    var practicass = [];
+    practicass = this.SubPracticas;
+    var desaf = e;
+    if (desaf == -1) {
+      this.DisablePriorizacion = false;
+      this.getPracticas(this.id_usr, false);
+      this.FILTRO_DE = false;
+    } else {
+      this.DisablePriorizacion = true;
+      this.FILTRO_DE = true;
+      this.filterbyDE = desaf;
+      var filter = practicass.filter(x => x.desafio == desaf);
+      this.Practicas = filter;
+    }
+  }
+
+  FilterNA(e: number) {
+    this.LimpiarFiltrosString(1);
+    this.selectaplicableval = 1;
+    this.selectdesafioval = -1;
+    var practicass = [];
+    practicass = this.SubPracticas;
+    var na = e;
+    if (na == -1) {
+      this.getPracticas(this.id_usr, false);
+      this.DisablePriorizacion = false;
+      this.FILTRO_NA = false;
+    } else {
+      this.DisablePriorizacion = true;
+      this.FILTRO_NA = true;
+      this.filterbyNA = na;
+      var filter = practicass.filter(x => x.nivelapli == na);
+      this.Practicas = filter;
+    }
+  }
+
+  FilterAplicable(e: Number) {
+    var apli: Number = Number(e);
+    this.selectdesafioval = -1;
+    this.selectnaval = -1;
+    this.LimpiarFiltrosString(1);
+    if (apli == 1) {
+      this.DisablePriorizacion = false;
+      this.FILTRO_ = false;
+      this.getPracticas(this.id_usr, false);
+    } else {
+      this.DisablePriorizacion = true;
+      var practicass = [];
+      practicass = this.SubPracticas;
+
+      switch (apli) {
+        case 2: {
+          this.FILTRO_ = true;
+          this.filterbyAplicable = true;
+          break;
+        }
+        case 3: {
+          this.FILTRO_ = true;
+          this.filterbyAplicable = false;
+          break;
+        }
+      }
+      var filter = practicass.filter(x => x.aplicable == this.filterbyAplicable);
+      this.Practicas = filter;
+    }
+  }
+
+  FilterTypeText(filterValue: string, colum: number) {
+    var columnaname;
+    var practicass = [];
+    this.selectaplicableval = 1;
+    this.selectdesafioval = -1;
+    this.selectnaval = -1;
+    this.FILTRO_DE = false;
+    this.FILTRO_NA = false;
+    this.FILTRO_ = false;
+    if (filterValue === "undefined" || filterValue === "") {
+      this.getPracticas(this.id_usr, false);
+      this.DisablePriorizacion = false;
+      this.LimpiarFiltrosString(1);
+    } else {
+      this.DisablePriorizacion = true;
+      practicass = this.SubPracticas;
+      columnaname = "";
+      var data;
+      if (colum == 1) {
+        columnaname = "num";
+        data = practicass.filter(x => x.n_prac == parseInt(filterValue));
+        this.LimpiarFiltrosString(2);
+      } else {
+        switch (colum) {
+          case 2: {
+            columnaname = "textprac";
+            this.LimpiarFiltrosString(3);
+            break;
+          }
+          case 3: {
+            columnaname = "metodologia";
+            this.LimpiarFiltrosString(4);
+            break;
+          }
+          case 4: {
+            columnaname = "notas";
+            this.LimpiarFiltrosString(5);
+            break;
+          }
+        }
+        data = practicass.filter(x => x[columnaname].toLowerCase().includes(filterValue.toLowerCase()));
+      }
+
+
+
+
+      this.Practicas = data;
+
+    }
+
+  }
+
+  LimpiarFiltrosString(n) {
+
+    switch (n) {
+      case 1: {
+        this.InputStringnprac = '';
+        this.InputStringTextPrac = '';
+        this.InputStringMetodo = '';
+        this.InputStringNotasPrac = '';
+        break;
+      }
+      case 2: {
+        this.InputStringTextPrac = '';
+        this.InputStringMetodo = '';
+        this.InputStringNotasPrac = '';
+        break;
+      }
+      case 3: {
+        this.InputStringnprac = '';
+        this.InputStringMetodo = '';
+        this.InputStringNotasPrac = '';
+        break;
+      }
+      case 4: {
+        this.InputStringnprac = '';
+        this.InputStringTextPrac = '';
+        this.InputStringNotasPrac = '';
+        break;
+      }
+      case 5: {
+        this.InputStringnprac = '';
+        this.InputStringTextPrac = '';
+        this.InputStringMetodo = '';
+        break;
+      }
+    }
+
+
+
+
+
+
+
+
+
+  }
+
+  //METODO PARA SCROLL 
+
+  scroll(el: HTMLElement) {
+    el.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  doneClick() {
+    this.popupPracticaDescription = false;
+  }
+  
+  doneObj(){
+    this.popupVisible = false;
+  }
+
 
 }
 

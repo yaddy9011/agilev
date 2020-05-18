@@ -1,0 +1,88 @@
+<div class="maincontent">
+    <app-menu></app-menu>
+    <div class="Appcontainer"  align="center">
+        <br>
+        <br>
+        <br>
+        <div #objPanel class="container">
+            <div class="row">
+                <div class="col">
+                    <img height="400" width="400" src="../../assets/images/practica1.png">
+                </div>
+                <div class="col">
+                    <p align="justify">
+                        Este diagrama ilustra el solape de prácticas entre los métodos ágiles más populares. Esto
+                        refuerza el hecho que no es sensato plantearse de forma exclusiva la implantación de un método u
+                        otro. Lo importante son las prácticas ágiles y la sinergia que generaría la aplicación de más
+                        prácticas y en mayor profundidad. Más abajo se presenta la lista de prácticas que corresponden a
+                        los números indicados en la figura. Haz clic en la imagen para descargar una diapositiva en la
+                        cual se pueden leer los nombres de las prácticas sobre la misma figura.
+                    </p>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col">
+                    <img height="400" class="rounded float-left" width="500" src="../../assets/images/practica2.png">
+                </div>
+                <div class="col">
+                    <p align="justify">
+                        Esta imagen muestra una posible agrupación de prácticas con el propósito de evaluar su
+                        aplicación en
+                        ciertos ámbitos específicos de mejora. La práctica 1 que aparece fuera de las agrupaciones es la
+                        que
+                        se refiere a enfatizar la sencillez en todos los aspectos, con lo cual hemos considerado que es
+                        la
+                        práctica transversal por excelencia. Hacer clic en la imagen para descargar una diapositiva en
+                        la
+                        cual se pueden leer los nombres de las prácticas sobre la misma figura. En cuanto a las
+                        prácticas 5
+                        y 6, la primera se refiere a la utilización de estimaciones y capacidad del equipo para
+                        establecer
+                        los compromisos, y la segunda a la utilización de iteraciones para agrupar el trabajo.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
+        <mat-card class="example-card">
+            <mat-card-header>
+                <mat-card-title>Catálogo de Prácticas Ágiles
+                </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Práctica</th>
+                            <th scope="col">Metodo ágil</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let prac of Practicas">
+                            <th scope="row">{{prac.Clave}}</th>
+                            <td>{{prac.descripcion}}</td>
+                            <td>{{prac.metodo_agil}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </mat-card-content>
+        </mat-card>
+        <br>
+        <br>
+
+
+
+
+
+        <button id="butt" mat-fab (click)="scroll(objPanel)">
+            <mat-icon>arrow_upward</mat-icon>
+        </button>
+
+    </div>
+    <app-footer></app-footer>
+</div>

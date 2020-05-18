@@ -9,4 +9,5 @@ export class obj {
     pd: string;
     NoInteresa: Boolean;
     notas: string;
+    showro:Boolean;
 }

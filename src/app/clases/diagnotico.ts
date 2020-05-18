@@ -25,11 +25,9 @@ export class Diagnostico {
 
         this.taskService.GetDataEval(Data)
             .subscribe(evals => {
-
                 //relación general de objetivos y prácticas
-
                 let levels = evals.map((ev, i) => {
-                
+
                     let nc = ev.relaop.nivel_contribucion;
                     let na = ev.prac.nivelapli;
                     let nc_title = "";
@@ -75,7 +73,7 @@ export class Diagnostico {
                             break;
                         case 1:
                             na_title = "Muy Bajo";
-                            na_new = 0;
+                            na_new = 0.01;
                             PremioNa = true;
                             break;
                         case 2:
@@ -112,30 +110,53 @@ export class Diagnostico {
                         na: na_new,
                         premioNa: PremioNa,
                         premioNc: PremioNc,
-                        PNCpo: PNCpo
+                        PNCpo: PNCpo,
+                        NoInteresa: ev.NoInteresa,
+                        aplicable: ev.prac.aplicable
                     };
                     return arraData;
                 });
+
+               
 
                 //para generar suma na, na, nd
 
                 let arrSuma = levels.reduce((contador, objeto) => {
                     var new_na;
-                    if (objeto.premioNa && objeto.premioNc == true) {
-                        new_na = objeto.na + (objeto.PNCpo * objeto.na);
+                    if (objeto.na != 0) {
+                        if (objeto.premioNa && objeto.premioNc == true) {
+                            new_na = objeto.na + (objeto.PNCpo * objeto.na);
+                        } else {
+                            new_na = objeto.na
+                        }
                     } else {
-                        new_na = objeto.na
+                        new_na = 0;
                     }
                     contador[objeto.n_obj] = (contador[objeto.n_obj] || 0) + new_na;
                     return contador;
                 }, {});
 
+            
                 //conseguir el total de relaciones objetivos-prácticas
 
+                // var FiltroNaNoaplica = levels.filter(x => x.na != 0);
+
                 const TotalRop = levels.reduce((contador, objeto) => {
-                    contador[objeto.n_obj] = (contador[objeto.n_obj] || 0) + 1;
+                    var csm;
+                    if (objeto.NoInteresa == true) {
+                        csm = 0;
+                    } else if (objeto.aplicable == true) {
+                        csm = 0;
+                    } else if (objeto.na != 0) {
+                        csm = 1;
+                    } else {
+                        csm = 0;
+                    }
+                    contador[objeto.n_obj] = (contador[objeto.n_obj] || 0) + csm;
                     return contador;
                 }, {});
+
+             
 
                 //quitamos los repetidos
                 let sinRepetidos = levels.filter((valorActual, indiceActual, arreglo) => {
@@ -145,11 +166,18 @@ export class Diagnostico {
                 // mapeamos los datos de los objetivos y el diagnóstico
 
                 let mapObjetivos = sinRepetidos.map((mo, i) => {
-                    let PorcentajeDiagnostic = Math.round(Number(100 / (TotalRop[mo.n_obj] / arrSuma[mo.n_obj])));
+                    let PorcentajeDiagnostic;
+                    if (TotalRop[mo.n_obj] == 0) {
+                        PorcentajeDiagnostic = 0;
+                    } else {
+                        PorcentajeDiagnostic = Math.round(Number(100 / (TotalRop[mo.n_obj] / arrSuma[mo.n_obj])));
+                    }
+
                     const DataObj = {
                         n_obj: mo.n_obj,
                         TexObj: mo.Descrip_obj,
-                        pd: PorcentajeDiagnostic
+                        pd: PorcentajeDiagnostic,
+                        NoInteresa: mo.NoInteresa
                     };
                     return DataObj;
                 });

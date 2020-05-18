@@ -22,6 +22,7 @@ export class MenuComponent implements OnInit {
   idEval: String;
   titlePage: String;
   adminacces: boolean;
+  idusr:String;
 
   constructor(private AuthService: AuthService, 
     private router: Router, 
@@ -30,6 +31,7 @@ export class MenuComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.resetToken = params.token;
       this.idEval = params.id_eval;
+      this.idusr= params.idusr;
     });
 
     var z = localStorage.getItem("ACCESS_admin");
@@ -189,7 +191,7 @@ export class MenuComponent implements OnInit {
         break;
       }
       case "/ForgotPassword": {
-        this.titlePage = "Recuperación de Contraseña";
+        this.titlePage = "Restablecimiento de Contraseña";
         if (x == null) {
           this.isShoweval = !this.isShoweval;
           this.isShowprac = !this.isShowprac;
@@ -249,6 +251,20 @@ export class MenuComponent implements OnInit {
         }
         break;
       }
+
+      case "/ValidEmail/" + this.idusr: {
+        this.titlePage = "Confirmación de Correo Electronico";
+        this.isShoweval = !this.isShoweval;
+        this.isShowprac = !this.isShowprac;
+        this.isShowLogo = !this.isShowLogo;
+        this.isShowGo = !this.isShowGo;
+        this.isShowGp = !this.isShowGp;
+        this.isShowROP = !this.isShowROP;
+        if (y == 1) {
+          this.router.navigateByUrl('/home');
+        }
+        break;
+      }
       case "/Diagnostico_objetivos/" + this.idEval: {
         this.titlePage = "Diagnóstico del nivel de agilidad";
         if (x == null) {
@@ -274,6 +290,78 @@ export class MenuComponent implements OnInit {
       }
       case "/EquipoAgile": {
         this.titlePage = "Equipo Agile Roadmap++";
+        if (x == null) {
+          this.isShoweval = !this.isShoweval;
+          this.isShowprac = !this.isShowprac;
+          this.isShowLogo = !this.isShowLogo;
+          this.isShowGo = !this.isShowGo;
+          this.isShowGp = !this.isShowGp;
+          this.isShowROP = !this.isShowROP;
+
+        } else {
+          this.isShowReg = !this.isShowReg;
+          this.isShowLog = !this.isShowLog;
+          if (this.adminacces == false) {
+            this.isShowGo = !this.isShowGo;
+            this.isShowGp = !this.isShowGp;
+            this.isShowROP = !this.isShowROP;
+          }
+        }
+        if (y == 1) {
+          this.router.navigateByUrl('/home');
+        }
+        break;
+      }
+      case "/InfoPasosRoadmap": {
+        this.titlePage = "Pasos Roadmap";
+        if (x == null) {
+          this.isShoweval = !this.isShoweval;
+          this.isShowprac = !this.isShowprac;
+          this.isShowLogo = !this.isShowLogo;
+          this.isShowGo = !this.isShowGo;
+          this.isShowGp = !this.isShowGp;
+          this.isShowROP = !this.isShowROP;
+
+        } else {
+          this.isShowReg = !this.isShowReg;
+          this.isShowLog = !this.isShowLog;
+          if (this.adminacces == false) {
+            this.isShowGo = !this.isShowGo;
+            this.isShowGp = !this.isShowGp;
+            this.isShowROP = !this.isShowROP;
+          }
+        }
+        if (y == 1) {
+          this.router.navigateByUrl('/home');
+        }
+        break;
+      }
+      case "/InfoAcercaDe": {
+        this.titlePage = "Roadmap++";
+        if (x == null) {
+          this.isShoweval = !this.isShoweval;
+          this.isShowprac = !this.isShowprac;
+          this.isShowLogo = !this.isShowLogo;
+          this.isShowGo = !this.isShowGo;
+          this.isShowGp = !this.isShowGp;
+          this.isShowROP = !this.isShowROP;
+
+        } else {
+          this.isShowReg = !this.isShowReg;
+          this.isShowLog = !this.isShowLog;
+          if (this.adminacces == false) {
+            this.isShowGo = !this.isShowGo;
+            this.isShowGp = !this.isShowGp;
+            this.isShowROP = !this.isShowROP;
+          }
+        }
+        if (y == 1) {
+          this.router.navigateByUrl('/home');
+        }
+        break;
+      }
+      case "/InfoPracticas": {
+        this.titlePage = "Prácticas Roadmap++";
         if (x == null) {
           this.isShoweval = !this.isShoweval;
           this.isShowprac = !this.isShowprac;

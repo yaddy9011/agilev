@@ -14,7 +14,7 @@
     font-size: 23px;
 }
 .un {
-width: 75%;
+width: 65%;
 color: rgb(38, 50, 56);
 font-weight: 700;
 font-size: 14px;
@@ -93,4 +93,9 @@ a {
     .main {
         border-radius: 0px;
     }
+}
+
+
+.mat-card-header{
+    justify-content: center /* for center*/
 }

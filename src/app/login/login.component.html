@@ -1,41 +1,71 @@
 <app-menu></app-menu>
 
-<div  class="Appcontainer" align="center">
+<div class="Appcontainer" align="center">
 
-<div class="main" align="center">
-  <p class="sign" align="center">Accede al sistema</p>
-  <form #frmLogin="ngForm" class="form1" (ngSubmit)="onLogin(frmLogin)">
-    <input class="un" type="email" name="email" placeholder="Email" ngModel required>
-    <div style="width: 300px">
-      <show-hide-password btnStyle="primary" [btnOutline]="false">
-        <input name="password" type="password" placeholder="Password" ngModel required>
-      </show-hide-password>
+
+  <br>
+  <br>
+
+  <mat-card style="max-width: 400px;">
+    <mat-card-header>
+      <mat-card-title>Acceso a cuenta
+      </mat-card-title>
+    </mat-card-header>
+    <form   #frmLogin="ngForm" class="form1" (ngSubmit)="onLogin(frmLogin)">
+      <input class="un" type="email" name="email" placeholder="Email" ngModel required>
+      <div style="width: 65%">
+        <show-hide-password btnStyle="primary" [btnOutline]="false">
+          <input name="password" type="password" placeholder="Password" ngModel required>
+        </show-hide-password>
+      </div>
+      <br>
+      <input class="submit" type="submit" value="Entrar">
+      <p class="forgot" align="center">
+        <a routerLink="/registro">¿No estás registrado? Regístrate aquí</a>
+        <br>
+        <br>
+        <a routerLink="/ForgotPassword">¿Olvidaste tu contraseña?</a>
+      </p>
+    </form>
+
+
+
+  </mat-card>
+
+  <br>
+  <!-- <div class="main" align="center">
+    <p class="sign" align="center">Accede al sistema</p>
+    <form #frmLogin="ngForm" class="form1" (ngSubmit)="onLogin(frmLogin)">
+      <input class="un" type="email" name="email" placeholder="Email" ngModel required>
+      <div style="width: 300px">
+        <show-hide-password btnStyle="primary" [btnOutline]="false">
+          <input name="password" type="password" placeholder="Password" ngModel required>
+        </show-hide-password>
+      </div>
+      <br>
+      <input class="submit" type="submit" value="Entrar">
+      <p class="forgot" align="center">
+        <a routerLink="/registro">¿No estás registrado? Regístrate aquí</a>
+        <br>
+        <br>
+        <a routerLink="/ForgotPassword">¿Olvidaste tu contraseña?</a>
+      </p>
+    </form>
+  </div> -->
+  <dx-popup [width]="300" [height]="250" [showTitle]="true" title="Aviso" [dragEnabled]="false"
+    [closeOnOutsideClick]="false" [(visible)]="popupVisible">
+    <div class='text-center'>
+      <br>
+      <p> {{mensaje}}</p>
+      <br>
+      <dx-button icon="check" type="success" text="Done" (onClick)="doneClick()">
+      </dx-button>
     </div>
-    <br>
-    <input class="submit" type="submit" value="Entrar">
-    <p class="forgot" align="center">
-      <a routerLink="/registro">¿No estás registrado? Regístrate aquí</a>
-      <br>
-      <br>
-      <a routerLink="/ForgotPassword">¿Olvidaste tu contraseña?</a>
-    </p>
-  </form>
-</div>
-<dx-popup [width]="300" [height]="250" [showTitle]="true" title="Aviso" [dragEnabled]="false"
-  [closeOnOutsideClick]="false" [(visible)]="popupVisible">
-  <div class='text-center'>
-    <br>
-    <p> {{mensaje}}</p>
-    <br>
-    <dx-button icon="check" type="success" text="Done" (onClick)="doneClick()">
-    </dx-button>
-  </div>
-</dx-popup>
-<dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [position]="{ of: '#frmLogin' }" [(visible)]="loadingVisible"
-  [showIndicator]="true" [showPane]="true" [shading]="true" [closeOnOutsideClick]="false" (onShown)="onShown()"
-  (onHidden)="onHidden()">
-</dx-load-panel>
-
+  </dx-popup>
+  <dx-load-panel #loadPanel shadingColor="rgba(0,0,0,0.4)" [position]="{ of: '#frmLogin' }" [(visible)]="loadingVisible"
+    [showIndicator]="true" [showPane]="true" [shading]="true" [closeOnOutsideClick]="false" (onShown)="onShown()"
+    (onHidden)="onHidden()">
+  </dx-load-panel>
 </div>
 
 <app-footer></app-footer>
