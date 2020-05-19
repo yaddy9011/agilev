@@ -93,7 +93,7 @@ export class RegisterComponent implements OnInit {
 
   doneClick() {
     this.popupVisible = false;
-    this.router.navigateByUrl('/home');
+    this.router.navigateByUrl('/');
   }
 
 }

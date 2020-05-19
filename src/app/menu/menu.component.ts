@@ -59,7 +59,8 @@ export class MenuComponent implements OnInit {
     var pagina = this.router.url;
     var x = localStorage.getItem("ACCESS_IDS");
     switch (pagina) {
-      case "/home": {
+
+      case "/home": case "/": {
         this.titlePage = " AGILE ROADMAP++ ";
         if (x == null) {
           this.isShowLogo = !this.isShowLogo;

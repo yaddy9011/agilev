@@ -19,6 +19,7 @@ import {InfoPasosRoadmapComponent} from './info-pasos-roadmap/info-pasos-roadmap
 import {InfoPracticasComponent} from './info-practicas/info-practicas.component';
 
 const routes: Routes = [
+  { path: '',  component: HomeComponent, pathMatch: 'full'},
   {
     path: 'login',
     component: LoginComponent
