@@ -13,7 +13,7 @@
 :root {
   --first-color: #4690b0;
   --second-color:#ff5757;
-  --first-letra: #000000;
+  --first-letra: #fff;
   --second-letra: #fff;
   --blue: #007bff;
   --indigo: #6610f2;
@@ -48,6 +48,7 @@
 
 #mat-header{
   background-color: var(--first-color);
+  color: var(--first-letra)!important;
 }
 
 #mat-button{
@@ -74,6 +75,11 @@ height: 100%;
     background-color: var(--first-color);
     background: var(--first-color) !important;
     color: var(--first-letra)!important;
+  }
+
+  .mheader-text{
+    color: var(--first-letra)!important;
+    font-weight: bold;
   }
 
   .mheader:hover {
@@ -9997,6 +10003,7 @@ h3 {
 .page-section .page-section-heading {
   font-size: 2.25rem;
   line-height: 2rem;
+  color:var(--first-color);
 }
 @media (min-width: 992px) {
   .page-section .page-section-heading {
@@ -10031,10 +10038,10 @@ h3 {
   font-size: 2rem;
 }
 .divider-custom.divider-light .divider-custom-line {
-  background-color: #fff;
+  background-color: var(--second-color);
 }
 .divider-custom.divider-light .divider-custom-icon {
-  color: #fff !important;
+  color:  var(--second-color)!important;
 }
 
 .btn-xl {

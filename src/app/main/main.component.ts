@@ -42,6 +42,7 @@ export class MainComponent implements OnInit {
   userName = '';
   objs: obj[];
   Subobjs: obj[];
+  public DiagnosticObj: [];
   title: string;
   nameusr: string;
   Practicas: Practica[];
@@ -116,11 +117,13 @@ export class MainComponent implements OnInit {
     this.showColumn();
     this.nameusr = localStorage.getItem("ACCESS_name");
     this.id_usr = localStorage.getItem("ACCESS_IDS");
-    this.GetDiagnosticLive();
+    this.someMethod();
     this.getPracticas(this.id_usr, this.checked);
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.GetDiagnosticLive();
+  }
 
   // METODOS PARA OBJETIVOS
 
@@ -128,17 +131,53 @@ export class MainComponent implements OnInit {
     var p = new Diagnostico(this.taskService, "5e52bc768e4e3736a866f5e7", this.EvalResulService);
     p.GetDataEva(true);
     this.EvalResulService.routeDataA().subscribe(data => {
-      let newDiag = data.sort((a, b) => a.n_obj - b.n_obj);
-      this.getObjetivos(this.id_usr, newDiag);
+      this.DiagnosticObj = data;
+      this.getObjetivos(this.id_usr);
     });
 
     this.EvalResulService.routeDataB().subscribe(data => {
       this.DataRop = data;
     });
+  }
+
+  someMethod() {
+    // var p = new Diagnostico(this.taskService, "5e52bc768e4e3736a866f5e7", this.EvalResulService);
+    // p.GetDataEva(true);
+
+
+    // this.EvalResulService.routeDataA().subscribe({
+    //   next: value => { console.log(value); },
+    //   error: err => { },
+    //   complete: () => {
+    //     console.log("ok");
+    //   }
+    // });
+    // this.EvalResulService.routeDataA().subscribe(
+    //   value => console.log(value),
+    //   error => console.log("Error: ", error),
+    //   () => console.log("ok"));
+
+
+    // this.EvalResulService.routeDataA()
+    //   .subscribe((num: any) => {
+    //     console.log(num);
+    //   }, (err) => {
+    //     console.log(err);
+    //   }, () => { 
+    //     console.log("ok");
+    //   });
+
+
+    // this.EvalResulService.routeDataA().subscribe(data => {
+    //   this.DiagnosticObj = data;
+    // }).add(() => {
+
+    // });
+
 
   }
 
-  getObjetivos(id_usr, diagnosticObjs) {
+  getObjetivos(id_usr) {
     var showre;
     var Numnobj = this._nobj
 
@@ -148,13 +187,19 @@ export class MainComponent implements OnInit {
       showre = false;
     }
 
+    var arrOBJDIAGnew = [];
+    arrOBJDIAGnew = this.DiagnosticObj;
     this.taskService.getobj(id_usr)
       .subscribe(obj => {
         var objss = obj.map(function (task, index, array) {
-          const fd = diagnosticObjs.find((item) => item.n_obj === obj[index].n_obj);
           let pd = 0;
-          if (fd) {
-            pd = fd.pd;
+          if (arrOBJDIAGnew) {
+            const fd = arrOBJDIAGnew.find((item) => item.n_obj === obj[index].n_obj);
+            if (fd) {
+              pd = fd.pd;
+            }
+          } else {
+            pd = 0;
           }
 
           var SwrFinal;
@@ -321,7 +366,7 @@ export class MainComponent implements OnInit {
       var arrFilter = arrObj.filter((task) => task.NoInteresa == false);
       this.objs = arrFilter;
     } else {
-      this.GetDiagnosticLive()
+      this.getObjetivos(this.id_usr);
     }
   }
 
@@ -340,7 +385,7 @@ export class MainComponent implements OnInit {
     this.LimpiarFiltrosStringObjetivos(1);
     if (Number(e) == 1) {
       this.FILTRO_NOAP = false;
-      this.GetDiagnosticLive();
+      this.getObjetivos(this.id_usr);
     } else {
 
       switch (Number(e)) {
@@ -365,21 +410,21 @@ export class MainComponent implements OnInit {
   }
 
   FilterTypeTextObj(filterValue: string, colum: number) {
-    var columnaname;
     var objetivos = [];
+    objetivos = this.Subobjs;
     if (filterValue === "undefined" || filterValue === "") {
-      this.GetDiagnosticLive();
+      // this.GetDiagnosticLive();
+      this.objs = this.Subobjs;
+      this.LimpiarFiltrosStringObjetivos(1);
     } else {
       this.DisablePriorizacionobj = true;
-      objetivos = this.Subobjs;
-      columnaname = "";
-      var data;
       if (colum == 1) {
-        columnaname = "num";
-        data = objetivos.filter(x => x.n_obj == parseInt(filterValue));
+        var filresul = objetivos.filter(x => x.n_obj == parseInt(filterValue));
+        this.objs = filresul;
         this.LimpiarFiltrosStringObjetivos(2);
       } else {
-
+        var columnaname;
+        columnaname = "";
         switch (colum) {
           case 2: {
             this.LimpiarFiltrosStringObjetivos(3);
@@ -397,14 +442,10 @@ export class MainComponent implements OnInit {
             break;
           }
         }
-        data = objetivos.filter(x => x[columnaname].toLowerCase().includes(filterValue.toLowerCase()));
+        var data = objetivos.filter(x => x[columnaname].toLowerCase().includes(filterValue.toLowerCase()));
+        this.objs = data;
       }
-
-      this.objs = data;
     }
-
-
-
   }
 
   LimpiarFiltrosStringObjetivos(n) {
@@ -641,15 +682,6 @@ export class MainComponent implements OnInit {
           }
 
         }
-
-
-
-
-
-
-
-
-
         this.tableprac.renderRows();
         this.GetDiagnosticLive();
       });
@@ -894,7 +926,7 @@ export class MainComponent implements OnInit {
     if (crop == true) {
       color = "#bfefbb";
     } else if (crpp == true) {
-      color = "#FFFACD";
+      color = "#FFFF99";
     } else if (cspp == true) {
       color = "#d1ebf7";
     } else {
@@ -1100,8 +1132,8 @@ export class MainComponent implements OnInit {
   doneClick() {
     this.popupPracticaDescription = false;
   }
-  
-  doneObj(){
+
+  doneObj() {
     this.popupVisible = false;
   }
 

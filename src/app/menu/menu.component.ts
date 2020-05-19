@@ -61,7 +61,7 @@ export class MenuComponent implements OnInit {
     switch (pagina) {
 
       case "/home": case "/": {
-        this.titlePage = " AGILE ROADMAP++ ";
+        this.titlePage = " AGILEV-ROADMAP";
         if (x == null) {
           this.isShowLogo = !this.isShowLogo;
           this.isShoweval = !this.isShoweval;
@@ -84,7 +84,7 @@ export class MenuComponent implements OnInit {
         break;
       }
       case "/main": {
-        this.titlePage = "Roadmap++ Plus";
+        this.titlePage = "ROADMAP";
         this.isShowReg = !this.isShowReg;
         this.isShowLog = !this.isShowLog;
 
