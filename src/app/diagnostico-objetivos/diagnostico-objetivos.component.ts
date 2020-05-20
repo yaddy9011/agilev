@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Diagnostico } from '../clases/diagnotico';
-import { EvalResulService } from '../services/eval-resul.service';
 import { TasksService } from '../services/tasks.service';
 import { ActivatedRoute } from '@angular/router';
 import ArrayStore from 'devextreme/data/array_store';
@@ -25,27 +24,21 @@ export class DiagnosticoObjetivosComponent implements OnInit {
   DataRpa = [];
   tasksDataSourceStorageAreas: any;
 
-  constructor(private EvalResulService: EvalResulService, private taskService: TasksService, private route: ActivatedRoute) {
+  constructor(private taskService: TasksService, private route: ActivatedRoute) {
 
     this.tasksDataSourceStorage = [];
     this.tasksDataSourceStorageAreas = [];
     this.id_usr = localStorage.getItem("ACCESS_IDS");
     this._idEval = this.route.snapshot.paramMap.get('id_eval');
 
-    var p = new Diagnostico(taskService, this._idEval, EvalResulService);
-    p.GetDataEva(false);
-
-    this.EvalResulService.routeDataA().subscribe(data => {
-      let newlv = data.sort((a, b) => a.n_obj - b.n_obj);
-      this.DatosObj = newlv;
-    });
-
-    this.EvalResulService.routeDataB().subscribe(data => {
-      this.DataRop = data;
-    });
-
-    this.EvalResulService.routeDataC().subscribe(data => {
-      this.AgilidadTotal = data;
+    var p = new Diagnostico(taskService, this._idEval);
+    p.fetchData(false);
+    p.bar.then((data) => {
+      p.generedEval(data);
+      this.DatosObj = p.arrObj;
+      this.DataRop = p.arrROP;
+    }).catch((error) => {
+      console.log(error);
     });
 
     this.GenerarDiagnosticoareas();
@@ -141,38 +134,25 @@ export class DiagnosticoObjetivosComponent implements OnInit {
             name_area: ev.area.name,
             na_t: na_title,
             na: na_new,
-            na_c:na,
-            aplicable:ev.aplicable
+            na_c: na,
+            aplicable: ev.aplicable
           };
           return arraData;
 
         });
-
-
         let arrSuma = levels.reduce((contador, objeto) => {
           contador[objeto.n_area] = (contador[objeto.n_area] || 0) + objeto.na;
           return contador;
         }, {});
-
-
-        // var filterNa = levels.filter(function (task) {
-        //   return task.na > 0;
-        // });
-        // console.log(filterNa);
-
-
         const TotalRpa = levels.reduce((contador, objeto) => {
           if (objeto.na != 0) {
             contador[objeto.n_area] = (contador[objeto.n_area] || 0) + 1;
           }
           return contador;
         }, {});
-
-
         let areas = levels.filter((valorActual, indiceActual, arreglo) => {
           return arreglo.findIndex(valorDelArreglo => JSON.stringify(valorDelArreglo.n_area) === JSON.stringify(valorActual.n_area)) === indiceActual
         });
-
         let mapAreas = areas.map((mo, i) => {
           let PorcentajeDiagnostic;
           if (TotalRpa[mo.n_area] === undefined) {

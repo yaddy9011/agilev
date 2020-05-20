@@ -7,7 +7,7 @@
     <mat-accordion>
         <mat-expansion-panel style="width:90%;">
             <mat-expansion-panel-header class="mheader">
-                <mat-panel-title  class="mheader-text">
+                <mat-panel-title class="mheader-text">
                     Diagnóstico de agilidad por objetivos
                 </mat-panel-title>
             </mat-expansion-panel-header>
@@ -24,16 +24,18 @@
             </dx-polar-chart>
             <br>
             <br>
-            <dx-data-grid (onRowPrepared)="onRowPreparedOBJ($event)" id="gridContainer" [dataSource]="DatosObj"
-                [masterDetail]="{ enabled: true, template: 'detail' }" keyExpr="n_obj" [showBorders]="true">
+            <dx-data-grid wordWrapEnabled="true" (onRowPrepared)="onRowPreparedOBJ($event)" id="gridContainer"
+                [dataSource]="DatosObj" [masterDetail]="{ enabled: true, template: 'detail' }" keyExpr="n_obj"
+                [showBorders]="true">
                 <dxi-column dataField="n_obj" [width]="50" caption="#"></dxi-column>
-                <dxi-column dataField="TexObj" caption="Objetivo" [width]="600"></dxi-column>
+                <dxi-column dataField="TexObj" caption="Objetivo" [width]="400"></dxi-column>
                 <dxi-column dataField="pd" caption="Diagnóstico" [customizeText]="customizeText" [width]="100">
                 </dxi-column>
                 <dxi-column dataField="NoInteresa" caption="No interesa" dataType="boolean" [width]="100">
                 </dxi-column>
                 <div *dxTemplate="let obj of 'detail'">
-                    <dx-data-grid (onRowPrepared)="onRowPreparedPrac($event)" [dataSource]="getPracticas(obj.key)" [showBorders]="true" [columnAutoWidth]="true">
+                    <dx-data-grid wordWrapEnabled="true" (onRowPrepared)="onRowPreparedPrac($event)"
+                        [dataSource]="getPracticas(obj.key)" [showBorders]="true" [columnAutoWidth]="true">
                         <dxi-column dataField="n_prac" [width]="70" caption="N°"></dxi-column>
                         <dxi-column dataField="Descrip_prac" [width]="300" caption="Práctica"></dxi-column>
                         <dxi-column dataField="na_t" [width]="150" caption="Nivel de aplicación">
@@ -50,7 +52,7 @@
         <br>
         <mat-expansion-panel style="width:90%;" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
             <mat-expansion-panel-header class="mheader">
-                <mat-panel-title  class="mheader-text">
+                <mat-panel-title class="mheader-text">
                     Diagnóstico de agilidad por áreas
                 </mat-panel-title>
             </mat-expansion-panel-header>
@@ -67,14 +69,14 @@
             </dx-polar-chart>
             <br>
             <br>
-            <dx-data-grid id="gridContainer" [dataSource]="DataAreas"
+            <dx-data-grid wordWrapEnabled="true"[columnAutoWidth]="true" id="gridContainer" [dataSource]="DataAreas"
                 [masterDetail]="{ enabled: true, template: 'detail' }" keyExpr="n_area" [showBorders]="true">
-                <dxi-column dataField="title_area" caption="Área" [width]="600"></dxi-column>
+                <dxi-column dataField="title_area" caption="Área" [width]="250"></dxi-column>
                 <dxi-column dataField="da" caption="Diagnóstico" [customizeText]="customizeText" [width]="100">
                 </dxi-column>
                 <div *dxTemplate="let area of 'detail'">
-                    <dx-data-grid (onRowPrepared)="onRowPreparedPrac($event)" [dataSource]="getPracticasAreas(area.key)" [showBorders]="true"
-                        [columnAutoWidth]="true">
+                    <dx-data-grid wordWrapEnabled="true" (onRowPrepared)="onRowPreparedPrac($event)"
+                        [dataSource]="getPracticasAreas(area.key)" [showBorders]="true">
                         <dxi-column dataField="n_prac" [width]="70" caption="N°"></dxi-column>
                         <dxi-column dataField="Descrip_prac" [width]="300" caption="Práctica"></dxi-column>
                         <dxi-column dataField="na_t" [width]="150" caption="Nivel de aplicación">

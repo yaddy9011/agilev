@@ -41,13 +41,6 @@ export class MenuComponent implements OnInit {
 
   ngOnInit() {
     this.navegacion(0);
-    // let unit : string = document.getElementById('idz').innerHTML;
-    // console.log(unit); para traerme valores de mis etiquetas html
-    //this.isShow = !this.isShow;
-    // if (x == null) {
-    //   this.isShow = !this.isShow;
-    //   console.log('x is greater than y.');
-    // }
   }
 
   salir() {
@@ -290,7 +283,7 @@ export class MenuComponent implements OnInit {
         break;
       }
       case "/EquipoAgile": {
-        this.titlePage = "Equipo Agile Roadmap++";
+        this.titlePage = "Equipo Agile Agilev-roadmap";
         if (x == null) {
           this.isShoweval = !this.isShoweval;
           this.isShowprac = !this.isShowprac;
@@ -314,7 +307,7 @@ export class MenuComponent implements OnInit {
         break;
       }
       case "/InfoPasosRoadmap": {
-        this.titlePage = "Pasos Roadmap";
+        this.titlePage = "Pasos Agilev-roadmap";
         if (x == null) {
           this.isShoweval = !this.isShoweval;
           this.isShowprac = !this.isShowprac;
@@ -338,7 +331,7 @@ export class MenuComponent implements OnInit {
         break;
       }
       case "/InfoAcercaDe": {
-        this.titlePage = "Roadmap++";
+        this.titlePage = "Agilev-roadmap";
         if (x == null) {
           this.isShoweval = !this.isShoweval;
           this.isShowprac = !this.isShowprac;
@@ -362,7 +355,7 @@ export class MenuComponent implements OnInit {
         break;
       }
       case "/InfoPracticas": {
-        this.titlePage = "Prácticas Roadmap++";
+        this.titlePage = "Prácticas Agilev-roadmap";
         if (x == null) {
           this.isShoweval = !this.isShoweval;
           this.isShowprac = !this.isShowprac;

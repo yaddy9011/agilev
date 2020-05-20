@@ -118,27 +118,29 @@
                 [style.background-color]="row.showro ? '#d1ebf7' : '#FFFFFF'" cdkDrag [cdkDragData]="row"></mat-row>
             </mat-table>
             <br>
-            <dx-popup [width]="600" [height]="400" [showTitle]="true" title="Prácticas Relacionadas"
+            <dx-popup [width]="450" [height]="400" [showTitle]="true" title="Prácticas Relacionadas"
               [dragEnabled]="false" [closeOnOutsideClick]="true" [(visible)]="popupVisible">
               <div *dxTemplate="let data of 'content'">
+                <dx-button icon="check" type="success" text="Done" (onClick)="doneObj()">
+                </dx-button>
+                <br>
                 <dx-scroll-view #scrollView id="scrollview" [scrollByContent]="scrollByContent"
                   [scrollByThumb]="scrollByThumb" [showScrollbar]="scrollbarMode">
                   <div>
                     <dx-data-grid wordWrapEnabled="true" [dataSource]="DatasourseRop" [showBorders]="true"
                       [columnAutoWidth]="true">
-                      <dxo-scrolling mode="virtual"></dxo-scrolling>
-                      <dxi-column dataField="n_prac" [width]="70" caption="N°"></dxi-column>
-                      <dxi-column dataField="Descrip_prac" [width]="300" caption="Práctica"></dxi-column>
-                      <dxi-column dataField="na_t" [width]="150" caption="Nivel de aplicación">
+                      <!-- <dxo-scrolling mode="virtual"></dxo-scrolling> -->
+                      <dxi-column dataField="n_prac" alignment="center" [width]="50" caption="#"></dxi-column>
+                      <dxi-column dataField="Descrip_prac" [width]="200" caption="Práctica"></dxi-column>
+                      <dxi-column dataField="na_t" [width]="80" alignment="center" caption="Nivel de aplicación">
                       </dxi-column>
-                      <dxi-column dataField="nc_t" [width]="150" caption="Nivel de contribución">
+                      <dxi-column dataField="nc_t" [width]="80" alignment="center" caption="Nivel de contribución">
                       </dxi-column>
                     </dx-data-grid>
                     <br>
-                    <dx-button icon="check" type="success" text="Done" (onClick)="doneObj()">
-                    </dx-button>
                   </div>
                 </dx-scroll-view>
+
               </div>
             </dx-popup>
           </div>
@@ -149,7 +151,7 @@
       <mat-expansion-panel style="width:96%;" [expanded]="panelOpenStatePrac" (opened)="panelOpenState = true"
         (closed)="panelOpenState = false">
         <mat-expansion-panel-header class="mheader">
-          <mat-panel-title  class="mheader-text">
+          <mat-panel-title class="mheader-text">
             PRÁCTICAS ÁGILES
           </mat-panel-title>
         </mat-expansion-panel-header>

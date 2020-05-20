@@ -5,9 +5,7 @@ import { obj } from '../clases/obj';
 import { Practica } from '../clases/practica';
 import { UserI } from '../clases/user';
 import { CrudRopService } from '../services/crud-rop.service';
-import { EvalResulService } from '../services/eval-resul.service';
 import { Diagnostico } from '../clases/diagnotico';
-import { RowDDService, SelectionService } from '@syncfusion/ej2-angular-grids';
 import { ViewportScroller } from '@angular/common';
 import notify from 'devextreme/ui/notify';
 import { MatTable } from '@angular/material/table';
@@ -108,8 +106,7 @@ export class MainComponent implements OnInit {
 
     public taskService: TasksService,
     private CrudRopService: CrudRopService,
-    private viewportScroller: ViewportScroller,
-    private EvalResulService: EvalResulService) {
+    private viewportScroller: ViewportScroller) {
 
     this.optionsNa = ['No Definido ', ' Muy Bajo', 'Bajo', 'Medio', 'Alto', 'Muy alto'];
     this.optionsDesa = [' Muy Bajo', 'Bajo', 'Medio', 'Alto', 'Muy alto'];
@@ -122,26 +119,12 @@ export class MainComponent implements OnInit {
 
   ngOnInit() {
     this.GetDiagnosticLive();
-
   }
 
   // METODOS PARA OBJETIVOS
 
   GetDiagnosticLive() {
-    var p = new Diagnostico(this.taskService, "5e52bc768e4e3736a866f5e7", this.EvalResulService);
-    // p.GetDataEva(true);
-    //  p.getUsers();
-    // p.getDiag();
-
-
-    // p.waitForOneSecond().then((value) =>
-    //   console.log(p.arrObj));
-
-    // p.bar.then((data) => {
-    //   console.log("Promise resolved with: " + JSON.stringify(data));
-    // }).catch((error) => {
-    //   console.log("Promise rejected with " + JSON.stringify(error));
-    // });
+    var p = new Diagnostico(this.taskService, "5e52bc768e4e3736a866f5e7");
     p.fetchData(true);
     p.bar.then((data) => {
       p.generedEval(data);
@@ -151,57 +134,6 @@ export class MainComponent implements OnInit {
     }).catch((error) => {
       console.log(error);
     });
-
-
-
-
-    // this.EvalResulService.routeDataA().subscribe(data => {
-    //   this.DiagnosticObj = data;
-    //   this.getObjetivos(this.id_usr);
-    // });
-
-    // this.EvalResulService.routeDataB().subscribe(data => {
-    //   this.DataRop = data;
-    // });
-
-
-  }
-
-  someMethod() {
-    // var p = new Diagnostico(this.taskService, "5e52bc768e4e3736a866f5e7", this.EvalResulService);
-    // p.GetDataEva(true);
-
-
-    // this.EvalResulService.routeDataA().subscribe({
-    //   next: value => { console.log(value); },
-    //   error: err => { },
-    //   complete: () => {
-    //     console.log("ok");
-    //   }
-    // });
-    // this.EvalResulService.routeDataA().subscribe(
-    //   value => console.log(value),
-    //   error => console.log("Error: ", error),
-    //   () => console.log("ok"));
-
-
-    // this.EvalResulService.routeDataA()
-    //   .subscribe((num: any) => {
-    //     console.log(num);
-    //   }, (err) => {
-    //     console.log(err);
-    //   }, () => { 
-    //     console.log("ok");
-    //   });
-
-
-    // this.EvalResulService.routeDataA().subscribe(data => {
-    //   this.DiagnosticObj = data;
-    // }).add(() => {
-
-    // });
-
-
   }
 
   getObjetivos(id_usr) {
@@ -1062,9 +994,10 @@ export class MainComponent implements OnInit {
     this.FILTRO_NA = false;
     this.FILTRO_ = false;
     if (filterValue === "undefined" || filterValue === "") {
-      this.getPracticas(this.id_usr, false);
+      // this.getPracticas(this.id_usr, false);
       this.DisablePriorizacion = false;
       this.LimpiarFiltrosString(1);
+      this.Practicas= this.SubPracticas;
     } else {
       this.DisablePriorizacion = true;
       practicass = this.SubPracticas;
