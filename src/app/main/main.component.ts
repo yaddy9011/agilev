@@ -117,27 +117,54 @@ export class MainComponent implements OnInit {
     this.showColumn();
     this.nameusr = localStorage.getItem("ACCESS_name");
     this.id_usr = localStorage.getItem("ACCESS_IDS");
-    this.someMethod();
     this.getPracticas(this.id_usr, this.checked);
   }
 
   ngOnInit() {
     this.GetDiagnosticLive();
+
   }
 
   // METODOS PARA OBJETIVOS
 
   GetDiagnosticLive() {
     var p = new Diagnostico(this.taskService, "5e52bc768e4e3736a866f5e7", this.EvalResulService);
-    p.GetDataEva(true);
-    this.EvalResulService.routeDataA().subscribe(data => {
-      this.DiagnosticObj = data;
+    // p.GetDataEva(true);
+    //  p.getUsers();
+    // p.getDiag();
+
+
+    // p.waitForOneSecond().then((value) =>
+    //   console.log(p.arrObj));
+
+    // p.bar.then((data) => {
+    //   console.log("Promise resolved with: " + JSON.stringify(data));
+    // }).catch((error) => {
+    //   console.log("Promise rejected with " + JSON.stringify(error));
+    // });
+    p.fetchData(true);
+    p.bar.then((data) => {
+      p.generedEval(data);
+      this.DiagnosticObj = p.arrObj;
+      this.DataRop = p.arrROP;
       this.getObjetivos(this.id_usr);
+    }).catch((error) => {
+      console.log(error);
     });
 
-    this.EvalResulService.routeDataB().subscribe(data => {
-      this.DataRop = data;
-    });
+
+
+
+    // this.EvalResulService.routeDataA().subscribe(data => {
+    //   this.DiagnosticObj = data;
+    //   this.getObjetivos(this.id_usr);
+    // });
+
+    // this.EvalResulService.routeDataB().subscribe(data => {
+    //   this.DataRop = data;
+    // });
+
+
   }
 
   someMethod() {
