@@ -20,27 +20,31 @@ export class MenuComponent implements OnInit {
   isShowROP = false;
   resetToken: null;
   idEval: String;
-  titlePage: String;
+  titlePage: String = "";
   adminacces: boolean;
-  idusr:String;
+  idusr: String;
 
-  constructor(private AuthService: AuthService, 
-    private router: Router, 
+  constructor(private AuthService: AuthService,
+    private router: Router,
     private route: ActivatedRoute) {
 
     this.route.params.subscribe(params => {
       this.resetToken = params.token;
       this.idEval = params.id_eval;
-      this.idusr= params.idusr;
+      this.idusr = params.idusr;
     });
 
-    var z = localStorage.getItem("ACCESS_admin");
-    this.adminacces = JSON.parse(z);
-    
+
   }
 
   ngOnInit() {
     this.navegacion(0);
+    var z = localStorage.getItem("ACCESS_admin");
+    this.adminacces = JSON.parse(z);
+
+
+
+
   }
 
   salir() {

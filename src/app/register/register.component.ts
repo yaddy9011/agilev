@@ -38,6 +38,7 @@ export class RegisterComponent implements OnInit {
   popupVisible = false;
   mensaje = "";
   loadingVisible = false;
+  correo="";
 
   emailFormControl = new FormControl('', [
     Validators.required,

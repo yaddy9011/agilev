@@ -124,8 +124,8 @@
                 <dx-button icon="check" type="success" text="Done" (onClick)="doneObj()">
                 </dx-button>
                 <br>
-                <dx-scroll-view #scrollView id="scrollview" [scrollByContent]="scrollByContent"
-                  [scrollByThumb]="scrollByThumb" [showScrollbar]="scrollbarMode">
+                <dx-scroll-view #scrollView id="scrollview" >
+
                   <div>
                     <dx-data-grid wordWrapEnabled="true" [dataSource]="DatasourseRop" [showBorders]="true"
                       [columnAutoWidth]="true">
@@ -139,6 +139,8 @@
                     </dx-data-grid>
                     <br>
                   </div>
+
+
                 </dx-scroll-view>
 
               </div>
@@ -360,8 +362,7 @@
           <dx-popup [width]="500" [height]="450" [showTitle]="true" title="Práctica" [dragEnabled]="false"
             [closeOnOutsideClick]="true" [(visible)]="popupPracticaDescription">
             <div *dxTemplate="let data of 'content'">
-              <dx-scroll-view #scrollView id="scrollview" [scrollByContent]="scrollByContent"
-                [scrollByThumb]="scrollByThumb" [showScrollbar]="scrollbarMode">
+              <dx-scroll-view #scrollView id="scrollview" >
                 <p>
                   {{ TextP}}
                 </p>

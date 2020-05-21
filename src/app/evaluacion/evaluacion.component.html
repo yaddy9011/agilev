@@ -1,70 +1,6 @@
 <app-menu></app-menu>
-<!-- 
-<div id="app" align="center">
-    <br>
-    <br>
-    <br>
-    <mat-card class="example-card">
-        <mat-card-header id="mat-header">
-            <div mat-card-avatar class="example-header-image"></div>
-            <mat-card-title>
-                Evaluación por objetivos
-            </mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-            <div align="center">
-                <table class="table table-bordered table-responsive-md table-striped text-center">
-                    <tr>
-                        <th class="text-center">Fecha de Evaluación</th>
-                        <th class="text-center">Línea de trabajo</th>
-                        <th class="text-center">Ver Evaluación</th>
-                        <th class="text-center">Ver Gráficas</th>
-                        <th class="text-center">Eliminar</th>
-                    </tr>
-                    <tbody>
-                        <tr
-                            *ngFor="let newarrss of newarrs | paginate: { itemsPerPage: 5, currentPage: p }; let id = index">
-                            <td>
-                                <span>{{newarrss.fecha_creacion | date:'yyyy-MM-dd HH:mm:ss'}}</span>
-                            </td>
-                            <td>
-                                <span>{{newarrss.workLine.descripcion}}</span>
-                            </td>
-                            <td>
-                                <button mat-mini-fab (click)="VerEval(id)">
-                                    <mat-icon>visibility</mat-icon>
-                                </button>
-                            </td>
-                            <td>
-                                <button mat-mini-fab [routerLink]="['/Graficas', newarrss._id]">
-                                    <mat-icon>trending_up</mat-icon>
-                                </button>
-                            </td>
-                            <td>
-                                <button mat-mini-fab (click)="EliminarEval(newarrss._id)">
-                                    <mat-icon>delete</mat-icon>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <pagination-controls (pageChange)="p = $event" previousLabel="Anterior" nextLabel="Siguiente">
-                    </pagination-controls>
-                </table>
-                <br>
-                <p>
-                    Presiona el botón para generar un nueva evaluación.
-                </p>
-            </div>
-        </mat-card-content>
-        <mat-card-actions>
-            <button (click)="GenerarEvaluacion($event, item)" mat-fab
-                aria-label="Example icon-button with a heart icon">
-                <mat-icon>list_alt</mat-icon>
-            </button>
-        </mat-card-actions>
-    </mat-card>
-</div> -->
-<div class="Appcontainer"  id="app" align="center">
+
+<div class="Appcontainer" id="app" align="center">
     <br>
     <br>
     <br>
@@ -83,12 +19,14 @@
                     </tr>
                     <tbody>
                         <tr
-                            *ngFor="let newarrss of newarrs | paginate: { itemsPerPage: 5, currentPage: p }; let id = index">
+                            *ngFor="let newarrss of newarrs; let id = index">
+                            <!-- *ngFor="let newarrss of newarrs | paginate: { itemsPerPage: 5, currentPage: p }; let id = index"> -->
                             <td>
                                 <span>{{newarrss.fecha_creacion | date:'yyyy-MM-dd HH:mm:ss'}}</span>
                             </td>
                             <td>
-                                <button id="mat-butt" mat-mini-fab [routerLink]="['/Diagnostico_objetivos', newarrss._id]">
+                                <button id="mat-butt" mat-mini-fab
+                                    [routerLink]="['/Diagnostico_objetivos', newarrss._id]">
                                     <mat-icon>visibility</mat-icon>
                                 </button>
                             </td>
@@ -100,40 +38,24 @@
                         </tr>
                     </tbody>
                 </table>
-                <pagination-controls (pageChange)="p = $event" previousLabel="Anterior" nextLabel="Siguiente">
-                </pagination-controls>
+
+
+
+                <!-- <pagination-controls (pageChange)="p = $event" previousLabel="Anterior" nextLabel="Siguiente">
+                </pagination-controls> -->
+
+
             </div>
         </mat-card-content>
         <mat-card-actions>
-            <button  mat-raised-button id="mat-button" (click)="GenerarEvaluacion($event, item)"> 
+            <button mat-raised-button id="mat-button" (click)="GenerarEvaluacion($event)">
                 Nuevo diagnóstico
             </button>
-        </mat-card-actions> 
+        </mat-card-actions>
         <br>
     </mat-card>
 </div>
 <br>
 <br>
 <br>
-<!-- <dx-popup [width]="400" [height]="250" [showTitle]="true" title="Evaluación" [dragEnabled]="false"
-    [closeOnOutsideClick]="true" [(visible)]="popupVisible">
-    <mat-label>Selecciona una línea de trabajo.</mat-label>
-    <br>
-    <br>
-    <form (submit)="InsertEval($event)">
-        <dx-select-box #selectBox id="mySelectBox" [dataSource]="NewWl" displayExpr="descripcion" valueExpr="_id"
-            (onValueChanged)="listValueChanged($event)">
-            <dx-validator>
-                <dxi-validation-rule type="required" message="Linea de trabajo es requerida"></dxi-validation-rule>
-            </dx-validator>
-        </dx-select-box>
-        <br>
-        <div class="text-center">
-            <dx-button id="button" text="Generar" type="default" [useSubmitBehavior]="true">
-            </dx-button>
-        </div>
-        <br>
-    </form>
-</dx-popup> -->
-<!-- <button type="button" class="btn btn-primary" (onClick)="InsertEval($event)" (click)="InsertEval($event)">Generar evaluación</button> -->
 <app-footer></app-footer>

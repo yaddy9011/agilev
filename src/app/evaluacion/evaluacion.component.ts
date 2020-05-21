@@ -77,27 +77,10 @@ export class EvaluacionComponent implements OnInit {
       });
   }
 
-  // VerEval(id) {   
-  //  // console.log(this.newarrs[id]._id);
-  //   const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
-  //     width: '1000px',
-  //     data: { idEval: this.newarrs[id]._id }
-  //   });
-  //   dialogRef.afterClosed().subscribe(result => {
-  //   });
-  // }
-
-
   EliminarEval(id) {
     this.taskService.DeleteEval(id)
       .subscribe(evals => {
       });
     location.reload();
   }
-  // GetWorkLines() {
-  //   this.taskService.getWorkLines()
-  //     .subscribe(wl => {
-  //       this.NewWl = wl;
-  //     });
-  // }
 }

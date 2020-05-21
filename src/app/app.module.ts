@@ -45,7 +45,6 @@ import { ResponseResetComponent } from './response-reset/response-reset.componen
 import { ShowHidePasswordModule } from 'ngx-show-hide-password';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { DiagnosticoObjetivosComponent } from './diagnostico-objetivos/diagnostico-objetivos.component';
-import { DiagnosticoAreasComponent } from './diagnostico-areas/diagnostico-areas.component';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatTooltipModule} from '@angular/material/tooltip';
@@ -74,7 +73,6 @@ import {MatGridListModule} from '@angular/material/grid-list';
     RelacionOpComponent,
     ResponseResetComponent,
     DiagnosticoObjetivosComponent,
-    DiagnosticoAreasComponent,
     EquipoAgileComponent,
     ValidEmailComponent,
     InfoAcercaDeComponent,

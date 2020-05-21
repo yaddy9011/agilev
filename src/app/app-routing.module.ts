@@ -11,7 +11,6 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { RelacionOpComponent } from './relacion-op/relacion-op.component';
 import { ResponseResetComponent } from './response-reset/response-reset.component';
 import {DiagnosticoObjetivosComponent} from './diagnostico-objetivos/diagnostico-objetivos.component';
-import {DiagnosticoAreasComponent} from './diagnostico-areas/diagnostico-areas.component';
 import {EquipoAgileComponent} from './equipo-agile/equipo-agile.component';
 import {ValidEmailComponent} from './valid-email/valid-email.component';
 import {InfoAcercaDeComponent} from './info-acerca-de/info-acerca-de.component';
@@ -63,10 +62,6 @@ const routes: Routes = [
   {
     path: 'Diagnostico_objetivos/:id_eval',
     component: DiagnosticoObjetivosComponent
-  },
-  {
-    path: 'Diagnostico_areas/:id_eval',
-    component: DiagnosticoAreasComponent
   },
   {
     path: 'EquipoAgile',
